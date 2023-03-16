@@ -23,23 +23,29 @@ class Terminal(pythonCodeEditor):
         super().__init__(parent)
         self.biggusPy = biggusPy
         self.nodeCodeInterpreter = NodeCodeInterpreter(self.biggusPy, self.biggusPy.canvas)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def updateSystemColors(self):
         # dovrebbe cambiare solo lo sfondo non tutto il colore del widget
         style = f"QPlainTextEdit {{background-color: {self.backgroundColor.name()}; color: {self.textColor.name()};}}"
         self.setStyleSheet(style)
 
-    def keyPressEvent(self, event):
-        # se viene premuto CTRL + RETURN
-        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key.Key_Return:
-            # prende l'ultima riga e la passa al nodeCodeInterpreter
-            command = self.toPlainText().splitlines()
-            for com in command:
-                self.nodeCodeInterpreter.parseCommand(com)
-            # self.insertPlainText(f"{self.prompt}\n ")
+    def contextMenuEvent(self, event) -> None:
+        menu = QMenu(self)
+        actionClear = menu.addAction("Clear")
+        separator = menu.addSeparator()
+        actionSend = menu.addAction("Send")
+        action = menu.exec_(event.globalPos())
+        if action == actionSend:
+            self.sendToCanvas()
+        elif action == actionClear:
             self.clear()
-            return
-        super().keyPressEvent(event)
+
+    def sendToCanvas(self):
+        command = self.toPlainText().splitlines()
+        for com in command:
+            self.nodeCodeInterpreter.parseCommand(com)
+        self.clear()
 
     def handleCommand(self, command):
         self.terminalSignal.emit(command)

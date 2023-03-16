@@ -386,6 +386,13 @@ class pythonCodeEditor(QPlainTextEdit):
         else:
             super(pythonCodeEditor, self).keyPressEvent(event)
 
+        current_char = self.textUnderCursor()
+        if not self.is_valid_completion_char(current_char):
+            self.completer.popup().hide()
+
+    def is_valid_completion_char(self, char):
+        return char.isalnum() or char == '_' or char == '.'
+
     def handleCompleterKeyPressEvent(self, event):
         if self.completer.popup().isVisible():
             if event.key() in (Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Escape):
@@ -393,14 +400,21 @@ class pythonCodeEditor(QPlainTextEdit):
                 return True
 
             if event.key() in [Qt.Key.Key_Tab, Qt.Key.Key_Return]:
-                self.insertCompletion(self.completer.currentCompletion())
+                completition = self.completer.currentCompletion()
+                # se scrivo Fa e poi tab viene scritto Faalse...
+                self.insertPlainText(completition[len(self.completer.completionPrefix())+1:])
                 self.completer.popup().hide()
                 return True
 
             elif event.key() == Qt.Key.Key_Backtab:
                 self.completer.setCurrentRow(self.completer.currentRow() - 1)
                 return True
-
+        elif self.completer.popup().isHidden():
+            # se viene premuto spazio o invio il pop up non deve comparire
+            # if key is space or enter the popup should not appear
+            if event.key() in [Qt.Key.Key_Space, Qt.Key.Key_Return]:
+                self.completer.popup().hide()
+                return False
         completion_prefix = self.textUnderCursor()
         if completion_prefix != self.completer.completionPrefix():
             self.updateCompleterPopupItems(completion_prefix)
@@ -411,7 +425,8 @@ class pythonCodeEditor(QPlainTextEdit):
             rect.setWidth(self.completer.popup().sizeHintForColumn(0)
                           + self.completer.popup().verticalScrollBar().sizeHint().width())
             self.completer.complete(rect)
-            return True
+        else:
+            self.completer.popup().hide()
         return False
 
     def parenthesesAutoComplete(self, event):
@@ -799,23 +814,82 @@ class pythonCodeEditor(QPlainTextEdit):
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.completer.activated.connect(self.insertCompletion)
 
+    def addWordToCompleter(self, word):
+        """
+        ITA:
+            Aggiunge una parola al completer
+        ENG:
+            Adds a word to the completer
+        :param word:
+        :return:
+        """
+        self.completer.model().addWord(word)
+
+    def removeWordFromCompleter(self, word):
+        """
+        ITA:
+            Rimuove una parola dal completer
+        ENG:
+            Removes a word from the completer
+        :param word:
+        :return:
+        """
+        self.completer.model().removeWord(word)
+
+    def returnListOfWords(self):
+        """
+        ITA:
+            Ritorna una lista di tutte le parole presenti nel completer
+        ENG:
+            Returns a list of all the words present in the completer
+        :return:
+        """
+        return self.completer.model().words
+
     def insertCompletion(self, completion):
         """
-        Inserisce il completamento. In pratica prende il testo selezionato
-        e lo sostituisce con il completamento
+        ITA:
+            Inserisce il completamento nella posizione corretta. Per trovare la posizione,
+            si scorre la stringa a partire dalla posizione del cursore fino a trovare
+            l'ultimo carattere. Quindi si inserisce il completamento
+            dopo tale carattere.
+        ENG:
+            Inserts the completion in the correct position. To find the position,
+            the string is scrolled from the cursor position until the last character is found.
+            Then the completion is inserted after that character.
         :param completion:
         :return:
         """
         if self.completer.widget() != self:
             return
+        tc = self.textCursor()
         extra = len(completion) - len(self.completer.completionPrefix())
-        cursor = self.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.Left)
-        cursor.movePosition(QTextCursor.MoveOperation.EndOfWord)
-        cursor.insertText(completion[-extra:])
-        self.setTextCursor(cursor)
+        tc.movePosition(QTextCursor.MoveOperation.Right)
+        tc.movePosition(QTextCursor.MoveOperation.Left, QTextCursor.MoveMode.KeepAnchor, extra)
+        tc.insertText(completion)
+        self.setTextCursor(tc)
+
+    def updateCompleterPopupItemsOld(self, completion_prefix):
+        self.completer.setCompletionPrefix(completion_prefix)
+        self.completer.popup().setCurrentIndex(self.completer.completionModel().index(0, 0))
 
     def updateCompleterPopupItems(self, completion_prefix):
+        # sourcery skip: skip-sorted-list-construction
+        # Trova i suggerimenti basati sul prefisso
+        prefix_matches = [word for word in python_keywords if word.startswith(completion_prefix)]
+
+        # Cerca le parole più vicine
+        closest_words = self.closestWords(completion_prefix, python_keywords, max_distance=3, top_n=10)
+
+        # Combina i suggerimenti basati sul prefisso con le parole più vicine
+        combined_words = list(set(prefix_matches + closest_words))
+        combined_words.sort()
+
+        # Aggiorna il modello del completer con le parole combinate
+        model = QStringListModel()
+        model.setStringList(combined_words)
+        self.completer.setModel(model)
+
         self.completer.setCompletionPrefix(completion_prefix)
         self.completer.popup().setCurrentIndex(self.completer.completionModel().index(0, 0))
 

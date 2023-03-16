@@ -23,6 +23,7 @@ class DraggableWidget(QWidget):
         self.initUI()
         self.setMouseTracking(True)
 
+
     def initUI(self):
         self.lblTxt = QLabel(self.title)
         self.lblIcon = QLabel()
@@ -96,6 +97,7 @@ class NodeBrowser(QWidget):
         self.addTabPage("python", pythonNodeFolderPath)
         self.addTabPage("pyqt5", pyQt5NodeFolderPath)
         self.addTabPage("opencv", openCvNodeFolderPath)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def addTabPage(self, name, itemList):
         scroll_area = QScrollArea(self.tabWidget)

@@ -126,6 +126,8 @@ class biggusPy(QMainWindow):
         elif event.key() == Qt.Key.Key_V:
             if event.modifiers() and Qt.KeyboardModifier.ControlModifier:
                 self.canvas.pasteNode()
+        else:
+            return super().keyPressEvent(event)
 
     # ------------------ SHOW ON CANVAS ------------------
 
