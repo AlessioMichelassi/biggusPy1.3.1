@@ -96,15 +96,16 @@ class numPyImageGeneratorNode(AbstractNodeInterface):
     def doColorBarImage(self):
         height, width = self.imageHeight, self.imageWidth
 
-        # Definisci i colori SMPTE come liste di valori RGB
+        # Definisci i colori SMPTE come liste di valori BGR
         colorForBar = [
-            (192, 192, 192),  # Grigio
-            (0, 192, 192),  # Ciano
-            (192, 192, 0),  # Giallo
-            (192, 0, 192),  # Magenta
-            (192, 0, 0),  # Rosso
-            (0, 0, 192),  # Blu
-            (0, 0, 0)  # Nero
+            [192, 192, 192],  # Grigio
+            [0, 192, 192],  # Giallo
+            [192, 192, 0],  # Ciano
+            [0, 192, 0],  # Verde
+            [192, 0, 192],  # Magenta
+            [0, 0, 192],  # Rosso
+            [192, 0, 0],  # Blu
+            [0, 0, 0]  # Nero
         ]
 
         # Calcola la larghezza delle singole barre
@@ -116,7 +117,7 @@ class numPyImageGeneratorNode(AbstractNodeInterface):
         # Disegna le barre colorate
         for i, color in enumerate(colorForBar):
             start_x = i * bar_width
-            end_x = (i+1)*bar_width
+            end_x = (i + 1) * bar_width
             smpte_image[:, start_x:end_x] = color
         cv2.imwrite("color_bar_image.png", smpte_image)
         # Imposta il valore dell'input plug e restituisci l'immagine SMPTE

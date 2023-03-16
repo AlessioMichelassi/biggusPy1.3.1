@@ -5,6 +5,12 @@ from PyQt5.QtWidgets import *
 from scratchNodeV0_9.ArguePy_CodeEditor.editorWidgetTool.tools.SintaxHighlighters.pyHighLighter import pythonHighLighter
 from scratchNodeV0_9.ArguePy_CodeEditor.editorWidgetTool.tools.lineNumberWidget import LineNumberArea
 
+python_keywords = [
+    'False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue',
+    'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in',
+    'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'
+]
+
 
 class searchAndReplaceWidget(QWidget):
     grpBox: QGroupBox
@@ -359,7 +365,11 @@ class pythonCodeEditor(QPlainTextEdit):
                 return True
         return super().event(QEvent)
 
+    # ---------------------- KET PRESS EVENT --------
+
     def keyPressEvent(self, event):
+        if self.completer.popup().isVisible():
+            self.wordCompleting(event)
         # Auto completamento delle parentesi
         if event.key() in [Qt.Key.Key_BraceLeft, Qt.Key.Key_BracketLeft, Qt.Key.Key_ParenLeft, Qt.Key.Key_QuoteDbl,
                            Qt.Key.Key_Apostrophe]:
@@ -374,6 +384,29 @@ class pythonCodeEditor(QPlainTextEdit):
                 super().keyPressEvent(event)
         else:
             super(pythonCodeEditor, self).keyPressEvent(event)
+
+    def wordCompleting(self, event):
+            if event.key() in (Qt.Key.Key_Enter, Qt.Key.Key_Return):
+                self.completer.setCurrentRow(self.completer.currentRow() + 1)
+                return
+            elif event.key() == Qt.Key.Key_Tab:
+                self.insert_completion(self.completer.currentCompletion())
+                self.completer.popup().hide()
+
+                return
+
+            super().keyPressEvent(event)
+
+            completion_prefix = self.text_under_cursor()
+            if completion_prefix != self.completer.completionPrefix():
+                self.update_completer_popup_items(completion_prefix)
+
+            if len(completion_prefix) > 0:
+                # Aggiungi questa riga per assicurarti che il popup del completer sia valido
+                self.completer.setWidget(self)
+                self.completer.complete()
+            else:
+                self.completer.popup().hide()
 
     def parenthesesAutoComplete(self, event):
         """
@@ -459,9 +492,11 @@ class pythonCodeEditor(QPlainTextEdit):
 
     def commentBlock(self):
         """
-        Commenta il testo selezionato
+        ITA:
+            Se viene premuto # e il testo è selezionato, commenta il testo selezionato
+        ENG:
+            If # is pressed and the text is selected, comment the selected text
         """
-
         text = self.searchIndentationInFirstLineOfSelection(self.textCursor().selectedText())
         lines = text.splitlines()
         for i in range(len(lines)):
@@ -471,9 +506,14 @@ class pythonCodeEditor(QPlainTextEdit):
                 lines[i] = f"# {lines[i]}\n"
         self.insertPlainText("".join(lines))
 
+    # ---------------------------- SEARCH WIDGET ----------------------------
+
     def onSearch(self):
         """
-        Quando viene premuto il tasto cerca
+        ITA:
+            Apre il widget per la ricerca quando viene premuto il tasto cerca
+        ENG:
+            Opens the search widget when the search button is pressed
         :return:
         """
         self.mainWidget.searchWidget.show()
@@ -675,6 +715,72 @@ class pythonCodeEditor(QPlainTextEdit):
         else:
             super().wheelEvent(event)
 
+    # ---------------------------------- COMPLETER ----------------------------------
+
+    @staticmethod
+    def levenshteinDistance(a, b):
+        """
+        ITA:
+        Calcola la distanza di Levenshtein tra due stringhe. Ovvero il numero minimo di operazioni
+        necessarie per trasformare una stringa nell'altra.
+        Le operazioni possibili sono:
+        - Inserimento di un carattere
+        - Cancellazione di un carattere
+        - Sostituzione di un carattere
+        ENG:
+        Calculates the Levenshtein distance between two strings. That is, the minimum number of
+        operations needed to transform one string into the other.
+        The operations allowed are:
+        - Insertion of a character
+        - Deletion of a character
+        - Substitution of a character
+        :param a: stringa 1
+        :param b:   stringa 2
+        :return:
+        """
+        if a == b:
+            return 0
+        if len(a) < len(b):
+            a, b = b, a
+
+        previous_row = range(len(b) + 1)
+        for i, c1 in enumerate(a):
+            current_row = [i + 1]
+            for j, c2 in enumerate(b):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (c1 != c2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+
+        return previous_row[-1]
+
+    def closestWords(self, input_word, word_list, max_distance=None, top_n=None):
+        """
+        ITA:
+            Restituisce una lista di parole che hanno una distanza di Levenshtein minore o uguale a max_distance
+            rispetto alla parola input_word.
+        ENG:
+            Returns a list of words that have a Levenshtein distance less than or equal to max_distance
+            from the input_word.
+        :param input_word:
+        :param word_list:
+        :param max_distance:
+        :param top_n:
+        :return:
+        """
+        word_distances = [(word, self.levenshteinDistance(input_word, word)) for word in word_list]
+
+        if max_distance is not None:
+            word_distances = [(word, distance) for word, distance in word_distances if distance <= max_distance]
+
+        word_distances.sort(key=lambda x: x[1])
+
+        if top_n is not None:
+            word_distances = word_distances[:top_n]
+
+        return [word for word, _ in word_distances]
+
     def initCompleter(self):
         """
         Inizializza il completer
@@ -685,7 +791,7 @@ class pythonCodeEditor(QPlainTextEdit):
         # PopupCompletion mostra la lista dei completamenti
         self.completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-        self.completer.activated.connect(self.insertCompletion)
+        self.completer.activated[str].connect(self.insertCompletion)
 
     def insertCompletion(self, completion):
         """
@@ -703,6 +809,10 @@ class pythonCodeEditor(QPlainTextEdit):
         cursor.insertText(completion[-extra:])
         self.setTextCursor(cursor)
 
+    def updateCompleterPopupItems(self, completion_prefix):
+        self.completer.setCompletionPrefix(completion_prefix)
+        self.completer.popup().setCurrentIndex(self.completer.completionModel().index(0, 0))
+
     def textUnderCursor(self):
         """
         Ritorna il testo sotto il cursore, ovvero il testo che si sta scrivendo
@@ -719,7 +829,6 @@ class pythonCodeEditor(QPlainTextEdit):
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
         self.updateLineNumberAreaWidth(0)
         self.highlightCurrentLine()
-
 
     def lineNumberAreaPaintEvent(self, event):
         painter = QPainter(self.lineNumberArea)
@@ -794,3 +903,21 @@ class pythonCodeEditor(QPlainTextEdit):
             cr.setWidth(self.completer.popup().sizeHintForColumn(0)
                         + self.completer.popup().verticalScrollBar().sizeHint().width())
             self.completer.complete(cr)
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.editor = pythonCodeEditor(self)
+        completer = QCompleter(python_keywords, self.editor)
+        self.editor.completer = completer
+        self.setCentralWidget(self.editor)
+
+def main():
+    app = QApplication([])
+    main_window = MainWindow()
+    main_window.show()
+    app.exec_()
+
+if __name__ == '__main__':
+    main()

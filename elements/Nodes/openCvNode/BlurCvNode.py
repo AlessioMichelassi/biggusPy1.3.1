@@ -197,7 +197,7 @@ class BlurCvNode(AbstractNodeInterface):
         self.proxyWidget.setFixedSize(self.width - 20, self.height - 50)
         self.nodeGraphic.createProxyWidget(self.proxyWidget)
         self.proxyWidget.setFixedWidth(self.width - 20)
-        self.proxyWidget.setFixedHeight(self.height - 50)
+        self.proxyWidget.setFixedHeight(self.height - 80)
         self.proxyWidget.move(int(self.width // 2 - self.proxyWidget.width() // 2),
                               int(self.height // 2 - self.proxyWidget.height() // 2) + 20)
         self.setDefaultParameters()

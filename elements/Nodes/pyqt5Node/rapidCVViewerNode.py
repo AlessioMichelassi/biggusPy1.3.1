@@ -28,7 +28,7 @@ class rapidCVViewerNode(AbstractNodeInterface):
     height = 250
     colorTrain = [QColor(28, 134, 26), QColor(230, 255, 249), QColor(23, 255, 102), QColor(63, 255, 128),
                   QColor(123, 255, 168), QColor(11, 167, 64), QColor(0, 0, 0), QColor(23, 255, 102)]
-
+    menuReturnValue = "normal"
     proxyWidget: ImageViewerWidget
     logo = r"Release/biggusFolder/imgs/logos/Qt.png"
 
@@ -41,7 +41,12 @@ class rapidCVViewerNode(AbstractNodeInterface):
         self.changeSize(self.width, self.height)
 
     def calculateOutput(self, plugIndex):
-        value = self.inPlugs[0].getValue()
+        image = self.inPlugs[0].getValue()
+        operations = {
+            "normal": self.doNormal,
+            "blueCheck": self.doBlueCheck,
+        }
+        value = operations[self.menuReturnValue](image)
         if isinstance(value, np.ndarray):
             self.proxyWidget.setImage(value)
             if len(value.shape) == 2:
@@ -60,6 +65,47 @@ class rapidCVViewerNode(AbstractNodeInterface):
         self.updateAll()
         self.outPlugs[plugIndex].setValue(value)
         return self.outPlugs[plugIndex].getValue()
+
+    def showContextMenu(self, position):
+        menu = QMenu()
+        _normal = menu.addAction("Normal")
+        _blueCheck = menu.addAction("blueCheck")
+
+        action = menu.exec_(position)
+        if action is not None:
+            self.menuReturnValue = action.text()
+        if action == _normal:
+            image = self.inPlugs[0].getValue()
+            self.menuReturnValue = "normal"
+            self.outPlugs[0].setValue(self.doNormal(image))
+        elif action == _blueCheck:
+            image = self.inPlugs[0].getValue()
+            self.menuReturnValue = "blueCheck"
+            self.outPlugs[0].setValue(self.doBlueCheck(image))
+
+        self.updateAll()
+        if self.nodeData.outConnections:
+            for connection in self.nodeData.outConnections:
+                connection.updateValue()
+        else:
+            self.nodeData.calculate()
+
+    def doNormal(self, image):
+        return image
+
+    def doBlueCheck(self, image):
+        if isinstance(image, np.ndarray):
+            blue_channel_only = np.zeros(image.shape, dtype=np.uint8)
+            blue_channel_only[:, :, 0] = image[:, :, 0]  # Usa il canale blu invece del rosso
+
+            # Annulla il canale rosso e verde nelle aree appropriate
+            mask = np.zeros(image.shape[:2], dtype=bool)  # Utilizza bool invece di np.bool
+            for i in range(1, 7, 2):
+                mask[:, int(i * image.shape[1] / 7):int((i + 1) * image.shape[1] / 7)] = True
+            blue_channel_only[mask, 1] = 0
+            blue_channel_only[mask, 2] = 0  # Annulla il canale rosso invece del blu
+
+            return blue_channel_only
 
     def setImage(self, image):
         self.viewer.setImage(image)
