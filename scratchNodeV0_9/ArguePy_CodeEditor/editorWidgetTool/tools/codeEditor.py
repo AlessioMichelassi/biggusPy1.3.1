@@ -368,8 +368,8 @@ class pythonCodeEditor(QPlainTextEdit):
     # ---------------------- KET PRESS EVENT --------
 
     def keyPressEvent(self, event):
-        if self.completer.popup().isVisible():
-            self.wordCompleting(event)
+        if self.handleCompleterKeyPressEvent(event):
+            return
         # Auto completamento delle parentesi
         if event.key() in [Qt.Key.Key_BraceLeft, Qt.Key.Key_BracketLeft, Qt.Key.Key_ParenLeft, Qt.Key.Key_QuoteDbl,
                            Qt.Key.Key_Apostrophe]:
@@ -385,7 +385,8 @@ class pythonCodeEditor(QPlainTextEdit):
         else:
             super(pythonCodeEditor, self).keyPressEvent(event)
 
-    def wordCompleting(self, event):
+    def handleCompleterKeyPressEvent(self, event):
+        if self.completer.popup().isVisible():
             if event.key() in (Qt.Key.Key_Enter, Qt.Key.Key_Return):
                 self.completer.setCurrentRow(self.completer.currentRow() + 1)
                 return
@@ -786,12 +787,12 @@ class pythonCodeEditor(QPlainTextEdit):
         Inizializza il completer
         :return:
         """
-        self.completer = QCompleter(self)
+        self.completer = QCompleter(python_keywords, self)
         self.completer.setWidget(self)
         # PopupCompletion mostra la lista dei completamenti
         self.completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-        self.completer.activated[str].connect(self.insertCompletion)
+        self.completer.activated.connect(self.insertCompletion)
 
     def insertCompletion(self, completion):
         """
