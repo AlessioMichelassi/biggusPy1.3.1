@@ -11,7 +11,7 @@ python_keywords = [
 ]
 
 
-class PlainTextEditWithCompleter(pythonCodeEditor):
+class PlainTextEditWithCompleter(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.completer = QCompleter()
@@ -40,7 +40,11 @@ class PlainTextEditWithCompleter(pythonCodeEditor):
         if len(completion_prefix) > 0:
             # Aggiungi questa riga per assicurarti che il popup del completer sia valido
             self.completer.setWidget(self)
-            self.completer.complete()
+            rect = self.cursorRect()
+            rect.setWidth(self.completer.popup().sizeHintForColumn(0)
+                          + self.completer.popup().verticalScrollBar().sizeHint().width())
+            # Mostra il popup nella posizione calcolata
+            self.completer.complete(rect)
         else:
             self.completer.popup().hide()
 
@@ -70,11 +74,13 @@ class MainWindow(QMainWindow):
         self.editor.completer = completer
         self.setCentralWidget(self.editor)
 
+
 def main():
     app = QApplication([])
     main_window = MainWindow()
     main_window.show()
     app.exec_()
+
 
 if __name__ == '__main__':
     main()

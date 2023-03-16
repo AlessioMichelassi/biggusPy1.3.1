@@ -351,19 +351,19 @@ class pythonCodeEditor(QPlainTextEdit):
         menu.addAction(_search)
         action = menu.exec_(self.mapToGlobal(event.pos()))
 
-    def event(self, QEvent):
-        if QEvent.type() == QEvent.Type.KeyPress:
-            if QEvent.key() == Qt.Key.Key_Tab:
+    def event(self, event):
+        if event.type() == event.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Tab:
                 if self.textCursor().hasSelection():  # se una parte del testo è selezionata
                     self.indentSelectedText()
                 else:
                     self.insertPlainText("    ")
                 return True
             # se viene premuto shift + tab fa l'indent alla rovescia
-            elif QEvent.key() == Qt.Key.Key_Backtab:
+            elif event.key() == Qt.Key.Key_Backtab:
                 self.unIndentSelectedText()
                 return True
-        return super().event(QEvent)
+        return super().event(event)
 
     # ---------------------- KET PRESS EVENT --------
 
