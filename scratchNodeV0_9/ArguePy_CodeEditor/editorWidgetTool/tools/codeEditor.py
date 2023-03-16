@@ -353,14 +353,14 @@ class pythonCodeEditor(QPlainTextEdit):
 
     def event(self, event):
         if event.type() == event.Type.KeyPress:
-            if event.key() == Qt.Key.Key_Tab:
+            if event.key() == Qt.Key.Key_Tab and not self.completer.popup().isVisible():
                 if self.textCursor().hasSelection():  # se una parte del testo è selezionata
                     self.indentSelectedText()
                 else:
                     self.insertPlainText("    ")
                 return True
             # se viene premuto shift + tab fa l'indent alla rovescia
-            elif event.key() == Qt.Key.Key_Backtab:
+            elif event.key() == Qt.Key.Key_Backtab and not self.completer.popup().isVisible():
                 self.unIndentSelectedText()
                 return True
         return super().event(event)
@@ -375,7 +375,8 @@ class pythonCodeEditor(QPlainTextEdit):
                            Qt.Key.Key_Apostrophe]:
             self.parenthesesAutoComplete(event)
         elif event.key() == Qt.Key.Key_Return:
-            self.insertNewLine()
+            if not self.completer.popup().isVisible():  # Aggiungi questa riga
+                self.insertNewLine()
         # se viene premuto il tasto #
         elif event.key() == Qt.Key.Key_NumberSign:
             if self.textCursor().hasSelection():
@@ -387,27 +388,31 @@ class pythonCodeEditor(QPlainTextEdit):
 
     def handleCompleterKeyPressEvent(self, event):
         if self.completer.popup().isVisible():
-            if event.key() in (Qt.Key.Key_Enter, Qt.Key.Key_Return):
-                self.completer.setCurrentRow(self.completer.currentRow() + 1)
-                return
-            elif event.key() == Qt.Key.Key_Tab:
-                self.insert_completion(self.completer.currentCompletion())
+            if event.key() in (Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Escape):
+                event.ignore()
+                return True
+
+            if event.key() in [Qt.Key.Key_Tab, Qt.Key.Key_Return]:
+                self.insertCompletion(self.completer.currentCompletion())
                 self.completer.popup().hide()
+                return True
 
-                return
+            elif event.key() == Qt.Key.Key_Backtab:
+                self.completer.setCurrentRow(self.completer.currentRow() - 1)
+                return True
 
-            super().keyPressEvent(event)
+        completion_prefix = self.textUnderCursor()
+        if completion_prefix != self.completer.completionPrefix():
+            self.updateCompleterPopupItems(completion_prefix)
 
-            completion_prefix = self.text_under_cursor()
-            if completion_prefix != self.completer.completionPrefix():
-                self.update_completer_popup_items(completion_prefix)
-
-            if len(completion_prefix) > 0:
-                # Aggiungi questa riga per assicurarti che il popup del completer sia valido
-                self.completer.setWidget(self)
-                self.completer.complete()
-            else:
-                self.completer.popup().hide()
+        if len(completion_prefix) > 0:
+            self.completer.setWidget(self)
+            rect = self.cursorRect()
+            rect.setWidth(self.completer.popup().sizeHintForColumn(0)
+                          + self.completer.popup().verticalScrollBar().sizeHint().width())
+            self.completer.complete(rect)
+            return True
+        return False
 
     def parenthesesAutoComplete(self, event):
         """
