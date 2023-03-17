@@ -29,9 +29,9 @@ class numPyImageGeneratorNode(AbstractNodeInterface):
         self.changeSize(self.width, self.height)
 
     def calculateOutput(self, plugIndex):
-
         value = self.inPlugs[0].getValue()
         self.outPlugs[plugIndex].setValue(value)
+        self.updateAll()
         return self.outPlugs[plugIndex].getValue()
 
     def redesign(self):
@@ -69,7 +69,6 @@ class numPyImageGeneratorNode(AbstractNodeInterface):
                 connection.updateValue()
         else:
             self.nodeData.calculate()
-        self.updateAll()
 
     def doBlackImage(self):
         image = np.zeros((self.imageHeight, self.imageWidth, self.imageColorChannel), self.imageDepth)

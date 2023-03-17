@@ -461,12 +461,9 @@ class AbstractNodeGraphic(QGraphicsItem):
             self.txtValue.text().count(char) for char in charset_normalizer
         )
         if charsCount > 0:
-            size.setWidth(size.width() + charsCount * 2)
-
+            self.txtValue.setFixedWidth(charsCount * 8)
         if self.txtValue.width() > self.width * 2 - 40:
-            size.setWidth(self.width * 2 - 40)
-        self.txtValue.setMinimumWidth(size.width())
-        self.txtValue.setMaximumWidth(size.width())
+            self.txtValue.setFixedWidth(self.width * 2 - 40)
         x = (self.width - self.txtValue.width()) // 2
         y = self.height - (self.txtValue.height() * 1.2)
         self.txtValueProxy.setPos(x, y)

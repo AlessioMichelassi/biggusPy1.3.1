@@ -50,6 +50,8 @@ class ImageBlendCvNode(AbstractNodeInterface):
             "hardMix": self.hardMix,
         }
         returnImage = operations[self.menuReturnValue]()
+        if returnImage is None:
+            return
         self.outPlugs[plugIndex].setValue(returnImage)
         self.updateAll()
         return self.outPlugs[plugIndex].getValue()
@@ -124,48 +126,58 @@ class ImageBlendCvNode(AbstractNodeInterface):
             self.pinLight()
         elif action == _hardMix:
             self.hardMix()
-        self.updateAll()
+
         if self.nodeData.outConnections:
             for connection in self.nodeData.outConnections:
                 connection.updateValue()
         else:
             self.nodeData.calculate()
+        self.updateAll()
 
     def returnImage(self):
         img1 = self.inPlugs[0].getValue()
         img2 = self.inPlugs[1].getValue()
-        if img1 is None or not isinstance(img1, np.ndarray):
-            img1 = np.zeros((512, 512, 3), np.uint8)
 
-        if img2 is None or not isinstance(img2, np.ndarray):
-            img2 = np.zeros((512, 512, 3), np.uint8)
-
+        if img1 is None or img2 is None:
+            return None, None
+        if not isinstance(img1, np.ndarray) or not isinstance(img2, np.ndarray):
+            return None, None
         if img1.shape != img2.shape:
             img2 = cv2.resize(img2, (img1.shape[1], img1.shape[0]))
         return img1, img2
 
     def add(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
     def addWeighted(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.addWeighted(img1, 0.5, img2, 0.5, 0)
         return returnImage
 
     def subtract(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.subtract(img1, img2)
         return returnImage
 
     def multiply(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.multiply(img1, img2)
         return returnImage
 
     def screen(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         img1_float = img1.astype(np.float32)
         img2_float = img2.astype(np.float32)
         returnImage = 255 - cv2.multiply(255 - img1_float, 255 - img2_float) / 255
@@ -173,6 +185,8 @@ class ImageBlendCvNode(AbstractNodeInterface):
 
     def overlay2(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         result = np.zeros_like(img1)
         mask = img2 <= 128
         result[mask] = (2 * img1[mask] * img2[mask]) / 255
@@ -181,26 +195,36 @@ class ImageBlendCvNode(AbstractNodeInterface):
 
     def overlay(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         result = np.where(img2 <= 128, (2 * img1 * img2) / 255, 255 - (2 * (255 - img1) * (255 - img2)) / 255)
         return result
 
     def darken(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.min(img1, img2)
         return returnImage
 
     def lighten(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.max(img1, img2)
         return returnImage
 
     def difference(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.absdiff(img1, img2)
         return returnImage
 
     def exclusion(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         img1_float = img1.astype(np.float32)
         img2_float = img2.astype(np.float32)
         returnImage = img1_float + img2_float - 2 * img1_float * img2_float / 255
@@ -208,6 +232,8 @@ class ImageBlendCvNode(AbstractNodeInterface):
 
     def hardLight(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         result = np.zeros_like(img1)
         mask = img1 <= 128
         result[mask] = (2 * img1[mask] * img2[mask]) / 255
@@ -216,6 +242,8 @@ class ImageBlendCvNode(AbstractNodeInterface):
 
     def softLight(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         result = np.zeros_like(img1)
         mask = img2 <= 128
         result[mask] = (img1[mask] * (img2[mask] / 128)) + img1[mask] * (1 - (img2[mask] / 255))
@@ -224,41 +252,57 @@ class ImageBlendCvNode(AbstractNodeInterface):
 
     def colorDodge(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.divide(img1, cv2.bitwise_not(img2))
         return returnImage
 
     def colorBurn(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.divide(cv2.bitwise_not(img1), cv2.bitwise_not(img2))
         return returnImage
 
     def linearDodge(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
     def linearBurn(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.subtract(img1, img2)
         return returnImage
 
     def linearLight(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
     def vividLight(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
     def pinLight(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
     def hardMix(self):
         img1, img2 = self.returnImage()
+        if img1 is None or img2 is None:
+            return
         returnImage = cv2.add(img1, img2)
         return returnImage
 
