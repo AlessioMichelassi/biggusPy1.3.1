@@ -122,7 +122,7 @@ class BlurCvNode(AbstractNodeInterface):
     proxyWidget: cmbBoxWidget
     logo = r"Release/biggusFolder/imgs/logos/openCvLogo.png"
 
-    def __init__(self, value=20, inNum=2, outNum=1, parent=None):
+    def __init__(self, value=20, inNum=1, outNum=1, parent=None):
         super().__init__(value, inNum, outNum, parent)
         self.setClassName("BlurCvNode")
         self.setName("BlurCvNode")

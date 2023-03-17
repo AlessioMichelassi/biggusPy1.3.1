@@ -460,8 +460,11 @@ class AbstractNodeGraphic(QGraphicsItem):
         charsCount = len(self.txtValue.text()) - sum(
             self.txtValue.text().count(char) for char in charset_normalizer
         )
-        if charsCount > 0:
+        if charsCount > 4:
             self.txtValue.setFixedWidth(charsCount * 8)
+        else:
+            self.txtValue.setFixedWidth(80)
+        # se la larghezza della QLineEdit è maggiore del doppio rispetto alla larghezza del widget
         if self.txtValue.width() > self.width * 2 - 40:
             self.txtValue.setFixedWidth(self.width * 2 - 40)
         x = (self.width - self.txtValue.width()) // 2

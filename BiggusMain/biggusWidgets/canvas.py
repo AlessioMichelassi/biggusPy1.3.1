@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import *
 from BiggusMain.biggusWidgets.CodeToNodeWidget.codeToNode import FromCodeToNode
 from BiggusMain.biggusWidgets.customFocusWidget import customFocusWidget
 from BiggusMain.elements.Connections.Connection import Connection
+from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeGraphicV1_2 import AbstractNodeGraphic
 from BiggusMain.graphicEngine.GraphicSceneOverride import GraphicSceneOverride
 from BiggusMain.graphicEngine.graphicViewOverride import GraphicViewOverride
 
@@ -84,6 +85,8 @@ class Canvas(customFocusWidget):
             super().keyPressEvent(event)
 
     # ------------------- MOUSE EVENTS -------------------
+
+
 
     # ------------------- DRAG AND DROP EVENTS -------------------
 
