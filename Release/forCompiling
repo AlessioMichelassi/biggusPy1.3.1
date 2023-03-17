@@ -1,0 +1,2 @@
+pyinstaller --icon=Release/biggusFolder/imgs/icon/BiggusIcon.ico --onedir --onefile --name biggusPy --clean main.py
+

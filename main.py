@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from biggusPy import biggusPy
+from BiggusMain.biggusPy import BiggusPy
 
 
 def setPalette(app):
@@ -36,7 +36,7 @@ def setPalette(app):
 def main():
     app = QApplication(sys.argv)
     setPalette(app)
-    window = biggusPy()
+    window = BiggusPy()
     window.show()
     sys.exit(app.exec())
 

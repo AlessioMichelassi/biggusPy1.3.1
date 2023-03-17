@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMenu
 
-from scratchNodeV0_9.pixelSmith_GraphicEditor.elements.nodeV2_1.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
+from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
 
 
 class DefaultNode(AbstractNodeInterface):
@@ -9,7 +9,7 @@ class DefaultNode(AbstractNodeInterface):
     height = 120
     colorTrain = []
 
-    def __init__(self, value= 20, inNum=2, outNum=1, parent=None):
+    def __init__(self, value=20, inNum=2, outNum=1, parent=None):
         super().__init__(value, inNum, outNum, parent)
         self.setClassName("DefaultNode")
         self.setName("DefaultNode")
