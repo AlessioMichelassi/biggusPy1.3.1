@@ -242,7 +242,6 @@ class GraphicViewOverride(QGraphicsView):
         :return:
         """
         item = self.getItemAtClick(event)
-        self.parent().setFocus()
         if self.isConnectingPlug:
             if isinstance(item, PlugGraphic):
                 self.connectNode(item)

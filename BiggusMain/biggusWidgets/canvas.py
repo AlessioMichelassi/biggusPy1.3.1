@@ -11,7 +11,6 @@ from PyQt5.QtWidgets import *
 from BiggusMain.biggusWidgets.CodeToNodeWidget.codeToNode import FromCodeToNode
 from BiggusMain.biggusWidgets.customFocusWidget import customFocusWidget
 from BiggusMain.elements.Connections.Connection import Connection
-from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeGraphicV1_2 import AbstractNodeGraphic
 from BiggusMain.graphicEngine.GraphicSceneOverride import GraphicSceneOverride
 from BiggusMain.graphicEngine.graphicViewOverride import GraphicViewOverride
 
@@ -446,7 +445,8 @@ class Canvas(customFocusWidget):
                 node.setPos(pos)
             except Exception as e:
                 print(
-                    f"error: {e} in {self.__class__.__name__} {sys._getframe().f_code.co_name} line: {sys._getframe().f_lineno}")
+                    f"error: {e} in {self.__class__.__name__} {sys._getframe().f_code.co_name} "
+                    f"line: {sys._getframe().f_lineno}")
 
     def deserializeConnections(self, serializedJsonDictionary):
         deserialized = json.loads(serializedJsonDictionary)

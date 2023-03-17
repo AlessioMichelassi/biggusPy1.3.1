@@ -71,6 +71,7 @@ class SuperTxtTitle(QGraphicsTextItem):
 
 class SuperQLineEdit(QLineEdit):
     font = QFont("Arial", 7)
+    isWidgetSelected = False
 
     def __init__(self, graphicNode, parent=None):
         super().__init__(parent)
@@ -99,6 +100,18 @@ class SuperQLineEdit(QLineEdit):
                                     }}
                         """
         self.setStyleSheet(self.styleZ)
+        self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        self.installEventFilter(self)
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        # sourcery skip: extract-duplicate-method
+        if event.type() == QEvent.Type.FocusIn:
+            self.isWidgetSelected = True
+            self.update()
+        elif event.type() == QEvent.Type.FocusOut:
+            self.isWidgetSelected = False
+            self.update()
+        return super().eventFilter(watched, event)
 
     def updateStyle(self):
         r, g, b = self.graphicNode.proxyColorFill.red(), self.graphicNode.proxyColorFill.green(), \
@@ -119,14 +132,12 @@ class SuperQLineEdit(QLineEdit):
                                 """
         self.setStyleSheet(self.styleZ)
 
-    def focusInEvent(self, event):
-        self.setStyleSheet(self.styleZ)
-        super().focusInEvent(event)
-
-    def focusOutEvent(self, event):
-        self.setStyleSheet(self.styleZ)
-        super().focusOutEvent(event)
-
+    def event(self, event: QEvent) -> bool:
+        if event.type() == QEvent.Type.MouseButtonPress:
+            # when the mouse is clicked, the focus is set on the widget
+            self.setFocus()
+            self.updateStyle()
+        return super().event(event)
 
 class SizeGripZ(QGraphicsItem):
     def __init__(self, graphicNode, parent=None):

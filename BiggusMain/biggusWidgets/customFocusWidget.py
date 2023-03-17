@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QObject, QEvent
-from PyQt5.QtGui import QKeyEvent, QPainter, QColor, QPen
-from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget
+from PyQt5.QtGui import QKeyEvent, QPainter, QColor, QPen, QFocusEvent
+from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget, QGraphicsView, QApplication, QGraphicsProxyWidget
 
 """
 ITA:
@@ -59,6 +59,7 @@ class customFocusWidget(QWidget):
 
     def event(self, event: QEvent) -> bool:
         if event.type() == QEvent.Type.MouseButtonPress:
+            # when the mouse is clicked, the focus is set on the widget
             self.setFocus()
         if event.type() == QEvent.Type.KeyPress:
             if event.key() == Qt.Key.Key_Tab:
@@ -68,3 +69,4 @@ class customFocusWidget(QWidget):
                 self.keyPressEvent(event)
                 return True
         return super().event(event)
+
