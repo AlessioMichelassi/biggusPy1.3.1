@@ -66,7 +66,6 @@ class PythonNodeMenu(QMenu):
         :param nodeName:
         :return:
         """
-        print(nodeName)
         self.biggusPy.canvas.addNodeFromMenu(self.nodeFolderPath, nodeName)
 
     def makeDoNode(self, nodeName):

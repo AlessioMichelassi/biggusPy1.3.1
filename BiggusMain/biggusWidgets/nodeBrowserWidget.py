@@ -27,10 +27,10 @@ class DraggableWidget(QWidget):
         self.lblIcon = QLabel()
         self.lblIcon.setPixmap(QPixmap("elements/imgs/BiggusIcon.ico"))
         self.lblIcon.setScaledContents(True)
-        self.lblIcon.setFixedSize(64, 40)
+        self.lblIcon.setFixedSize(54, 40)
         self.mainLayout = QVBoxLayout()
-        self.mainLayout.addWidget(self.lblIcon, Qt.AlignmentFlag.AlignHCenter)
-        self.mainLayout.addWidget(self.lblTxt, Qt.AlignmentFlag.AlignHCenter)
+        self.mainLayout.addWidget(self.lblIcon, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.mainLayout.addWidget(self.lblTxt, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.setLayout(self.mainLayout)
         self.setStyleSheet("font-family: Lohit Gujarati; "
                            "font-size: 8pt; "
@@ -40,9 +40,8 @@ class DraggableWidget(QWidget):
     def setIcon(self, path):
         self.lblIcon.setPixmap(QPixmap(path))
         self.lblIcon.setScaledContents(True)
-        self.lblIcon.setFixedSize(64, 40)
-        self.lblIcon.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self.lblIcon.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        self.lblIcon.setFixedSize(54, 40)
+        self.lblIcon.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 
         self.update()
 
@@ -53,7 +52,6 @@ class DraggableWidget(QWidget):
 
     def mouseMoveEvent(self, event: QMouseEvent):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            print(f"Debug from class {self.__class__.__name__}: mouseMoveEvent")
             # Crea l'oggetto drag
             drag = QDrag(self)
             mime_data = QMimeData()
@@ -119,12 +117,15 @@ class NodeBrowser(customFocusWidget):
                 Nodes.append(_file[:-3])
                 draggableObj = DraggableWidget(_file[:-3], widget)
                 draggableObj.nodePath = itemList
-                path = r"Release/biggusFolder/imgs/icon/"
-                file = path + (_file[:-3].replace("Node", "")).lower() + ".ico"
-                if os.path.isfile(file):
-                    draggableObj.setIcon(file)
-                else:
-                    draggableObj.setIcon("BiggusMain/elements/imgs/BiggusIcon.ico")
+                try:
+                    path = self.biggusPy.returnIconPath(_file[:-3])
+                    file = path + (_file[:-3].replace("Node", "")).lower() + ".ico"
+                    if os.path.isfile(file):
+                        draggableObj.setIcon(file)
+                except Exception as e:
+                    a = e
+                    path = f'{self.biggusPy.returnIconPath("biggusIcon")}/BiggusIcon.ico'
+                    draggableObj.setIcon(path)
                 row, col = divmod(len(Nodes), 8)
                 grid.addWidget(draggableObj, row, col)
         self.tabWidget.addTab(scroll_area, name)

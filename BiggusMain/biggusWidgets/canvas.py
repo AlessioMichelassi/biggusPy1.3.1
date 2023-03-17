@@ -91,7 +91,8 @@ class Canvas(customFocusWidget):
     @staticmethod
     def createNode(className: str, *args, **kwargs):
         # sourcery skip: use-named-expression
-        modulePath = "BiggusMain.elements.Nodes.PythonNodes"
+
+        modulePath = "Release.biggusFolder.Nodes.PythonNodes"
         module = importlib.import_module(f"{modulePath}.{className}")
         nodeClass = getattr(module, className)
         node = nodeClass(*args, **kwargs)
