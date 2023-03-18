@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QObject, QEvent
+from PyQt5.QtCore import Qt, QObject, QEvent, QRect
 from PyQt5.QtGui import QKeyEvent, QPainter, QColor, QPen, QFocusEvent
 from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget, QGraphicsView, QApplication, QGraphicsProxyWidget
 
@@ -63,7 +63,8 @@ class customFocusWidget(QWidget):
             painter.setPen(QPen(QColor(120, 60, 30), 2, Qt.PenStyle.SolidLine))
         else:
             painter.setPen(QPen(QColor(10, 10, 10), 1, Qt.PenStyle.SolidLine))
-        painter.drawRoundedRect(self.rect(), 5, 5)
+        rect = QRect(3, 3, self.width() - 4, self.height() - 4)
+        painter.drawRoundedRect(rect, 5, 5)
 
     def event(self, event: QEvent) -> bool:
         if event.type() == QEvent.Type.MouseButtonPress:
