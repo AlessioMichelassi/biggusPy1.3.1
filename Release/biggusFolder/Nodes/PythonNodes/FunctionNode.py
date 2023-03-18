@@ -89,7 +89,7 @@ class FunctionWidget(QWidget):
 
 
 class FunctionNode(AbstractNodeInterface):
-    resetValue = "def default_function(arg1):\n    return arg1 += 1"
+    resetValue = "def default_function(initialLocation):\n    return initialLocation += 1"
     functionString = resetValue
     menuReturnValue = ""
     function = None

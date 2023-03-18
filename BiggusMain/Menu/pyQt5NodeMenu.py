@@ -43,7 +43,7 @@ class PyQt5NodeMenu(QMenu):
             Create the list of python nodes
         :return:
         """
-        nodeFolderPath = self.biggusPy.returnPath("pyQt5")
+        nodeFolderPath = self.biggusPy.returnNodePath("pyQt5")
         if exists(nodeFolderPath):
             for _file in os.listdir(nodeFolderPath):
                 if _file.endswith('.py'):

@@ -14,8 +14,7 @@ class Terminal(customFocusWidget):
     messageSignal = pyqtSignal(str)
 
     def __init__(self, biggusPy, canvas, parent=None):
-        super().__init__(parent)
-        self.biggusPy = biggusPy
+        super().__init__(biggusPy, parent)
         self.canvas = canvas
         layout = QVBoxLayout()
         self.argue = pythonCodeEditor(self.biggusPy, self.canvas)

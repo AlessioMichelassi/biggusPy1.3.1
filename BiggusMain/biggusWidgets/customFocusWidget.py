@@ -27,9 +27,17 @@ ENG:
 
 class customFocusWidget(QWidget):
     isDebugFocus = False
+    systemWidgetFont = "Lohit Gujarati"
+    systemWidgetFontSize = 8
+    systemWidgetTextColor = "black"
+    systemWidgetColor = "white"
+    systemWidgetBorderColor = "black"
+    systemWidgetBackGroundColor = "white"
 
-    def __init__(self, parent=None):
+    def __init__(self, biggusPy, parent=None):
         super().__init__(parent)
+        self.biggusPy = biggusPy
+        self.getWidgetStyleFromBiggus()
         self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
         self.setMouseTracking(True)
         self.isWidgetSelected = False
@@ -70,3 +78,27 @@ class customFocusWidget(QWidget):
                 return True
         return super().event(event)
 
+    def setWidgetStyle(self):
+        self.setStyleSheet(
+            f"""
+            QWidget {{
+                background-color: rgba({self.systemWidgetBackGroundColor.red()}, {self.systemWidgetBackGroundColor.green()}, {self.systemWidgetBackGroundColor.blue()}, {self.systemWidgetBackGroundColor.alpha()});
+                color: rgba({self.systemWidgetTextColor.red()}, {self.systemWidgetTextColor.green()}, {self.systemWidgetTextColor.blue()}, {self.systemWidgetTextColor.alpha()});
+                font-family: {self.systemWidgetFont};
+                font-size: {self.systemWidgetFontSize}px;
+            }}""")
+
+    def getWidgetStyleFromBiggus(self):
+        font = self.biggusPy.systemWidgetFont
+        if isinstance(font, str):
+            self.systemWidgetFont = font
+            self.systemWidgetFontSize = self.biggusPy.systemWidgetFontSize
+        else:
+            self.systemWidgetFont = font.family()
+            self.systemWidgetFontSize = font.pointSize()
+
+        self.systemWidgetTextColor = self.biggusPy.systemWidgetFontColor
+        self.systemWidgetColor = self.biggusPy.systemWidgetFontColor
+        self.systemWidgetBorderColor = self.biggusPy.systemWidgetBorderColor
+        self.systemWidgetBackGroundColor = self.biggusPy.systemWidgetBackGroundColor
+        self.setWidgetStyle()

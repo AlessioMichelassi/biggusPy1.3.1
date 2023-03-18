@@ -44,7 +44,7 @@ class OpenCvNodeMenu(QMenu):
             Create the list of python nodes
         :return:
         """
-        nodeFolderPath = self.biggusPy.returnPath("openCv")
+        nodeFolderPath = self.biggusPy.returnNodePath("openCv")
         if exists(nodeFolderPath):
             for _file in os.listdir(nodeFolderPath):
                 if _file.endswith('.py'):

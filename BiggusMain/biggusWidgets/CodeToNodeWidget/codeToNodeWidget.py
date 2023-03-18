@@ -308,7 +308,7 @@ class CodeToNodeWidget(QWidget):
         :param assignmentVariable: Ex: a = 10 b = 10 c = a + b assignmentVariable = c
         :param opNode: Ex a = 10 b = 10 c = a + b opNode = mathNode
         :param arg2: variableNode 2 Ex: a = 10 b = 10 c = a + b arg2 = b
-        :param arg1: variableNode 1 Ex: a = 10 b = 10 c = a + b arg1 = a
+        :param arg1: variableNode 1 Ex: a = 10 b = 10 c = a + b initialLocation = a
         :return:
         """
         x0 = arg1.getPos().x()

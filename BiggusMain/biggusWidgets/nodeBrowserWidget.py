@@ -77,19 +77,22 @@ class DraggableWidget(QWidget):
 
 
 class NodeBrowser(customFocusWidget):
-    systemFont: QFont = QFont("Lohit Gujarati", 8)
+
     pyTab: QWidget
     qtTab: QWidget
     cvTab: QWidget
+    tabWidget: QTabWidget
 
-    def __init__(self, biggus, canvas, parent=None):
-        super().__init__(parent)
+    def __init__(self, biggusPy, canvas, parent=None):
+        super().__init__(biggusPy, parent)
         self.canvas = canvas
-        self.biggusPy = biggus
-        pythonNodeFolderPath = self.biggusPy.returnPath("python")
-        pyQt5NodeFolderPath = self.biggusPy.returnPath("pyQt5")
-        openCvNodeFolderPath = self.biggusPy.returnPath("openCv")
-        self.setFont(self.systemFont)
+        self.initUI()
+
+    def initUI(self):
+        pythonNodeFolderPath = self.biggusPy.returnNodePath("python")
+        pyQt5NodeFolderPath = self.biggusPy.returnNodePath("pyQt5")
+        openCvNodeFolderPath = self.biggusPy.returnNodePath("openCv")
+
         self.tabWidget = QTabWidget()
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.tabWidget)

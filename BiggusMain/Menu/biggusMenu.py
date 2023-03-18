@@ -8,8 +8,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 
-
 from BiggusMain.Menu.openCvNodeMenu import OpenCvNodeMenu
+from BiggusMain.Menu.preferenceWidget import PreferenceWidget
 from BiggusMain.Menu.pyQt5NodeMenu import PyQt5NodeMenu
 from BiggusMain.Menu.pythonNodeMenu import PythonNodeMenu
 from BiggusMain.biggusWidgets.CodeToNodeWidget.codeToNode import FromCodeToNode
@@ -53,6 +53,7 @@ class BiggusMenu(QMenuBar):
         self.createNodeMenu()
         self.createViewMenu()
         self.createHelpMenu()
+        self.setMenuStyle()
 
     def createLink(self):
         self.canvas = self.biggusPy.canvas
@@ -114,11 +115,9 @@ class BiggusMenu(QMenuBar):
         _undo = QAction("Undo", self)
         _undo.setShortcut("Ctrl+Z")
         _undo.setStatusTip("Undo the last action")
-        _undo.triggered.connect(self.undo)
         _redo = QAction("Redo", self)
         _redo.setShortcut("Ctrl+Shift+Z")
         _redo.setStatusTip("Redo the last action")
-        _redo.triggered.connect(self.redo)
         _copy = QAction("Copy", self)
         _copy.setShortcut("Ctrl+C")
         _copy.setStatusTip("Copy the selected item")
@@ -131,11 +130,18 @@ class BiggusMenu(QMenuBar):
         _delete.setShortcut("Del")
         _delete.setStatusTip("Delete the selected item")
         _delete.triggered.connect(self.delete)
+        _selectAll = QAction("Select All", self)
+        _selectAll.setShortcut("Ctrl+A")
+        _selectAll.setStatusTip("Select all the items")
+        _selectAll.triggered.connect(self.selectAll)
         self.editMenu.addAction(_undo)
         self.editMenu.addAction(_redo)
         self.editMenu.addAction(_copy)
         self.editMenu.addAction(_paste)
+        self.editMenu.addSeparator()
         self.editMenu.addAction(_delete)
+        self.editMenu.addSeparator()
+        self.editMenu.addAction(_selectAll)
 
     def createNodeMenu(self):
         """
@@ -222,6 +228,8 @@ class BiggusMenu(QMenuBar):
         result.setStatusTip(arg2)
         return result
 
+    # ------------------- File Menu -------------------
+
     def newFile(self):
         self.biggusPy.restartCanvas()
         # self.biggusPy.printOnStatusBar("new")
@@ -287,6 +295,8 @@ class BiggusMenu(QMenuBar):
     def exitApp(self):
         sys.exit()
 
+    # ------------------- Edit Menu -------------------
+
     def undo(self):
         print("undo")
 
@@ -301,6 +311,11 @@ class BiggusMenu(QMenuBar):
 
     def delete(self):
         self.biggusPy.canvas.graphicView.deleteSelectedItems()
+
+    def selectAll(self):
+        self.biggusPy.canvas.graphicView.selectAllItems()
+
+    # ------------------- Node Menu -------------------
 
     def refreshNodeList(self):
         self.pythonNodeMenu.updateNodeMenu()
@@ -320,6 +335,8 @@ class BiggusMenu(QMenuBar):
     def renameNode(self):
         print("rename biggusNode")
 
+    # ------------------- View Menu -------------------
+
     def zoomIn(self):
         self.biggusPy.canvas.graphicView.scale(1.3, 1.3)
 
@@ -331,6 +348,18 @@ class BiggusMenu(QMenuBar):
 
     def zoomFitInView(self):
         self.biggusPy.canvas.graphicView.selectAllCenterSceneAndDeselect()
+
+    def settings(self):
+        self.preferencesWidget = PreferenceWidget(self.biggusPy)
+        self.preferencesWidget.show()
+
+    def openScratchONode(self):
+        scratchNode = scratchNodeV0_9(self.biggusPy.canvas)
+        scratchNode.filePath = "Release/biggusFolder/biggusCode/defaultNode.py"
+        scratchNode.loadUntitledNode(scratchNode.filePath)
+        scratchNode.show()
+
+    # ------------------- Help Menu -------------------
 
     def help(self):
         pass
@@ -370,15 +399,6 @@ class BiggusMenu(QMenuBar):
         :return:
         """
         QMessageBox.aboutQt(self, "About Qt")
-
-    def settings(self):
-        print("settings")
-
-    def openScratchONode(self):
-        scratchNode = scratchNodeV0_9(self.biggusPy.canvas)
-        scratchNode.filePath = "Release/biggusFolder/biggusCode/defaultNode.py"
-        scratchNode.loadUntitledNode(scratchNode.filePath)
-        scratchNode.show()
 
     # ------------------ recent files ------------------
 
@@ -425,3 +445,34 @@ class BiggusMenu(QMenuBar):
                 self.recentFilesMenu.addAction(file)
         self.recentFilesMenu.addSeparator()
         self.recentFilesMenu.addAction("Clear recent files").triggered.connect(self.clearRecentFiles)
+
+    # ------------------ style ------------------
+
+    def setMenuStyle(self):
+        """
+        set the menu style
+        :return:
+        """
+        # #2D2D30 è  in rgb 45 45 48
+        self.setStyleSheet(f"""
+        QMenu {{
+                font-family: "{self.biggusPy.systemFont}";
+                font-size: {self.biggusPy.systemFontSize}px;
+                background-color: #2D2D30;
+                border: 1px solid #2D2D30;
+                color: #FFFFFF;
+            }}
+            QMenu::item {{
+                background-color: transparent;
+                padding: 5px 30px 5px 30px;
+            }}
+            QMenu::item:selected {{
+                background-color: #3A393C;
+                color: #FFFFFF;
+            }}
+            QMenu::separator {{
+                height: 1px;
+                background-color: #3A393C;
+                margin-left: 10px;
+                margin-right: 5px;
+            }}""")

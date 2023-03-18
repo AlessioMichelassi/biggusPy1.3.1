@@ -38,7 +38,7 @@ class PythonNodeMenu(QMenu):
             Create the list of python nodes
         :return:
         """
-        nodeFolderPath = self.biggusPy.returnPath("python")
+        nodeFolderPath = self.biggusPy.returnNodePath("python")
         if exists(nodeFolderPath):
             for _file in os.listdir(nodeFolderPath):
                 if _file.endswith('.py'):

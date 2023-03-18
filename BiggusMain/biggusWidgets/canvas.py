@@ -24,8 +24,8 @@ class Canvas(customFocusWidget):
     clipboard = None
     node_name_list = []
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, biggusPy, parent=None):
+        super().__init__(biggusPy, parent)
         self.fileName = "Untitled"
         self.initUI()
         self.nodes = []
