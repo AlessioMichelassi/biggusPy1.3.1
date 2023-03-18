@@ -6,62 +6,7 @@ from PyQt5.QtWidgets import *
 import cv2 as cv
 import sys
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
-from BiggusMain.elements.tools.sliderBox import sliderBox
-
-
-class toolz(QWidget):
-    sld1: sliderBox
-    sld2: sliderBox
-    frame: QFrame
-    grpBox: QGroupBox
-    grpBoxLayout: QVBoxLayout
-    layout: QHBoxLayout
-    width: int = 300
-    height: int = 200
-
-    radiusChange = pyqtSignal(str)
-    sigmaChange = pyqtSignal(str)
-    valueChanged = pyqtSignal()
-
-    def __init__(self, parent=None):
-        super().__init__(parent, Qt.WindowType.Window)
-        self.sld1 = sliderBox("radius")
-        self.sld1.setSliderRange(0, 100)
-        self.sld2 = sliderBox("sigma")
-        self.sld2.setSliderRange(0, 100)
-        self.initUI()
-        self.initConnections()
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
-
-    def initUI(self):
-        mainLayout = QVBoxLayout()
-        self.frame = QFrame(flags=Qt.WindowFlags())
-        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame.setContentsMargins(5, 5, 5, 5)
-        self.frame.setFixedSize(self.width, self.height)
-        self.frame.setLayout(QVBoxLayout())
-        # aggiunge una groupBox
-        self.grpBox = QGroupBox("Blur Tool")
-        self.grpBox.setFixedSize(self.width-10, self.height-10)
-        self.grpBoxLayout = QVBoxLayout()
-        self.grpBox.setLayout(self.grpBoxLayout)
-        self.grpBoxLayout.addWidget(self.sld1, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.grpBoxLayout.addWidget(self.sld2, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.frame.layout().addWidget(self.grpBox)
-        mainLayout.addWidget(self.frame)
-        self.setLayout(mainLayout)
-
-    def initConnections(self):
-        self.sld1.valueChanged.connect(self.onRadiusChange)
-        self.sld2.valueChanged.connect(self.onSigmaChange)
-        self.sld1.valueChanged.connect(self.valueChanged)
-        self.sld2.valueChanged.connect(self.valueChanged)
-
-    def onRadiusChange(self, value):
-        self.radiusChange.emit(str(value))
-
-    def onSigmaChange(self, value):
-        self.sigmaChange.emit(str(value))
+from BiggusMain.elements.tools.blurTool import blurTool
 
 
 class cmbBoxWidget(QWidget):
@@ -75,7 +20,7 @@ class cmbBoxWidget(QWidget):
 
     def __init__(self, reference, parent=None):
         super().__init__(parent)
-        self.toolBox = toolz()
+        self.toolBox = blurTool()
         self.reference = reference
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
@@ -89,10 +34,9 @@ class cmbBoxWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def onComboChanged(self, index):
-        self.toolBox.sld1.setSliderRange(0, 100)
-        self.toolBox.sld2.setSliderRange(0, 100)
-        self.toolBox.sld1.setValue(5)
-        self.toolBox.sld2.setValue(0)
+        self.toolBox.setRange(0, 100)
+        self.toolBox.setRadius(5)
+        self.toolBox.setSigma(0)
 
     def showToolBox(self, pos):
         self.toolBox.setGeometry(int(pos.x()), int(pos.y()), 200, 100)
@@ -198,14 +142,14 @@ class ErodeCvNode(AbstractNodeInterface):
         self.proxyWidget.move(int(self.width // 2 - self.proxyWidget.width() // 2),
                               int(self.height // 2 - self.proxyWidget.height() // 2) + 20)
         self.setDefaultParameters()
-        self.proxyWidget.toolBox.radiusChange.connect(self.onRadiusChange)
-        self.proxyWidget.toolBox.sigmaChange.connect(self.onSigmaChange)
+        self.proxyWidget.toolBox.radiusChanged.connect(self.onRadiusChange)
+        self.proxyWidget.toolBox.sigmaChanged.connect(self.onSigmaChange)
         self.proxyWidget.toolBox.valueChanged.connect(self.nodeData.calculate)
 
     def setDefaultParameters(self):
         self.proxyWidget.combo.setCurrentIndex(0)
-        self.proxyWidget.toolBox.sld1.setValue(7)
-        self.proxyWidget.toolBox.sld2.setValue(0)
+        self.proxyWidget.toolBox.setRadius(7)
+        self.proxyWidget.toolBox.setSigma(0)
 
     def onRadiusChange(self, value):
         value = int(value)

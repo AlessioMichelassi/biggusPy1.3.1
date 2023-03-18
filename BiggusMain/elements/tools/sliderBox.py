@@ -11,7 +11,7 @@ class sliderBox(QWidget):
     lblOption2: QLabel  # Label for the second option
     lblOption3: QLabel  # Label for the third option
 
-    systemFont = QFont("Arial", 7)
+    systemFont = QFont("Lohit Gujarati", 7)
     widgetStyle = f"""
     QSlider::groove:horizontal {{
         border: 1px solid #bbb;
@@ -62,7 +62,8 @@ class sliderBox(QWidget):
         border-radius: 3px;
         color: white;
     }}"""
-    valueChanged = pyqtSignal(int)
+    valueChanged = pyqtSignal()
+    valueStrChange = pyqtSignal(str)
 
     def __init__(self, name, value=None, parent=None):
         super().__init__(parent)
@@ -72,7 +73,7 @@ class sliderBox(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setStyleSheet(self.widgetStyle)
+        # self.setStyleSheet(self.widgetStyle)
         self.setFont(self.systemFont)
         self.initWidget()
         self.initWidgetSize()
@@ -90,10 +91,13 @@ class sliderBox(QWidget):
         self.sldValue.setTickPosition(QSlider.TicksBelow)
 
         self.lblOption1 = QLabel()
+        self.lblOption1.hide()
         self.lblOption1.setStyleSheet(self.labelStyle)
         self.lblOption2 = QLabel()
+        self.lblOption2.hide()
         self.lblOption2.setStyleSheet(self.labelStyle)
         self.lblOption3 = QLabel()
+        self.lblOption3.hide()
         self.lblOption3.setStyleSheet(self.labelStyle)
         hLayout = QHBoxLayout()
         hLayout.addWidget(self.lblName)
@@ -129,7 +133,8 @@ class sliderBox(QWidget):
 
     def onSliderChanged(self, value):
         self.txtValue.setText(str(value))
-        self.valueChanged.emit(value)
+        self.valueChanged.emit()
+        self.valueStrChange.emit(str(value))
 
     def onTextChanged(self):
         value = self.txtValue.text()
