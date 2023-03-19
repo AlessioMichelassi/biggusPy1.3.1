@@ -15,7 +15,7 @@ from scratchONodeV0_9.pixelSmith_GraphicEditor.Widgets.colorSmith.tools.roundBtn
     Se tutti i pulsanti sono disabilitati, allora è possibile cambiare il colore a tutti i pulsanti tramite 
     un altro selezionatore (colorTrainGenerator) che usa vari algoritmi per determinare i colori.
     
-    Si può trascinare un colore da un pulsante a un altro e viceversa. Il pulsante selezionato viene utilizzato
+    Si può trascinare un colore da un pulsante a un altro event viceversa. Il pulsante selezionato viene utilizzato
     per settare il colore di partenza nell'override della QDialog.
 """
 
@@ -53,7 +53,7 @@ class ColorButtonsSelector(QWidget):
     def initUI(self):
         """
         Inizializza l'interfaccia grafica del widget creando una griglia di pulsanti
-        e label, ognuno dei quali rappresenta un colore.
+        event label, ognuno dei quali rappresenta un colore.
         :return:
         """
         gridLayout = QGridLayout()
@@ -219,7 +219,7 @@ class ColorButtonsSelector(QWidget):
         ITA:
             Dal menu contestuale è possibile fare il copia incolla dei colori.
             Copia, mette in memoria il colore su cui è stato cliccato con il tasto destro,
-            e incolla, sostituisce il colore del pulsante su cui è stato cliccato con il tasto destro
+            event incolla, sostituisce il colore del pulsante su cui è stato cliccato con il tasto destro
         :param event:
         :return:
         """

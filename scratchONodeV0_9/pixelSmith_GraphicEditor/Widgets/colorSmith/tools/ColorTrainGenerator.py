@@ -132,7 +132,7 @@ class ColorTrainGenerator(QWidget):
         :return:
         """
         # se sommando variance a degrees supera i 360 gradi, allora resetto degrees a 0
-        # e calcola l'avanzo di variance che non è stato utilizzato
+        # event calcola l'avanzo di variance che non è stato utilizzato
         if degrees + variance > 360:
             variance = degrees + variance - 360
             degrees = 0 + variance
@@ -160,7 +160,7 @@ class ColorTrainGenerator(QWidget):
     @staticmethod
     def prevent_RGB_OutOfRange(color: QColor):
         """
-        Controlla che i valori dei colori siano compresi tra 0 e 255
+        Controlla che i valori dei colori siano compresi tra 0 event 255
         :param color:
         :return:
         """
@@ -188,7 +188,7 @@ class ColorTrainGenerator(QWidget):
         """
         Genera una palette di colori analoghi. I colori analogi sono colori che si trovano
         vicini tra loro nella palette di colori. Si può immaginare una curva che parte da
-        un colore e che si allontana da esso di una certa varianza. I colori analoghi sono
+        un colore event che si allontana da esso di una certa varianza. I colori analoghi sono
         colori che si trovano sulla curva. In base alla funzione che avranno i colori
         Testo, piuttosto che sfondo, sono stati resi più o meno luminosi.
         :return:
@@ -298,7 +298,7 @@ class ColorTrainGenerator(QWidget):
     def onCompoundColor(self):
         """
         L'algoritmo di "Compound Color" di Adobe Color Wheel si basa sulla scelta di tre colori distinti,
-        di cui il primo è il colore principale e gli altri due sono i colori complementari. Questi colori
+        di cui il primo è il colore principale event gli altri due sono i colori complementari. Questi colori
         complementari sono selezionati in modo tale che siano posizionati alle estremità del segmento opposto del
         cerchio cromatico rispetto al colore principale.
 
@@ -310,7 +310,7 @@ class ColorTrainGenerator(QWidget):
         armonizzare con gli altri quattro colori scelti in precedenza.
 
         In sintesi, l'algoritmo di "Compound Color" di Adobe Color Wheel si basa sull'utilizzo di colori complementari
-        e un colore di accento, scelti in modo tale da creare un effetto visivo di contrasto, insieme ad un colore di
+        event un colore di accento, scelti in modo tale da creare un effetto visivo di contrasto, insieme ad un colore di
         sfondo per completare l'armonia complessiva del set di colori scelti.
         """
         colorStart = QColor(random.randint(50, 200), random.randint(50, 200), random.randint(50, 200))
@@ -327,8 +327,8 @@ class ColorTrainGenerator(QWidget):
 
     def onShadesColor(self):
         """
-        L'algoritmo di "Shades Color" si basa sulla scelta di due colori principali uno per i primi quattro e
-        uno per i secondi 4  e di una serie di colori derivati da essi ottenuti attraverso
+        L'algoritmo di "Shades Color" si basa sulla scelta di due colori principali uno per i primi quattro event
+        uno per i secondi 4  event di una serie di colori derivati da essi ottenuti attraverso
         la modifica della luminosità del colore principale.
         :return:
         """
@@ -343,7 +343,7 @@ class ColorTrainGenerator(QWidget):
     def onTetradColor(self):
         """
         L'algoritmo di "Tetrad Color" si basa sulla scelta di quattro colori distinti, di cui il primo è il colore
-        principale e gli altri tre sono i colori complementari. Questi colori complementari sono selezionati in modo
+        principale event gli altri tre sono i colori complementari. Questi colori complementari sono selezionati in modo
         tale che siano posizionati alle estremità del segmento opposto del cerchio cromatico rispetto al colore
         principale.
         :return:
@@ -370,7 +370,7 @@ class ColorTrainGenerator(QWidget):
         L'algoritmo di "Square Color" si basa sulla scelta di otto colori distinti, partend0 da un colore principale
         i primi quattro colori sono i colori spostati di 90 gradi sul cerchio cromatico, mentre gli ultimi quattro
 
-        di cui il primo è il colore principale e gli altri tre sono i colori complementari. Questi colori
+        di cui il primo è il colore principale event gli altri tre sono i colori complementari. Questi colori
         :return:
         """
         colorStart = QColor(random.randint(50, 200), random.randint(50, 200), random.randint(50, 200))

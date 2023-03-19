@@ -108,7 +108,7 @@ class rapidCVViewerNode(AbstractNodeInterface):
             blue_channel_only = np.zeros(image.shape, dtype=np.uint8)
             blue_channel_only[:, :, 0] = image[:, :, 0]  # Usa il canale blu invece del rosso
 
-            # Annulla il canale rosso e verde nelle aree appropriate
+            # Annulla il canale rosso event verde nelle aree appropriate
             mask = np.zeros(image.shape[:2], dtype=bool)  # Utilizza bool invece di np.bool
             for i in range(1, 7, 2):
                 mask[:, int(i * image.shape[1] / 7):int((i + 1) * image.shape[1] / 7)] = True

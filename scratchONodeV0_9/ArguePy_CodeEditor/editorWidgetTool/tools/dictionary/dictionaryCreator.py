@@ -24,10 +24,10 @@ class dictionaryCreator:
     def createDictionary(self, inputFileName, outputFileName):
         """
         crea un file python con un dizionario contenente le parole di inputFileName
-        le parole sono divise per lettera e incluse in una lista in modo che non siano più di 500 parole per lista
+        le parole sono divise per lettera event incluse in una lista in modo che non siano più di 500 parole per lista
         il dizionario è scritto in questo modo:
         [A] _ [500word] = ['A', 'A-horizon', 'A-ok', 'Aa', 'Aaa', 'Aachen'..... ]
-        e contine le parole che iniziano con la lettera [A] contanto 500 parole per lista le la 500esima parola è [500word]
+        event contine le parole che iniziano con la lettera [A] contanto 500 parole per lista le la 500esima parola è [500word]
         :param inputFileName:
         :param outputFileName:
         :return:
@@ -80,7 +80,7 @@ class dictionaryCreator:
                 # Prendiamo il primo carattere della parola
                 first_char = word[0]
 
-                # Se la chiave non esiste nel dizionario, la creiamo e inizializziamo la lista vuota
+                # Se la chiave non esiste nel dizionario, la creiamo event inizializziamo la lista vuota
                 if first_char not in dict_liste:
                     dict_liste[first_char] = []
 
@@ -102,7 +102,7 @@ class dictionaryCreator:
         A= ['A', 'A-horizon', 'A-ok', 'Aa', 'Aaa', 'Aachen'..... ]
         B= ['B', 'B-horizon', 'B-ok', 'Ba', 'Baa', 'Baal'..... ]
         Quello che fa la routine è aggiungere le parole mancanti al dizionario esistente cercandole
-        nel file fileWithTheListOfWord e poi salvare il dizionario aggiornato in outputFileName
+        nel file fileWithTheListOfWord event poi salvare il dizionario aggiornato in outputFileName
         :param existingDictionaryFileName: file esistente con il dizionario
         :param fileWithTheListOfWord: file con una lista di parole
         :param outputFileName:
@@ -120,7 +120,7 @@ class dictionaryCreator:
                 # Prendiamo il primo carattere della parola
                 first_char = word[0]
 
-                # Se la chiave non esiste nel dizionario, la creiamo e inizializziamo la lista vuota
+                # Se la chiave non esiste nel dizionario, la creiamo event inizializziamo la lista vuota
                 if first_char not in dict_liste:
                     dict_liste[first_char] = []
 
@@ -136,7 +136,7 @@ class dictionaryCreator:
                 # Prendiamo il primo carattere della parola
                 first_char = word[0]
 
-                # Se la chiave non esiste nel dizionario, la creiamo e inizializziamo la lista vuota
+                # Se la chiave non esiste nel dizionario, la creiamo event inizializziamo la lista vuota
                 if first_char not in dict_liste:
                     dict_liste[first_char] = []
 

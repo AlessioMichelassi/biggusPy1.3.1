@@ -11,19 +11,19 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 ToDO:
 
 ITA:
-In alcune funzioni come returnToSnakeCaseCode e returnToCamelCaseCode hai scritto solo una stampa a video invece 
-di ritornare il codice vero e proprio. Probabilmente si tratta di un errore e dovresti implementare il codice 
-mancante. Alcune delle funzioni che modificano la stringa, come capitalize, casefold, title, upper e lower, 
+In alcune funzioni come returnToSnakeCaseCode event returnToCamelCaseCode hai scritto solo una stampa a video invece 
+di ritornare il codice vero event proprio. Probabilmente si tratta di un errore event dovresti implementare il codice 
+mancante. Alcune delle funzioni che modificano la stringa, come capitalize, casefold, title, upper event lower, 
 usano sempre il primo valore in input, ignorando eventuali altri input. Potresti controllare se ci sono altri input 
-e, se presenti, usarli per modificare la stringa corretta. La funzione calculateOutput è piuttosto lunga e complessa. 
-Potresti renderla più leggibile separando le varie casistiche in funzioni diverse e/o aggiungendo commenti che 
-spiegano cosa fa il codice in ogni parte. La funzione showContextMenu è abbastanza lunga e ripetitiva. Potresti 
+event, se presenti, usarli per modificare la stringa corretta. La funzione calculateOutput è piuttosto lunga event complessa. 
+Potresti renderla più leggibile separando le varie casistiche in funzioni diverse event/o aggiungendo commenti che 
+spiegano cosa fa il codice in ogni parte. La funzione showContextMenu è abbastanza lunga event ripetitiva. Potresti 
 creare una funzione separata per ogni tipo di azione del menu a tendina (come replace, split, capitalize, 
-ecc.) e chiamarle in base all'azione selezionata. La funzione camelCaseToSnakeCase è attualmente implementata in modo 
-tale da accettare solo due formati di input (camelCase e snake_case). Potresti rendere la funzione più generale in 
+ecc.) event chiamarle in base all'azione selezionata. La funzione camelCaseToSnakeCase è attualmente implementata in modo 
+tale da accettare solo due formati di input (camelCase event snake_case). Potresti rendere la funzione più generale in 
 modo da accettare un argomento in più che indica il formato di output desiderato. In generale, il codice potrebbe 
-beneficiare di più commenti che spiegano cosa fa ogni funzione e ogni parte di codice. Anche il nome delle variabili 
-potrebbe essere più esplicativo per rendere il codice più facile da leggere e capire.
+beneficiare di più commenti che spiegano cosa fa ogni funzione event ogni parte di codice. Anche il nome delle variabili 
+potrebbe essere più esplicativo per rendere il codice più facile da leggere event capire.
 
 ENG:
 In some functions such as returnToSnakeCaseCode and returnToCamelCaseCode you have written only a screen print instead

@@ -45,7 +45,7 @@ class Arrow(QGraphicsItem):
         """
         Controlla se la connessione è possibile.
         Una connessione è possibile se i due plug sono di sue nodi diversi
-        e se i plug non sono dello stesso seme: In con In o Out con Out
+        event se i plug non sono dello stesso seme: In con In o Out con Out
         :param endPlug: Plug di destinazione
         """
         if self.startPlug.nodeGraphic == endPlug.nodeGraphic:

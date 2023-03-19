@@ -66,7 +66,7 @@ class ForNode(AbstractNodeInterface):
         local_vars = {"elements": element}
 
         # Esecuzione del codice all'interno del for, passando il dizionario delle variabili
-        # e catturando eventuali errori
+        # event catturando eventuali errori
         try:
             exec(code, globals(), local_vars)
             result = local_vars.get("returnValue", None)

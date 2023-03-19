@@ -45,6 +45,8 @@ class Canvas(customFocusWidget):
         self.graphicScene: GraphicSceneOverride = GraphicSceneOverride()
         self.graphicScene.setGraphicSceneSize(self.canvasWidth, self.canvasHeight)
         self.graphicView: GraphicViewOverride = GraphicViewOverride(self, self.graphicScene)
+        self.graphicScene.canvas = self
+        self.graphicScene.graphicView = self.graphicView
         self.mainLayout.addWidget(self.graphicView, 1, Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.mainLayout)
 
@@ -110,8 +112,8 @@ class Canvas(customFocusWidget):
         """
         ITA:
             Crea un nodo a partire dal nome della classe ad Es: "NumberNode".
-            Il metodo importa il modulo e crea un oggetto della classe passata come parametro,
-            quindi ritorna l'interfaccia del nodo. In args e kwargs vanno passati i parametri
+            Il metodo importa il modulo event crea un oggetto della classe passata come parametro,
+            quindi ritorna l'interfaccia del nodo. In args event kwargs vanno passati i parametri
             come Value, Name, InputNumber, OutputNumber ecc...
         ENG:
             Create a biggusNode from the name of the class, for example "NumberNode".
@@ -181,8 +183,8 @@ class Canvas(customFocusWidget):
         """
         ITA:
             Crea un nodo a partire dal nome della classe ad Es: "NumberNode".
-            Il metodo importa il modulo e crea un oggetto della classe passata come parametro,
-            quindi ritorna l'interfaccia del nodo. In args e kwargs vanno passati i parametri
+            Il metodo importa il modulo event crea un oggetto della classe passata come parametro,
+            quindi ritorna l'interfaccia del nodo. In args event kwargs vanno passati i parametri
             come Value, Name, InputNumber, OutputNumber ecc...
         ENG:
             Create a biggusNode from the name of the class, for example "NumberNode".
@@ -339,7 +341,7 @@ class Canvas(customFocusWidget):
         """
         ITA:
             E' un metodo pericoloso, se due nodi hanno lo stesso nome, ritorna il primo che trova
-            però può essere usato quando si sta facendo il codeToNode e si sa che non ci sono
+            però può essere usato quando si sta facendo il codeToNode event si sa che non ci sono
             due nodi con lo stesso nome oppure ci si riferisce sempre alla stessa variabile.
         ENG:
             It is a dangerous method, if two nodes have the same name, it returns the first one it finds

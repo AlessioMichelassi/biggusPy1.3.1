@@ -60,10 +60,10 @@ class CodeToNodeWidget(QWidget):
         """
         ITA:
             Questo metodo crea un nodo a partire dal codice passato come parametro grazie alla libreria Ast.
-            Ast è una libreria che permette di analizzare il codice python e di creare un AST (Abstract Syntax Tree)
+            Ast è una libreria che permette di analizzare il codice python event di creare un AST (Abstract Syntax Tree)
             ovvero un albero sintattico astratto. Questo albero viene poi analizzato per creare i nodi.
-            Con parseCode() viene creato l'AST e con nodeSearch() viene analizzato l'AST per creare i nodi.
-            una volta che tutti i nodi sono stati creati, vengono posizionati nella scena e quindi vengono creati i collegamenti.
+            Con parseCode() viene creato l'AST event con nodeSearch() viene analizzato l'AST per creare i nodi.
+            una volta che tutti i nodi sono stati creati, vengono posizionati nella scena event quindi vengono creati i collegamenti.
         ENG:
             This method creates a biggusNode from the code passed as a parameter thanks to the Ast library.
             Ast is a library that allows you to analyze the python code and create an AST (Abstract Syntax Tree)
@@ -199,7 +199,7 @@ class CodeToNodeWidget(QWidget):
         # ast.Subscript sono gli indici tipo lista[0] o dizionario["chiave"]
         elif isinstance(value, ast.Subscript):
             pass
-        # ast.Index sono gli indici tipo lista[0] o dizionario["chiave"] e sono usati per creare i nodi
+        # ast.Index sono gli indici tipo lista[0] o dizionario["chiave"] event sono usati per creare i nodi
         elif isinstance(value, ast.Index):
             pass
         # ast.Slice sono gli slice tipo lista[0:1] o lista[0:1:2]
@@ -255,7 +255,7 @@ class CodeToNodeWidget(QWidget):
     def returnBiggusPyNodeDictionary(self, className: str, value, name):
         """
         ITA:
-            nel caso di un dizionario una volta trovati key e biggusNode, poiche sono due liste,
+            nel caso di un dizionario una volta trovati key event biggusNode, poiche sono due liste,
             vengono convertiti in un dizionario.
         ENG:
             in the case of a dictionary once keys and values are found, because they are two lists,
@@ -295,7 +295,7 @@ class CodeToNodeWidget(QWidget):
         """
         ITA:
             opNode dovrà essere posizionato in base alle variabili che ha,
-            se a = 10 e b = 10 a e b vengono posizionati al momento della creazione
+            se a = 10 event b = 10 a event b vengono posizionati al momento della creazione
             opNode sarà posizionato come:
                 x = max(a.getPos().x(), b.getPos().x())* 1.2
                 y = (a.getPos().y(), b.getPos().y()) // 2
@@ -574,7 +574,7 @@ class CodeToNodeWidget(QWidget):
         forNode.setPos(QPointF(x, y))
 
     def setForBodyNodePosition(self, bodyNode, forNode):
-        # posiziona il body biggusNode alla sinistra del for biggusNode e sotto
+        # posiziona il body biggusNode alla sinistra del for biggusNode event sotto
         x = forNode.getPos().x() - (forNode.getWidth() + bodyNode.getWidth() * 1.2)
         y = forNode.getPos().y() + (forNode.getHeight() * 1.2)
         self.updateNodePosition(bodyNode, x, y)
@@ -692,7 +692,7 @@ class CodeToNodeWidget(QWidget):
         """
         ITA:
             Aggiorna la posizione del nodo nella scena. Quindi va a cercare il nodo
-            nel canvas e aggiorna la sua posizione.
+            nel canvas event aggiorna la sua posizione.
         ENG:
             Update the position of the biggusNode in the scene. Then it looks for the biggusNode
             in the canvas and updates its position.

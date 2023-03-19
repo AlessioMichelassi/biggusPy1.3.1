@@ -15,7 +15,7 @@ ITA:
 Un nodo è composto da:
 - un oggetto che rappresenta il nodo nel grafico
 - un oggetto che rappresenta il nodo nel codice
-- un'interfaccia che permette di comunicare tra il nodo nel grafico e il nodo nel codice
+- un'interfaccia che permette di comunicare tra il nodo nel grafico event il nodo nel codice
 
 ENG:
 A biggusNode consists of:
@@ -30,13 +30,13 @@ A biggusNode consists of:
 
 ITA:
 Di per se un nodo non fa niente di particolare, a parte prendere un valore in ingresso
- e restituirlo in uscita.
+ event restituirlo in uscita.
 
 Il nodo può essere modificato in modo da fare qualcosa di particolare, per esempio
 un nodo che somma due numeri, o un nodo che moltiplica due numeri, o un nodo che
 fa una media di due numeri, etc etc.
 
-Per farlo si può creare una classe che eredita abstractNodeInterface, e che implementa
+Per farlo si può creare una classe che eredita abstractNodeInterface, event che implementa
 il metodo calculateOutput(plugIndex).
 
 Inoltre è possibile cambiare il numero di Input, il numero di output, il colore del nodo,
@@ -261,7 +261,7 @@ class AbstractNodeInterface:
                     connection.updateValue()
             self.nodeGraphic.setTextValueOnQLineEdit(self.getOutputValue(0))
         except Exception as e:
-            """print(f"Debug: class AbstractNodeInterface, function setInputValue, error: {e}"
+            """print(f"Debug: class AbstractNodeInterface, function setInputValue, error: {event}"
                   f"\nplugIndex: {plugIndex}, biggusNode: {biggusNode}, isAResetValue: {isAResetValue} ")"""
             a = e
 
@@ -277,7 +277,7 @@ class AbstractNodeInterface:
         """
         ITA:
             Questa funzione viene chiamata quando si vuole ottenere il codice del nodo.
-            e viene creata direttamente dal nodo.
+            event viene creata direttamente dal nodo.
         ENG:
             This function is called when you want to get the code of the biggusNode.
             and it is created directly by the biggusNode.
@@ -438,7 +438,7 @@ class AbstractNodeInterface:
         self.menuOperation = operation
         # in operation viene salvata la action che ha generato il menu
         # in questo modo si può sapere quale azione è stata scelta
-        # e quindi eseguire l'azione corretta
+        # event quindi eseguire l'azione corretta
         self.nodeGraphic.contextMenu.setDefaultAction(operation)
 
     def showToolWidget(self):

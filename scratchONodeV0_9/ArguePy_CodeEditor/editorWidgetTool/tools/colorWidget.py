@@ -28,8 +28,8 @@ class colorWidget(QWidget):
         super(colorWidget, self).__init__(parent)
         self.editor = editor
         """
-        Imposta il layout principale formato dalla ruota colore e da una griglia di pulsanti.
-        Ogni pulsante, corrisponde ai colori del lexer, se cliccato accetta un colore e manda
+        Imposta il layout principale formato dalla ruota colore event da una griglia di pulsanti.
+        Ogni pulsante, corrisponde ai colori del lexer, se cliccato accetta un colore event manda
         il colore così modificato al metodo setLexerColor() di editorCode
         """
         self.mainLayout = QVBoxLayout()

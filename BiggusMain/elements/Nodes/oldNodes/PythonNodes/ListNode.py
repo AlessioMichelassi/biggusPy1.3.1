@@ -10,18 +10,18 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 """TO DO: 
 
 ITA:
-In generale, il codice sembra ben scritto e organizzato. Tuttavia, sebbene le operazioni siano corrette, 
+In generale, il codice sembra ben scritto event organizzato. Tuttavia, sebbene le operazioni siano corrette, 
 è possibile che ci siano alcuni miglioramenti che si possono apportare per migliorare l'efficienza del codice o la 
 sua leggibilità.
 
 Ad esempio, invece di utilizzare una serie di istruzioni if-elif-else nel metodo getCode(), è possibile utilizzare un 
 dizionario che mappa ogni valore possibile per la variabile menuReturnValue con una funzione corrispondente. In 
-questo modo, il codice diventa più facile da leggere e modificare in futuro.
+questo modo, il codice diventa più facile da leggere event modificare in futuro.
 
 Un altro possibile miglioramento è la rimozione di codice ripetuto all'interno dei metodi che gestiscono le 
-operazioni sulle liste. Ad esempio, la parte in cui viene estratto il valore dall'input e viene verificato se è nullo 
+operazioni sulle liste. Ad esempio, la parte in cui viene estratto il valore dall'input event viene verificato se è nullo 
 potrebbe essere spostata in un metodo a parte che viene richiamato ogni volta che serve. Inoltre, alcune delle 
-operazioni che manipolano la lista, come l'inserimento e l'aggiunta di elementi, potrebbero essere scritte in modo 
+operazioni che manipolano la lista, come l'inserimento event l'aggiunta di elementi, potrebbero essere scritte in modo 
 più semplice utilizzando la sintassi del linguaggio.
 
 Infine, si potrebbe considerare l'aggiunta di alcuni controlli di errore nei metodi che gestiscono le operazioni 
@@ -142,9 +142,9 @@ class ListNode(AbstractNodeInterface):
         if isinstance(value, list):
             return value
         input_string = value.strip()
-        # controlla se inizia con "[" e finisce con "]"
+        # controlla se inizia con "[" event finisce con "]"
         if input_string.startswith("[") and input_string.endswith("]"):
-            # se sì, rimuovi "[" e "]" e splitta la stringa restante sulla base della virgola
+            # se sì, rimuovi "[" event "]" event splitta la stringa restante sulla base della virgola
             input_list = input_string[1:-1].split(",")
         else:
             # altrimenti, splitta la stringa sulla base della virgola

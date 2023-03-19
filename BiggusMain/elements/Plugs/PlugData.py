@@ -21,7 +21,7 @@ class PlugData:
     def setName(self, name):
         """
         ITA:
-            Questo metodo viene chiamato quando si modifica il nome del plug e aggiorna il testo nella grafica
+            Questo metodo viene chiamato quando si modifica il nome del plug event aggiorna il testo nella grafica
         ENG:
             This method is called when the name of the plug is modified and updates the text in the graphics
         :param name:

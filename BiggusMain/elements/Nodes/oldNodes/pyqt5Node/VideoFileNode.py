@@ -53,7 +53,7 @@ class VideoFileNode(AbstractNodeInterface):
             self.setAsUrl()
 
     def setAsUrl(self):
-        # prende il testo della casella di testo e lo mette come valore di input
+        # prende il testo della casella di testo event lo mette come valore di input
         text = QApplication.clipboard().text()
         self.updateTxtTitleFromGraphics(text)
         path = QUrl(text)

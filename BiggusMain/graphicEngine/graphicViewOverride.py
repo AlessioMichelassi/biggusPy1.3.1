@@ -112,7 +112,7 @@ class GraphicViewOverride(QGraphicsView):
         ITA:
             Centra un oggetto nella scena. Se non viene passato nessun oggetto, ma
             sono presenti degli oggetti non selezionati, crea un rettangolo contenente tutti gli oggetti
-            non selezionati e centra la scena su questo rettangolo, altrimenti centra la scena sul punto (0,0)
+            non selezionati event centra la scena su questo rettangolo, altrimenti centra la scena sul punto (0,0)
         ENG:
             Center an object in the scene. If no object is passed, but there are
             objects that are not selected, create a rectangle containing all the objects
@@ -142,7 +142,7 @@ class GraphicViewOverride(QGraphicsView):
         """
         ITA:
             Seleziona tutti gli oggetti nella scena, centra la scena su uno di questi oggetti, la
-            scala in modo che tutti gli oggetti siano visibili e deseleziona tutti gli oggetti
+            scala in modo che tutti gli oggetti siano visibili event deseleziona tutti gli oggetti
         ENG:
             Select all the objects in the scene, center the scene on one of these objects, scale it
             so that all objects are visible and deselect all objects.
@@ -178,6 +178,37 @@ class GraphicViewOverride(QGraphicsView):
             self.panTheScene(event)
         if self.isConnectingPlug:
             self.arrow.updatePosition(self.mapToScene(event.pos()))
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            if isinstance(self.selectedItem, AbstractNodeGraphic):
+                # se è premuto CTRL
+                if QApplication.keyboardModifiers() == Qt.KeyboardModifier.ControlModifier:
+                    self.checkCollisions(self.selectedItem)
+
+    def checkCollisions(self, node):
+        for item in self.graphicScene.items():
+            if isinstance(item, Connection):
+                if item.collidesWithItem(node):
+                    # crea una connessione fra i tre elementi
+                    inputNode = item.inputNode
+                    inputPlug = item.inputPlug
+                    inputIndexPlug = item.inIndex
+                    newNode = node.nodeData
+                    outputNode = item.outputNode
+                    outputPlug = item.outputPlug
+                    outputIndexPlug = item.outIndex
+                    self.canvas.deleteConnection(item)
+                    self.graphicScene.removeItem(item)
+                    connection = Connection(outputNode, outputPlug, outputIndexPlug, newNode, newNode.inPlugs[0], 0)
+                    self.setConnection(connection)
+                    connection = Connection(newNode, newNode.outPlugs[0], 0, inputNode, inputPlug, inputIndexPlug)
+                    self.setConnection(connection)
+
+    def setConnection(self, connection):
+        connection.outputNode.outConnections.append(connection)
+        connection.inputNode.inConnections = connection
+        self.canvas.connections.append(connection)
+        self.graphicScene.addItem(connection)
+
 
     # -------------------------- MOUSE EVENTS -------------------------- #
 
@@ -185,7 +216,7 @@ class GraphicViewOverride(QGraphicsView):
         """
         ITA:
             Per prima cosa controlla se il click è stato effettuato su un oggetto
-            e lo mette nella variabile self.selectedItem. Se il click è stato effettuato
+            event lo mette nella variabile self.selectedItem. Se il click è stato effettuato
             su un plug si sta tentando di connettere due nodi, quindi crea la freccia.
             Un plugOut può avere più collegamenti, un plugIn no, quindi prima di creare
             la freccia controlla se il plugIn non abbia già una connessione. In caso la cancella.
@@ -212,7 +243,7 @@ class GraphicViewOverride(QGraphicsView):
         """
         ITA:
             Se si sta creando una connessione tra due nodi, controlla se il click è stato effettuato su un plug
-            e se è un plug di "In" controlla se il plug non abbia già una connessione. In caso la cancella.
+            event se è un plug di "In" controlla se il plug non abbia già una connessione. In caso la cancella.
         ENG:
             If you are creating a connection between two nodes, check if the click was made on a plug
             and if it is a plug of "In" check if the plug does not already have a connection. In case it deletes it.
@@ -275,9 +306,9 @@ class GraphicViewOverride(QGraphicsView):
         """
         ITA:
             Crea la freccia che collega due nodi. La freccia è una specie di collegamento
-            temporaneo e serve solo per visualizzare l'azione del collegare. Quando viene
-            fatto il release del mouse viene creata la connessione vera e propria la freccia
-            viene cancellata e sostituita con una Connection.
+            temporaneo event serve solo per visualizzare l'azione del collegare. Quando viene
+            fatto il release del mouse viene creata la connessione vera event propria la freccia
+            viene cancellata event sostituita con una Connection.
         ENG:
             Creates the arrow that connects two nodes. The arrow is a kind of temporary connection
             and is only used to visualize the action of connecting. When the mouse is released,
@@ -293,7 +324,7 @@ class GraphicViewOverride(QGraphicsView):
     def createArrowFromConnection(self, connection, event):
         """
         ITA:
-            Quando un nodo ha già una connessione in input, e si clicca sul suo plugIn,
+            Quando un nodo ha già una connessione in input, event si clicca sul suo plugIn,
             viene creata una freccia che collega il nodo con il nodo precedente in modo che la
             connessione possa essere modificata agevolmente.
         ENG:
@@ -387,7 +418,7 @@ class GraphicViewOverride(QGraphicsView):
     def openTabWindow(self):
         """
         ITA:
-            La tab Windows è una finestra di dialogo che serve per cercare i nodi e inserirli nella view.
+            La tab Windows è una finestra di dialogo che serve per cercare i nodi event inserirli nella view.
         ENG:
             The tab Windows is a dialog window that is used to search for nodes and insert them into the view.
         :return:

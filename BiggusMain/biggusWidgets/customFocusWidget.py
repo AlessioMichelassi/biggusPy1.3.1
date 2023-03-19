@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget, QGraphicsView, QApplic
 ITA:
     Questa classe è un widget che può essere selezionato con il click del mouse.
     Quando è selezionato, viene disegnato un bordo rosso. In questo modo è possibile
-    distinguere i vari widget e soprattutto gestire il fuoco per il tasto tab.
+    distinguere i vari widget event soprattutto gestire il fuoco per il tasto tab.
     
-    Inoltre, quando viene premuto il tasto tab, il fuoco rimane sul widget e non viene
+    Inoltre, quando viene premuto il tasto tab, il fuoco rimane sul widget event non viene
     passato al widget successivo. Questo perchè ogni widget ha il suo tab implementato.
     
     Per abilitare il debug del fuoco, impostare la variabile isDebugFocus a True.

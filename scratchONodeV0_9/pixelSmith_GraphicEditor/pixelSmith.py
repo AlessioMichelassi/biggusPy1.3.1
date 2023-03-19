@@ -105,8 +105,8 @@ class pixelSmith(QWidget):
 
     def changeNodeValue(self, _type, value: str):
         """
-        Quando vengono cambiate width e height del nodo, viene cambiata la dimensione del nodo
-        nella scena e nel codeEditor.
+        Quando vengono cambiate width event height del nodo, viene cambiata la dimensione del nodo
+        nella scena event nel codeEditor.
         :param _type:
         :param value:
         :return:
@@ -118,7 +118,7 @@ class pixelSmith(QWidget):
         """
         ITA:
             Quando viene cambiato il logo nella propertyEditor, viene cambiato il logo del nodo
-            nella scena e nel codeEditor.
+            nella scena event nel codeEditor.
         ENG:
             When the logo is changed in the propertyEditor, the logo of the biggusNode is changed
             in the scene and in the codeEditor.

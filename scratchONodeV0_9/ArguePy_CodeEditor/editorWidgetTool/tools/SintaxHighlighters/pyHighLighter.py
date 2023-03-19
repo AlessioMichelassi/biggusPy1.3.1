@@ -35,7 +35,7 @@ classFunction = ['__init__', '__del__', '__repr__', '__str__', '__cmp__', '__cal
 decorators = ['@staticmethod', '@classmethod', '@property']
 
 mathFunction = ['acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'ceil', 'copysign', 'cos', 'cosh',
-                'degrees', 'e', 'erf', 'erfc',
+                'degrees', 'event', 'erf', 'erfc',
                 'exp', 'expm1', 'fabs', 'factorial', 'floor', 'fmod', 'frexp', 'fsum', 'gamma', 'hypot', 'inf',
                 'isclose', 'isfinite', 'isinf',
                 'isnan', 'ldexp', 'lgamma', 'log', 'log10', 'log1p', 'log2', 'modf', 'nan', 'pi', 'pow', 'radians',
@@ -59,9 +59,9 @@ braces = ['\{', '\}', '\(', '\)', '\[', '\]']
 
 def find_triple_quotes(text):
     """
-    Trova le posizioni di inizio e fine dei commenti multilinea
+    Trova le posizioni di inizio event fine dei commenti multilinea
     :param text:
-    :return: una lista di tuple contenenti l'inizio e la fine dei commenti multilinea
+    :return: una lista di tuple contenenti l'inizio event la fine dei commenti multilinea
     """
     positions = []
     start = None
@@ -122,7 +122,7 @@ class pythonHighLighter(QSyntaxHighlighter):
         self.rules += [(r'\b%s\b' % w, 0, self.selfColor) for w in ['self']]
 
         self.rules += [(r'\b%s\b' % w, 0, self.functionColor) for w in predefinedFunctionNames]
-        # se una parola è preceduta da def o class e non è in classFunction allora è un metodo
+        # se una parola è preceduta da def o class event non è in classFunction allora è un metodo
         self.rules += [(r'\bdef\b\s*(\w+)', 1, self.methodColor)]
         self.rules += [(r'\b%s\b' % w, 0, self.classFunctionColor) for w in classFunction]
         self.rules += [(f'{b}', 0, self.braceColor) for b in braces]
@@ -199,7 +199,7 @@ class pythonHighLighter(QSyntaxHighlighter):
         for word in words:
             if word not in self.knownWords and not word.startswith('__'):
                 error_list.append((text.index(word), len(word)))  # Aggiungi l'errore alla lista
-        # Rimuovi i commenti e le stringhe dalla lista degli errori
+        # Rimuovi i commenti event le stringhe dalla lista degli errori
         rulez = [(QRegExp(pat), index, fmt)
                  for (pat, index, fmt) in self.rules]
 

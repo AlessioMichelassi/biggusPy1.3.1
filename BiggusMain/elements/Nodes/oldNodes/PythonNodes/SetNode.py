@@ -117,12 +117,12 @@ class SetNode(AbstractNodeInterface):
     def checkSet(value):
         inputString = str(value)
         print(inputString)
-        # controlla se inizia con "{" e finisce con "}"
+        # controlla se inizia con "{" event finisce con "}"
         if inputString.startswith("{") and inputString.endswith("}"):
-            # se sì, rimuovi "{" e "}" e splitta la stringa restante sulla base della virgola
+            # se sì, rimuovi "{" event "}" event splitta la stringa restante sulla base della virgola
             input_set = inputString[1:-1].split(",")
         elif inputString.startswith("[") and inputString.endswith("]"):
-            # se sì, rimuovi "[" e "]" e splitta la stringa restante sulla base della virgola
+            # se sì, rimuovi "[" event "]" event splitta la stringa restante sulla base della virgola
             input_set = inputString[1:-1].split(",")
         else:
             # altrimenti, splitta la stringa sulla base della virgola

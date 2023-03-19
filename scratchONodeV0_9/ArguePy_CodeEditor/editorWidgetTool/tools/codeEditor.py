@@ -55,12 +55,12 @@ class searchAndReplaceWidget(QWidget):
         Inizializza l'interfaccia
         :return:
         """
-        # mette i layout di search e replace in una group Box
+        # mette i layout di search event replace in una group Box
         self.grpBox = QGroupBox("Search and Replace")
 
         self.mainLayout = QVBoxLayout()
         self.mainLayout.addWidget(self.grpBox)
-        # crea i layout per search e replace
+        # crea i layout per search event replace
         self.SearchAndReplaceLayout()
 
         self.grpBox.setLayout(self.layoutMain)
@@ -402,7 +402,7 @@ class pythonCodeEditor(QPlainTextEdit):
 
             if event.key() in [Qt.Key.Key_Tab, Qt.Key.Key_Return]:
                 completition = self.completer.currentCompletion()
-                # se scrivo Fa e poi tab viene scritto Faalse...
+                # se scrivo Fa event poi tab viene scritto Faalse...
                 self.insertPlainText(completition[len(self.completer.completionPrefix())+1:])
                 self.completer.popup().hide()
                 return True
@@ -433,9 +433,9 @@ class pythonCodeEditor(QPlainTextEdit):
     def parenthesesAutoComplete(self, event):
         """
         Questa funzione si occupa di inserire le parentesi corrispondenti
-        Se proviamo a scrive una parentesi e non è segnato nessun testo crea la parentsesi corrispondente e sponsta
-        il cursore al centro. Se invece sotto sottolieiamo una porzione di testo, e clicchiamo su una parentesi di
-        apertura inserisce automaticamente la parentesi di chiusura e sposta il cursore alla fine del testo selezionato
+        Se proviamo a scrive una parentesi event non è segnato nessun testo crea la parentsesi corrispondente event sponsta
+        il cursore al centro. Se invece sotto sottolieiamo una porzione di testo, event clicchiamo su una parentesi di
+        apertura inserisce automaticamente la parentesi di chiusura event sposta il cursore alla fine del testo selezionato
         :param event:
         :return:
         """
@@ -446,7 +446,7 @@ class pythonCodeEditor(QPlainTextEdit):
             # sposta il cursore alla fine del testo selezionato
             self.moveCursor(QTextCursor.MoveOperation.EndOfBlock)
             # se non è segnato nessun testo crea la parentesi corrispondente
-            # e sposta il cursore al centro
+            # event sposta il cursore al centro
         elif not selectedText:
             self.insertPlainText(f"{event.text()}{matching[event.key()]}")
             self.moveCursor(QTextCursor.MoveOperation.Left)
@@ -496,7 +496,7 @@ class pythonCodeEditor(QPlainTextEdit):
 
     def insertNewLine(self):
         """
-        Se viene premuto invio e la riga precedente aveva
+        Se viene premuto invio event la riga precedente aveva
         una o più indentazioni la mette anche alla linea successiva
         """
         indentation = ""
@@ -515,7 +515,7 @@ class pythonCodeEditor(QPlainTextEdit):
     def commentBlock(self):
         """
         ITA:
-            Se viene premuto # e il testo è selezionato, commenta il testo selezionato
+            Se viene premuto # event il testo è selezionato, commenta il testo selezionato
         ENG:
             If # is pressed and the text is selected, comment the selected text
         """
@@ -670,7 +670,7 @@ class pythonCodeEditor(QPlainTextEdit):
         isFoundADef = False
         linesOfCode = self.toPlainText().splitlines()
         for row, line in enumerate(linesOfCode):
-            # se la riga inizia con "def" allora aggiungiamo l'indentazione e la coordinata x
+            # se la riga inizia con "def" allora aggiungiamo l'indentazione event la coordinata x
             if "def " in line and not isFoundADef:
                 indentation = len(line) - len(line.lstrip())
                 self.appendToLineIndentationList(indentation, row)
@@ -969,7 +969,7 @@ class pythonCodeEditor(QPlainTextEdit):
 
     def doCompletion(self):
         """
-        Esegue il completamento. In pratica prende il testo sotto il cursore e
+        Esegue il completamento. In pratica prende il testo sotto il cursore event
         lo confronta con la lista dei completamenti, se c'è un match allora
         mostra la lista dei completamenti nella finestra di completamento
         :return:

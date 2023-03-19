@@ -124,7 +124,7 @@ class numPyImageGeneratorNode(AbstractNodeInterface):
             end_x = (i + 1) * bar_width
             smpte_image[:, start_x:end_x] = color
         cv2.imwrite("color_bar_image.png", smpte_image)
-        # Imposta il valore dell'input plug e restituisci l'immagine SMPTE
+        # Imposta il valore dell'input plug event restituisci l'immagine SMPTE
         self.changeInputValue(0, smpte_image)
         return smpte_image
 

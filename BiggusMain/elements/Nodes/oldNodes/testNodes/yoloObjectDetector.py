@@ -72,8 +72,8 @@ class yoloObjectDetector(AbstractNodeInterface):
         infer the frame. Once it has results it will extract the labels and cordinates(Along with scores) for each object
         detected in the frame.
         ITA:
-        Questa funzione identifica il dispositivo disponibile per effettuare la predizione e lo utilizza per caricare e
-        inferire il fotogramma. Una volta ottenuti i risultati, estrarrà le etichette e le coordinate (insieme ai punteggi)
+        Questa funzione identifica il dispositivo disponibile per effettuare la predizione event lo utilizza per caricare event
+        inferire il fotogramma. Una volta ottenuti i risultati, estrarrà le etichette event le coordinate (insieme ai punteggi)
         per ogni oggetto rilevato nel fotogramma.
         """
         device = 'cuda' if torch.cuda.is_available() else 'cpu'

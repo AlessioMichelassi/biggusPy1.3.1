@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QGraphicsItem
 
+from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
+
 
 class Connection(QGraphicsItem):
     outputNode = None
@@ -13,10 +15,9 @@ class Connection(QGraphicsItem):
     inputPlug = None
     inIndex = None
 
-    def __init__(self, outputNode: 'AbstractNodeInterface', outputPlug: 'PlugData', outIndex,
-                 inputNode: 'AbstractNodeInterface', inputPlug: 'PlugData', inIndex):
+    def __init__(self, outputNode: 'AbstractNodeData', outputPlug: 'PlugData', outIndex,
+                 inputNode: 'AbstractNodeData', inputPlug: 'PlugData', inIndex):
         super().__init__()
-
         self.checkTheRightPlugType(outputNode, outputPlug, outIndex, inputNode, inputPlug, inIndex)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setZValue(-100)
@@ -48,7 +49,6 @@ class Connection(QGraphicsItem):
         if self.inputNode.outConnections:
             for connection in self.inputNode.outConnections:
                 connection.updateValue()
-
 
     def disconnect(self):
         if self in self.inputNode.outConnections:

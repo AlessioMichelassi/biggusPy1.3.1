@@ -1,3 +1,4 @@
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -11,6 +12,8 @@ class GraphicSceneOverride(QGraphicsScene):
     greyLighter: QColor = QColor(47, 47, 47, 255)
     greyDarker = QColor = QColor(29, 29, 29, 255)
     currentMousePos = QPointF(0, 0)
+    canvas = None
+    graphicView = None
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -25,8 +28,8 @@ class GraphicSceneOverride(QGraphicsScene):
         self._penLight.setWidth(1)
         self._penDark = QPen(self.greyDarker)
         self._penDark.setWidth(2)
-        self.currentDraggingNode = None
-        self.currentHoveredItem = None
+        self.current_dragging_node = None
+        self.current_hovered_item = None
 
     def setGraphicSceneSize(self, width, height):
         self.setSceneRect(-width // 2, -height // 2, width, height)
@@ -61,65 +64,32 @@ class GraphicSceneOverride(QGraphicsScene):
         if darkGreyLines:
             painter.drawLines(*darkGreyLines)
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton:
-            item = self.itemAt(event.scenePos(), QTransform())
-            if isinstance(item, AbstractNodeGraphic):
-                self.currentDraggingNode = item
-                self.currentDraggingNode.setSelected(True)
-                event.accept()
-                return
-        super().mousePressEvent(event)
-
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         super().mouseMoveEvent(event)
-        self.currentMousePos = event.scenePos()
-        if self.currentDraggingNode is not None:
-            mime_data = QMimeData()
-            drag = QDrag(self.views()[0])
-            drag.setMimeData(mime_data)
-            drag.exec_(Qt.DropAction.MoveAction)
-            event.accept()
-            return
-        item = self.itemAt(event.scenePos(), QTransform())
-        self.currentHoveredItem = item if isinstance(item, Connection) else None
-
-    def mouseReleaseEvent(self, event):
-        if self.currentDraggingNode is not None:
-            self.currentDraggingNode.setSelected(False)
-            middleNode = self.currentDraggingNode.nodeInterface
-            self.currentDraggingNode = None
-
-            if self.currentHoveredItem is not None and isinstance(self.currentHoveredItem, Connection):
-                startNode = self.currentHoveredItem.outputNode
-                startPlug = self.currentHoveredItem.outputPlug
-                startPlugIndex = self.currentHoveredItem.outIndex
-
-                new_connection = Connection(startNode, startPlug, startPlugIndex, middleNode, middleNode.inPlugs[0], 0)
-                self.addItem(new_connection)
-
-                endNode = self.currentHoveredItem.inputNode
-                endPlug = self.currentHoveredItem.inputPlug
-                endPlugIndex = self.currentHoveredItem.inIndex
-                new_connection = Connection(middleNode, middleNode.outPlugs[0], 0, endNode, endPlug, endPlugIndex)
-                self.addItem(new_connection)
-                event.accept()
-                return
-
-        super().mouseReleaseEvent(event)
+        position = QPoint(int(event.scenePos().x()), int(event.scenePos().y()))
+        self.currentMousePos = position
 
     def dragEnterEvent(self, e):
         e.acceptProposedAction()
 
-    def dropEvent(self, e):
-        # find item at these coordinates
-        item = self.itemAt(e.scenePos())
-        if item.setAcceptDrops == True:
-            # pass on event to item at the coordinates
-            try:
-                item.dropEvent(e)
-            except RuntimeError:
-                pass  # This will supress a Runtime Error generated when dropping into a widget with no MyProxy
+    def dropEvent(self, event):
+        # sourcery skip: use-named-expression
+        if event.mimeData().hasText():
+            mimeText = (event.mimeData().text()).split(";;")
+            nodeName = mimeText[1]
+            nodeAbsolutePath = mimeText[0]
+            node = self.canvas.createNodeFromAbsolutePath(nodeAbsolutePath, nodeName)
+            if node:
+                print(event.scenePos().toPoint())
+                position = self.views()[0].mapToScene(event.screenPos())
+                self.canvas.addNode(node)
+                # la posizione è scorretta di 50 pixel in x e 30 in y
+                pos = QPoint(int(position.x())-70, int(position.y() -50))
+                node.setPos(pos)  # posiziona il nodo nella scena
 
     def dragMoveEvent(self, e):
         e.acceptProposedAction()
+
+
+
+

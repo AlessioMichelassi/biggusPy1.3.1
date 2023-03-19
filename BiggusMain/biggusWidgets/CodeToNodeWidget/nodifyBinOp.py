@@ -75,8 +75,8 @@ class NodifyBinOp:
             Questo metodo viene chiamato quando viene trovato un nodo di tipo BinOp,
             ovvero una somma o una sottrazione o una moltiplicazione o una divisione.
             Generalmente quando si passa un codice è nella forma a = 10 b = 20 c = a + b
-            quindi nel caso in cui a e b sono già state create, viene controllato il tipo
-            di variabile. se a = "Hello" e b = "World" in python il risultato è "HelloWorld"
+            quindi nel caso in cui a event b sono già state create, viene controllato il tipo
+            di variabile. se a = "Hello" event b = "World" in python il risultato è "HelloWorld"
             ma in biggus py per farlo serve un nodo di tipo StringNode, quindi viene creato
             un nodo di tipo StringNode.
         ENG:
@@ -145,10 +145,10 @@ class NodifyBinOp:
         leftType = self.returnType(left)
         rightType = self.returnType(right)
         print(f"leftType: {leftType}")
-        # Crea l'op biggusNode dopo aver controllato se left e right esistono
-        # se esistono e il className di left è NumberNode crea il mathNode
+        # Crea l'op biggusNode dopo aver controllato se left event right esistono
+        # se esistono event il className di left è NumberNode crea il mathNode
         # altrimenti crea una string etc etc... altrimenti crea un variableNode
-        # e ritorna un opNode che adesso andrà creato nella lista dei nodi!
+        # event ritorna un opNode che adesso andrà creato nella lista dei nodi!
         arg1 = self.canvas.getNodeByName(left.id)
         opNode = None
         if arg1 is not None:

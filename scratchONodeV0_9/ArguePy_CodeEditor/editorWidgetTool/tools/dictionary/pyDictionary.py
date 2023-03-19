@@ -5,7 +5,7 @@ wordList = {
     'c': ['classmethod', 'callable', 'ceil', 'chr', 'class', 'classmethod', 'compile', 'complex', 'continue',
           'copysign', 'cos', 'cosh'],
     'd': ['def', 'degrees', 'del', 'delattr', 'dict', 'dir', 'divmod'],
-    'e': ['elif', 'else', 'enumerate', 'erf', 'erfc', 'eval', 'except', 'exec', 'exp', 'expm1'],
+    'event': ['elif', 'else', 'enumerate', 'erf', 'erfc', 'eval', 'except', 'exec', 'exp', 'expm1'],
     'f': ['fabs', 'factorial', 'filter', 'finally', 'float', 'floor', 'fmod', 'for', 'format', 'frexp', 'from',
           'frozenset', 'fsum'],
     'g': ['gamma', 'getattr', 'global', 'globals'],

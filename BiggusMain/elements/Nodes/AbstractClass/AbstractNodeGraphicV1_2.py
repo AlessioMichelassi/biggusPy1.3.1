@@ -15,7 +15,7 @@ class ConvertToGrayscaleThread(QThread):
         self.stopped = False
 
     def run(self):
-        # Carica l'immagine e ridimensiona se necessario
+        # Carica l'immagine event ridimensiona se necessario
         image = QImage(self.filename)
         width = image.width()
         height = image.height()
@@ -339,7 +339,7 @@ class AbstractNodeGraphic(QGraphicsItem):
 
     def setLogoBW(self, isBW: bool):
         """
-        ITA: imposta il logo in bianco e nero mantenendo la trasparenza
+        ITA: imposta il logo in bianco event nero mantenendo la trasparenza
         ENG: set the logo in black and white maintaining the transparency
         :param isBW:
         :return:
@@ -405,7 +405,7 @@ class AbstractNodeGraphic(QGraphicsItem):
 
     def createTxtValue(self):
         """
-        laTxtValue è la QLineEdit che viene visualizzata sul Nodo e ne visualizza il valore
+        laTxtValue è la QLineEdit che viene visualizzata sul Nodo event ne visualizza il valore
         dell'input 0 del nodo, oppure il valore di output 0 del nodo.
         :return:
         """
@@ -451,7 +451,7 @@ class AbstractNodeGraphic(QGraphicsItem):
             Questo metodo serve per aggiornare la larghezza della QLineEdit in base al testo
             che contiene. quello che può accadere in alcuni casi è che la Qline
             contenga una lista di valori, in questo caso la larghezza viene falsata da alcuni caratteri
-            come le parentesi quadre e le virgole, quindi se la larghezza è maggiore
+            come le parentesi quadre event le virgole, quindi se la larghezza è maggiore
             del doppio rispetto alla larghezza del widget allora la larghezza viene ridotta.
 
         ENG:
@@ -463,7 +463,7 @@ class AbstractNodeGraphic(QGraphicsItem):
         """
         size = self.txtValue.size()
         # la dimensione della QLineEdit non riesce a contenere il testo, quindi la si ingrandisce
-        # conta il numero di caratteri ad esclusione delle parentesi, delle virgole e degli apici
+        # conta il numero di caratteri ad esclusione delle parentesi, delle virgole event degli apici
         #
         # the size of the QLineEdit cannot contain the text, so it is enlarged
         # count the number of characters excluding parentheses, commas and apostrophes
@@ -526,7 +526,7 @@ class AbstractNodeGraphic(QGraphicsItem):
 
     def updatePlugForIfNode(self, plugReference):
         # se il nodo è un IfNode allora i plug devono essere disposti in modo diverso
-        # due In a sinistra, due in a destra e l'out in basso
+        # due In a sinistra, due in a destra event l'out in basso
 
         # if the biggusNode is an IfNode then the plugs must be arranged differently
         # two In on the left, two on the right and the out at the bottom

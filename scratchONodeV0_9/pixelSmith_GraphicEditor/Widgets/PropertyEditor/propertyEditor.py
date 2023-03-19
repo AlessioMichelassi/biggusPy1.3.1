@@ -67,9 +67,9 @@ class nodePropertyEditor(QWidget):
     def initUI(self):
         """
         Inizializza l'interfaccia grafica del widget.
-        Crea per prima cosa la grpBox e la mainLayout.
+        Crea per prima cosa la grpBox event la mainLayout.
         Quindi crea il colorDialog, i pulsanti per scegliere i colori di partenza
-        e i pulsanti per rappresentare i colori.
+        event i pulsanti per rappresentare i colori.
         :return:
         """
         self.mainLayout = QVBoxLayout()
@@ -227,7 +227,7 @@ class nodePropertyEditor(QWidget):
 
     def initConnections(self):
         """
-        Inizializza le connessioni tra i segnali e i relativi slot.
+        Inizializza le connessioni tra i segnali event i relativi slot.
         :return:
         """
         self.sldWidth.sliderReleased.connect(self.onSldReleased)

@@ -39,9 +39,9 @@ class colorToolsWidget(QWidget):
     def initUI(self):
         """
         Inizializza l'interfaccia grafica del widget.
-        Crea per prima cosa la grpBox e la mainLayout.
+        Crea per prima cosa la grpBox event la mainLayout.
         Quindi crea il colorDialog, i pulsanti per scegliere i colori di partenza
-        e i pulsanti per rappresentare i colori.
+        event i pulsanti per rappresentare i colori.
         :return:
         """
         self.mainLayout = QVBoxLayout()

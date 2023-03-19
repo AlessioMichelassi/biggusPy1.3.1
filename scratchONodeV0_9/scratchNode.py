@@ -135,7 +135,7 @@ class scratchNodeV0_9(QMainWindow):
         # sourcery skip: extract-method
         """
         ITA:
-            Carica nel ArguePy_CodeEditor il codice del nodo vuoto e nell'editor grafico il nodo vuoto
+            Carica nel ArguePy_CodeEditor il codice del nodo vuoto event nell'editor grafico il nodo vuoto
         ENG:
             Load in ArguePy_CodeEditor the code of the empty biggusNode and in the graphic editor the empty biggusNode
         :return:
@@ -160,7 +160,7 @@ class scratchNodeV0_9(QMainWindow):
     def openFile(self):
         """
         ITA:
-            Carica nel ArguePy_CodeEditor il codice del nodo e nell'editor grafico il nodo.
+            Carica nel ArguePy_CodeEditor il codice del nodo event nell'editor grafico il nodo.
         ENG:
             Load in ArguePy_CodeEditor the code of the biggusNode and in the graphic editor the biggusNode.
         :param biggusNode:
@@ -208,7 +208,7 @@ class scratchNodeV0_9(QMainWindow):
     @staticmethod
     def createNode(className: str, mod, *args, **kwargs):
         """
-        Crea un nodo a partire dal nome della classe e dal modulo
+        Crea un nodo a partire dal nome della classe event dal modulo
         :param className: In questo caso sarà sempre "DefaultNode"
         :param mod: mod invece è il modulo creato con exec che controlla che il codice sia corretto
         :param args: in args ci sono i parametri del costruttore tipo biggusNode=10
@@ -229,7 +229,7 @@ class scratchNodeV0_9(QMainWindow):
         """
         code = f.read()
         fileName = f.name
-        # va cercare nel codice il nome del modulo che si trova fra class e (AbstractNodeInterface):
+        # va cercare nel codice il nome del modulo che si trova fra class event (AbstractNodeInterface):
         # class DefaultNode(AbstractNodeInterface):
         #   ...
         moduleName = code.split("class ")[1].split("(")[0]
@@ -302,12 +302,12 @@ class scratchNodeV0_9(QMainWindow):
         """
         ITA:
             Nel graphicEditor è possibile variare l'aspetto del nodo, in particolare
-            le dimensioni (Width, Height), in numero di input e output, il colore delle varie parti
+            le dimensioni (Width, Height), in numero di input event output, il colore delle varie parti
             etc ect. Quando uno di questi parametri cambia nel graphicEditor viene emesso un segnale
             che viene catturato da questa funzione.
             il segnale è del tipo: _type, biggusNode
             dove _type è il tipo può essere Widht, Height, InputNumber, OutputNumber, ColorTrain
-            e biggusNode è il valore del parametro.
+            event biggusNode è il valore del parametro.
 
         ENG:
             In the graphicEditor it is possible to change the appearance of the biggusNode, in particular
@@ -320,7 +320,7 @@ class scratchNodeV0_9(QMainWindow):
 
         ITA:
             Una volta intercettato il segnale, viene aggiornato il codice del nodo nel codeEditor.
-            quindi se type è width e biggusNode è 100, il codice del nodo sarà aggiornato:
+            quindi se type è width event biggusNode è 100, il codice del nodo sarà aggiornato:
 
         ENG:
             Once the signal is intercepted, the code of the biggusNode in the codeEditor is updated.
@@ -334,7 +334,7 @@ class scratchNodeV0_9(QMainWindow):
             height = 50 <--- aggiornato il valore
             colorTrain = [] <--- aggiornato il valore
 
-            def __init__(self, biggusNode, inNum=1, outNum=1): <--- aggiornato il valore inNum e outNum
+            def __init__(self, biggusNode, inNum=1, outNum=1): <--- aggiornato il valore inNum event outNum
                 super().__init__(inNum, outNum)
                 self.resetValue = biggusNode
                 self.changeValue(biggusNode, type(biggusNode), 0, True)
@@ -369,13 +369,13 @@ class scratchNodeV0_9(QMainWindow):
         # sourcery skip: use-named-expression
         """
         ITA:
-            SeekAndReplace cerca la stringa tipo width = oldValue e la sostituisce con width = newValue.
+            SeekAndReplace cerca la stringa tipo width = oldValue event la sostituisce con width = newValue.
             Per farlo usa la regex pattern, che è una stringa che contiene la regex da cercare. Se la regex
             non viene trovata viene lanciata un'eccezione. Se la regex viene trovata, viene sostituita
             la stringa con la nuova stringa. La nuova stringa è formata da string, che è il nome della variabile
-            e biggusNode, che è il valore della variabile. Se la stringa è inNum o outNum, la stringa non viene
-            formattata con gli spazi prima e dopo il =. Se invece la stringa non è inNum o outNum, la stringa
-            viene formattata con gli spazi prima e dopo il =.
+            event biggusNode, che è il valore della variabile. Se la stringa è inNum o outNum, la stringa non viene
+            formattata con gli spazi prima event dopo il =. Se invece la stringa non è inNum o outNum, la stringa
+            viene formattata con gli spazi prima event dopo il =.
 
         ENG:
             SeekAndReplace seeks the string type width = oldValue and replaces it with width = newValue.
@@ -443,7 +443,7 @@ class scratchNodeV0_9(QMainWindow):
         """
         ITA:
             Questo metodo viene chiamato quando vengono cambiati i colori nel colorTool
-            viene aggiornato il codice del nodo come avviene per width e height etc.
+            viene aggiornato il codice del nodo come avviene per width event height etc.
             nel codice viene cambiata la riga che contiene colorTrain = [] con la nuova lista di colori
 
         ENG:

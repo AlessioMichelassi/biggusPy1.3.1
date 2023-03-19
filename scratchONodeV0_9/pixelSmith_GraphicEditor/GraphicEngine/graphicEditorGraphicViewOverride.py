@@ -137,7 +137,7 @@ class graphicEditor_GraphicViewOverride(QGraphicsView):
         ITA:
             Centra un oggetto nella scena. Se non viene passato nessun oggetto, ma
             sono presenti degli oggetti non selezionati, crea un rettangolo contenente tutti gli oggetti
-            non selezionati e centra la scena su questo rettangolo, altrimenti centra la scena sul punto (0,0)
+            non selezionati event centra la scena su questo rettangolo, altrimenti centra la scena sul punto (0,0)
         ENG:
             Center an object in the scene. If no object is passed, but there are
             objects that are not selected, create a rectangle containing all the objects
@@ -167,7 +167,7 @@ class graphicEditor_GraphicViewOverride(QGraphicsView):
         """
         ITA:
             Seleziona tutti gli oggetti nella scena, centra la scena su uno di questi oggetti, la
-            scala in modo che tutti gli oggetti siano visibili e deseleziona tutti gli oggetti
+            scala in modo che tutti gli oggetti siano visibili event deseleziona tutti gli oggetti
         ENG:
             Select all the objects in the scene, center the scene on one of these objects, scale it
             so that all objects are visible and deselect all objects.
