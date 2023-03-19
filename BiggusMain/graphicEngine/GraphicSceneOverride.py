@@ -1,7 +1,9 @@
-
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+
+from BiggusMain.elements.Connections.Connection import Connection
+from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeGraphicV1_2 import AbstractNodeGraphic
 
 
 class GraphicSceneOverride(QGraphicsScene):
@@ -23,6 +25,8 @@ class GraphicSceneOverride(QGraphicsScene):
         self._penLight.setWidth(1)
         self._penDark = QPen(self.greyDarker)
         self._penDark.setWidth(2)
+        self.currentDraggingNode = None
+        self.currentHoveredItem = None
 
     def setGraphicSceneSize(self, width, height):
         self.setSceneRect(-width // 2, -height // 2, width, height)
@@ -57,9 +61,52 @@ class GraphicSceneOverride(QGraphicsScene):
         if darkGreyLines:
             painter.drawLines(*darkGreyLines)
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            item = self.itemAt(event.scenePos(), QTransform())
+            if isinstance(item, AbstractNodeGraphic):
+                self.currentDraggingNode = item
+                self.currentDraggingNode.setSelected(True)
+                event.accept()
+                return
+        super().mousePressEvent(event)
+
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         super().mouseMoveEvent(event)
         self.currentMousePos = event.scenePos()
+        if self.currentDraggingNode is not None:
+            mime_data = QMimeData()
+            drag = QDrag(self.views()[0])
+            drag.setMimeData(mime_data)
+            drag.exec_(Qt.DropAction.MoveAction)
+            event.accept()
+            return
+        item = self.itemAt(event.scenePos(), QTransform())
+        self.currentHoveredItem = item if isinstance(item, Connection) else None
+
+    def mouseReleaseEvent(self, event):
+        if self.currentDraggingNode is not None:
+            self.currentDraggingNode.setSelected(False)
+            middleNode = self.currentDraggingNode.nodeInterface
+            self.currentDraggingNode = None
+
+            if self.currentHoveredItem is not None and isinstance(self.currentHoveredItem, Connection):
+                startNode = self.currentHoveredItem.outputNode
+                startPlug = self.currentHoveredItem.outputPlug
+                startPlugIndex = self.currentHoveredItem.outIndex
+
+                new_connection = Connection(startNode, startPlug, startPlugIndex, middleNode, middleNode.inPlugs[0], 0)
+                self.addItem(new_connection)
+
+                endNode = self.currentHoveredItem.inputNode
+                endPlug = self.currentHoveredItem.inputPlug
+                endPlugIndex = self.currentHoveredItem.inIndex
+                new_connection = Connection(middleNode, middleNode.outPlugs[0], 0, endNode, endPlug, endPlugIndex)
+                self.addItem(new_connection)
+                event.accept()
+                return
+
+        super().mouseReleaseEvent(event)
 
     def dragEnterEvent(self, e):
         e.acceptProposedAction()
@@ -76,7 +123,3 @@ class GraphicSceneOverride(QGraphicsScene):
 
     def dragMoveEvent(self, e):
         e.acceptProposedAction()
-
-
-
-

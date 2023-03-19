@@ -251,23 +251,23 @@ class GraphicViewOverride(QGraphicsView):
 
     # -------------------------- DRAG OBJECT EVENTS -------------------------- #
 
-    def dragEnterEvent(self, event):
-        # se il drag and drop parte da un'altro widget
-
-        if event.mimeData():
-            event.acceptProposedAction()
-
-    def dropEvent(self, event: QDropEvent):
-        # sourcery skip: use-named-expression
-        if event.mimeData():
-            position = self.mapToScene(event.pos())
-            mimeText = (event.mimeData().text()).split(";;")
-            nodeName = mimeText[1]
-            nodeAbsolutePath = mimeText[0]
-            node = self.canvas.createNodeFromAbsolutePath(nodeAbsolutePath, nodeName)
-            if node:
-                self.canvas.addNode(node)
-                node.setPos(position)  # posiziona il nodo nella scena
+    """    def dragEnterEvent(self, event):
+            # se il drag and drop parte da un'altro widget
+    
+            if event.mimeData():
+                event.acceptProposedAction()
+    
+        def dropEvent(self, event: QDropEvent):
+            # sourcery skip: use-named-expression
+            if event.mimeData():
+                position = self.mapToScene(event.pos())
+                mimeText = (event.mimeData().text()).split(";;")
+                nodeName = mimeText[1]
+                nodeAbsolutePath = mimeText[0]
+                node = self.canvas.createNodeFromAbsolutePath(nodeAbsolutePath, nodeName)
+                if node:
+                    self.canvas.addNode(node)
+                    node.setPos(position)  # posiziona il nodo nella scena"""
 
     # ---------------------- Connection  ----------------------
 
