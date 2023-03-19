@@ -309,7 +309,7 @@ class PreferenceWidget(QWidget):
         self.biggusPy = biggusPy
         self.initUi()
         self.initConnection()
-        self.getInfoFromBiggus()
+        self.initStyle()
 
     def initUi(self):
         self.tabWidget = QTabWidget(self)
@@ -330,7 +330,7 @@ class PreferenceWidget(QWidget):
         layout.addWidget(self.grpBoxSystemDir)
         self.grpBoxSystemFont = self.initGrpBoxSystemFont()
         layout.addWidget(self.grpBoxSystemFont)
-        self.tabWidget.addTab(self.tabSystemSettings, "System Settings")
+        self.tabWidget.addTab(self.tabSystemSettings, "Preferences")
 
     def initGrpSystemBox(self):
         grpBoxSystem = QGroupBox(self.tabSystemSettings)
@@ -343,8 +343,8 @@ class PreferenceWidget(QWidget):
         grpBoxSystem.layout().addWidget(self.biggusDirChooser)
         grpBoxSystem.layout().addWidget(self.biggusConfigFile)
         grpBoxSystem.layout().addWidget(self.biggusSaveFileDir)
-        spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        grpBoxSystem.layout().addItem(spacer)
+        # spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        # grpBoxSystem.layout().addItem(spacer)
         return grpBoxSystem
 
     def initGrpBoxSystemFont(self):
@@ -352,32 +352,32 @@ class PreferenceWidget(QWidget):
         grpBoxSystemFont.setObjectName("grpBoxSystemFont")
         grpBoxSystemFont.setTitle("System Color")
         grpBoxSystemFont.setLayout(QVBoxLayout())
-        self.biggusSystemFontChooser = self.returnFontChooser("System Font", QFont("Lohit Gujarati", 10))
+        self.biggusSystemFontChooser = self.returnFontChooser("System Font", self.biggusPy.configColor["systemFont"])
         grpBoxSystemFont.layout().addWidget(self.biggusSystemFontChooser)
-        self.biggusWidgetFontChooser = self.returnFontChooser("Widget Font", QFont("Lohit Gujarati", 10))
+        self.biggusWidgetFontChooser = self.returnFontChooser("Widget Font", self.biggusPy.configColor["widgetFont"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetFontChooser)
-        self.biggusWidgetOnWidgetFontChooser = self.returnFontChooser("Widget On Widget Font", QFont("Lohit Gujarati", 10))
+        self.biggusWidgetOnWidgetFontChooser = self.returnFontChooser("Widget On Widget Font", self.biggusPy.configColor["widgetOnWidgetFont"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetOnWidgetFontChooser)
 
-        self.biggusSystemFontColorChooser = self.returnColorChooser("System Font Color", QColor("black"))
+        self.biggusSystemFontColorChooser = self.returnColorChooser("System Font Color", self.biggusPy.configColor["systemFontColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusSystemFontColorChooser)
-        self.biggusSystemBackgroundColorChooser = self.returnColorChooser("System Background Color", QColor("white"))
+        self.biggusSystemBackgroundColorChooser = self.returnColorChooser("System Background Color", self.biggusPy.configColor["systemBackgroundColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusSystemBackgroundColorChooser)
-        self.biggusSystemBorderColorChooser = self.returnColorChooser("System Border Color", QColor("black"))
+        self.biggusSystemBorderColorChooser = self.returnColorChooser("System Border Color", self.biggusPy.configColor["systemBorderColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusSystemBorderColorChooser)
 
-        self.biggusWidgetFontColorChooser = self.returnColorChooser("Widget Font Color", QColor("black"))
+        self.biggusWidgetFontColorChooser = self.returnColorChooser("Widget Font Color", self.biggusPy.configColor["widgetFontColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetFontColorChooser)
-        self.biggusWidgetBackgroundColorChooser = self.returnColorChooser("Widget Background Color", QColor("white"))
+        self.biggusWidgetBackgroundColorChooser = self.returnColorChooser("Widget Background Color", self.biggusPy.configColor["widgetBackgroundColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetBackgroundColorChooser)
-        self.biggusWidgetBorderColorChooser = self.returnColorChooser("Widget Border Color", QColor("black"))
+        self.biggusWidgetBorderColorChooser = self.returnColorChooser("Widget Border Color", self.biggusPy.configColor["widgetBorderColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetBorderColorChooser)
 
-        self.biggusWidgetOnWidgetFontColorChooser = self.returnColorChooser("Widget On Widget Font Color", QColor("black"))
+        self.biggusWidgetOnWidgetFontColorChooser = self.returnColorChooser("Widget On Widget Font Color", self.biggusPy.configColor["widgetOnWidgetFontColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetOnWidgetFontColorChooser)
-        self.biggusWidgetOnWidgetBackgroundColorChooser = self.returnColorChooser("Widget On Widget Background Color", QColor("white"))
+        self.biggusWidgetOnWidgetBackgroundColorChooser = self.returnColorChooser("Widget On Widget Background Color", self.biggusPy.configColor["widgetOnWidgetBackgroundColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetOnWidgetBackgroundColorChooser)
-        self.biggusWidgetOnWidgetBorderColorChooser = self.returnColorChooser("Widget On Widget Border Color", QColor("black"))
+        self.biggusWidgetOnWidgetBorderColorChooser = self.returnColorChooser("Widget On Widget Border Color", self.biggusPy.configColor["widgetOnWidgetBorderColor"])
         grpBoxSystemFont.layout().addWidget(self.biggusWidgetOnWidgetBorderColorChooser)
 
         spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -424,31 +424,35 @@ class PreferenceWidget(QWidget):
     def setBiggusSaveFileDir(self, _dir):
         self.biggusPy.setSaveFileDir(_dir)
 
-    def getInfoFromBiggus(self):
-        self.biggusDirChooser.setInitialLocation(self.biggusPy.mainDir)
-        self.biggusConfigFile.setInitialLocation(self.biggusPy.configurationFilePath)
-        self.biggusSaveFileDir.setInitialLocation(self.biggusPy.saveFileDirectory)
-        # get font
-        self.biggusSystemFontChooser.setInitialFont(self.biggusPy.systemFont)
-        self.biggusWidgetFontChooser.setInitialFont(self.biggusPy.systemWidgetFont)
-        self.biggusWidgetOnWidgetFontChooser.setInitialFont(self.biggusPy.systemWidgetOnWidgetFont)
-        # get color
-        self.biggusSystemFontColorChooser.setInitialColor(self.biggusPy.systemFontColor)
-        self.biggusWidgetFontColorChooser.setInitialColor(self.biggusPy.systemWidgetFontColor)
-        self.biggusWidgetOnWidgetFontColorChooser.setInitialColor(self.biggusPy.systemWidgetOnWidgetFontColor)
+    # ------------------ Style ------------------
 
-        self.biggusSystemBackgroundColorChooser.setInitialColor(self.biggusPy.systemBackgroundColor)
-        self.biggusWidgetBackgroundColorChooser.setInitialColor(self.biggusPy.systemWidgetBackGroundColor)
-        self.biggusWidgetOnWidgetBackgroundColorChooser.setInitialColor(self.biggusPy.systemWidgetOnWidgetBorderColor)
-
-
-
-
-
-if __name__ == '__main__':
-    import sys
-
-    app = QApplication(sys.argv)
-    ui = PreferenceWidget()
-    ui.show()
-    sys.exit(app.exec_())
+    def initStyle(self):
+        # i colori sono settati rgb
+        # il titole della grpBox è allineato al centro
+        style = f""" 
+        QWidget {{
+            background-color: rgb({self.biggusPy.configColor["systemBackgroundColor"].red()}, {self.biggusPy.configColor["systemBackgroundColor"].green()}, {self.biggusPy.configColor["systemBackgroundColor"].blue()});
+            color: rgb({self.biggusPy.configColor["systemFontColor"].red()}, {self.biggusPy.configColor["systemFontColor"].green()}, {self.biggusPy.configColor["systemFontColor"].blue()});
+            font: {self.biggusPy.configColor["systemFont"].family()};
+            font-size: {self.biggusPy.configColor["systemFont"].pointSize()}px;
+        }}
+        QGroupBox {{
+            background-color: rgb({self.biggusPy.configColor["widgetBackgroundColor"].red()}, {self.biggusPy.configColor["widgetBackgroundColor"].green()}, {self.biggusPy.configColor["widgetBackgroundColor"].blue()});
+            border: 1px solid rgb({self.biggusPy.configColor["widgetBorderColor"].red()}, {self.biggusPy.configColor["widgetBorderColor"].green()}, {self.biggusPy.configColor["widgetBorderColor"].blue()});
+            border-radius: 5px;
+            margin-top: 1ex;
+        }}
+        QGroupBox::title {{
+            subcontrol-origin: margin;
+            subcontrol-position: top center;
+            padding: 0 3px;
+            background-color: rgb({self.biggusPy.configColor["widgetBackgroundColor"].red()}, {self.biggusPy.configColor["widgetBackgroundColor"].green()}, {self.biggusPy.configColor["widgetBackgroundColor"].blue()});
+            color: rgb({self.biggusPy.configColor["widgetFontColor"].red()}, {self.biggusPy.configColor["widgetFontColor"].green()}, {self.biggusPy.configColor["widgetFontColor"].blue()});
+            font: {self.biggusPy.configColor["widgetFont"].family()};
+            font-size: {self.biggusPy.configColor["widgetFont"].pointSize()}px;
+        }}
+        QLabel {{
+            background-color: transparent;
+            }}
+        """
+        self.setStyleSheet(style)

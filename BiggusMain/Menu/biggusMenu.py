@@ -366,8 +366,8 @@ class BiggusMenu(QMenuBar):
 
     def about(self):
         aboutDialog = QDialog(self)
-        aboutDialog.setWindowTitle("About scratchNodeV0_9")
-        aboutDialog.setFixedSize(600, 300)
+        aboutDialog.setWindowTitle("About BiggusPy")
+        aboutDialog.setFixedSize(800, 500)
 
         titleLabel = QLabel("BiggusPy - a great Caesar friend")
         titleLabel.setStyleSheet("font-size: 24px; font-weight: bold;")
@@ -376,7 +376,7 @@ class BiggusMenu(QMenuBar):
         authorLabel = QLabel("Author: Alessio Michelassi (2023)")
         authorLabel.setStyleSheet("font-size: 12px; font-weight: bold;")
         descriptionTxt = QTextEdit()
-        descriptionTxt.setStyleSheet("font-size: 10px;")
+        descriptionTxt.setStyleSheet("font-size: 14px;")
         with open("BiggusMain/Menu/AboutThisSoftware", "r") as file:
             aboutTxt = file.read()
         descriptionTxt.setText(aboutTxt)
@@ -456,8 +456,8 @@ class BiggusMenu(QMenuBar):
         # #2D2D30 è  in rgb 45 45 48
         self.setStyleSheet(f"""
         QMenu {{
-                font-family: "{self.biggusPy.systemFont}";
-                font-size: {self.biggusPy.systemFontSize}px;
+                font-family: "{self.biggusPy.configColor["systemFont"].family()}";
+                font-size: {self.biggusPy.configColor["systemFont"].pointSize()}px;
                 background-color: #2D2D30;
                 border: 1px solid #2D2D30;
                 color: #FFFFFF;

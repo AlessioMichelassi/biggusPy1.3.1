@@ -83,23 +83,11 @@ class customFocusWidget(QWidget):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: rgba({self.systemWidgetBackGroundColor.red()}, {self.systemWidgetBackGroundColor.green()}, {self.systemWidgetBackGroundColor.blue()}, {self.systemWidgetBackGroundColor.alpha()});
-                color: rgba({self.systemWidgetTextColor.red()}, {self.systemWidgetTextColor.green()}, {self.systemWidgetTextColor.blue()}, {self.systemWidgetTextColor.alpha()});
-                font-family: {self.systemWidgetFont};
-                font-size: {self.systemWidgetFontSize}px;
+                background-color: rgba({self.biggusPy.configColor["widgetBackgroundColor"].red()}, {self.biggusPy.configColor["widgetBackgroundColor"].green()}, {self.biggusPy.configColor["widgetBackgroundColor"].blue()}, {self.biggusPy.configColor["widgetBackgroundColor"].alpha()});
+                color: rgba({self.biggusPy.configColor["widgetFontColor"].red()}, {self.biggusPy.configColor["widgetFontColor"].green()}, {self.biggusPy.configColor["widgetFontColor"].blue()}, {self.biggusPy.configColor["widgetFontColor"].alpha()});
+                font-family: {self.biggusPy.configColor["widgetFont"].family()};
+                font-size: {self.biggusPy.configColor["widgetFont"].pointSize()}px;
             }}""")
 
     def getWidgetStyleFromBiggus(self):
-        font = self.biggusPy.systemWidgetFont
-        if isinstance(font, str):
-            self.systemWidgetFont = font
-            self.systemWidgetFontSize = self.biggusPy.systemWidgetFontSize
-        else:
-            self.systemWidgetFont = font.family()
-            self.systemWidgetFontSize = font.pointSize()
-
-        self.systemWidgetTextColor = self.biggusPy.systemWidgetFontColor
-        self.systemWidgetColor = self.biggusPy.systemWidgetFontColor
-        self.systemWidgetBorderColor = self.biggusPy.systemWidgetBorderColor
-        self.systemWidgetBackGroundColor = self.biggusPy.systemWidgetBackGroundColor
         self.setWidgetStyle()

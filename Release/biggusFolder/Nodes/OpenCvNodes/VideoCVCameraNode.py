@@ -29,8 +29,9 @@ https://stackoverflow.com/questions/11420748/setting-camera-parameters-in-opencv
 17. CV_CAP_PROP_WHITE_BALANCE Currently unsupported
 18. CV_CAP_PROP_RECTIFICATION Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently)
 
-(Please note, as commenter Markus Weber pointed out below, in OpenCV 4 you have to remove the "CV" prefix from the property name, eg cv2.CV_CAP_PROP_FRAME_HEIGHT -> cv2.CAP_PROP_FRAME_HEIGHT)
-"""
+(Please note, as commenter Markus Weber pointed out below, in OpenCV 4 you have to remove the "CV" prefix from the 
+property name, eg cv2.CV_CAP_PROP_FRAME_HEIGHT -> cv2.CAP_PROP_FRAME_HEIGHT)"""
+
 
 class blinker(QWidget):
     lblBlink: QLabel
@@ -99,7 +100,6 @@ class CameraWorker(QThread):
 
     def run(self):
         while not self._stopped:
-            self.printCameraInfo()
             if not self._slow_down:  # Aggiungi questo controllo
                 ret, self.frame = self.cam.read()
                 if ret:
@@ -149,6 +149,9 @@ class VideoCVCameraNode(AbstractNodeInterface):
         self.frameImage = QImage()
         self.lastFrame = None
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.videoCamera.stop()
+
     def calculateOutput(self, plugIndex):
         value = self.inPlugs[0].getValue()
         self.outPlugs[plugIndex].setValue(value)
@@ -168,7 +171,6 @@ class VideoCVCameraNode(AbstractNodeInterface):
         self.videoCamera.frame_ready.connect(self.process_frames)
         self.videoCamera.cpuUsageHigh.connect(self.onCpuUsageHigh)
         self.videoCamera.frameRate.connect(self.onFrameRate)
-        self.videoCamera.cameraInfo.connect(self.showCameraInfo)
         self.videoCamera.start()
 
     def stopVideoCamera(self):

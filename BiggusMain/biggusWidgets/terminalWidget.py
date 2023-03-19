@@ -18,10 +18,10 @@ class Terminal(customFocusWidget):
         self.canvas = canvas
         layout = QVBoxLayout()
         self.argue = pythonCodeEditor(self.biggusPy, self.canvas)
-        layout.addWidget(self.argue, 1, Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(self.argue)
         self.setLayout(layout)
         # Sovrascrivi il menu contestuale di pythonCodeEditor
-        self.argue.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.argue.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.argue.customContextMenuRequested.connect(self.createContextMenu)
 
     def updateSystemColors(self):

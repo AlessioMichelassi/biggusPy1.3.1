@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import *
 
 from BiggusMain.Menu.biggusMenu import BiggusMenu
 from BiggusMain.biggusWidgets.canvas import Canvas
-from BiggusMain.biggusWidgets.customFocusWidget import customFocusWidget
 from BiggusMain.biggusWidgets.nodeBrowserWidget import NodeBrowser
 from BiggusMain.biggusWidgets.terminalWidget import Terminal
 
@@ -33,41 +32,43 @@ class BiggusPy(QMainWindow):
 
     nodesFolderPath = {"python": "Release/biggusFolder/Nodes/PythonNodes",
                        "openCv": "Release/biggusFolder/Nodes/OpenCvNodes",
-                       "pyQt5": "Release/biggusFolder/Nodes/pyqt5Node"}
+                       "pyQt5": "Release/biggusFolder/Nodes/PyQt5Nodes"}
     iconPaths = {
         "biggusIcon": "Release/biggusFolder/imgs/icon/biggusIcon",
         "pythonIcon": "Release/biggusFolder/imgs/icon/pythonIcon",
         "openCv": "Release/biggusFolder/imgs/icon/openCvIcon",
-        "pyQt5": "Release/biggusFolder/imgs/icon/pyqt5Icon"}
+        "pyQt5": "Release/biggusFolder/imgs/icon/pyQt5Icon"}
     logoPaths = {
         "logos": "Release/biggusFolder/imgs/logos"}
 
-    systemFont = "Lohit Gujarati"
-    systemFontSize = 16
-    systemFontColor = "black"
+    # ----------------- sys Variables -----------------
 
-    systemWidgetFont = "Lohit Gujarati"
-    systemWidgetFontSize = 14
-    systemWidgetFontColor = QColor(250, 250, 255)
+    configColor = {
+        "systemFont": QFont("Lohit Gujarati", 16),
+        "systemFontColor": QColor(250, 250, 250),
 
-    systemWidgetOnWidgetFont = "Lohit Gujarati"
-    systemWidgetOnWidgetFontSize = 8
-    systemWidgetOnWidgetFontColor = QColor(150, 150, 240)
+        "widgetFont": QFont("Lohit Gujarati", 14),
+        "widgetFontColor": QColor(250, 250, 250),
 
-    systemBackgroundColor = QColor(50, 50, 53)
-    systemIconSize = 40
-    systemBorderColor = "black"
-    systemHighlightColor = "black"
-    systemHighlightTextColor = "white"
+        "widgetOnWidgetFont": QFont("Lohit Gujarati", 8),
+        "widgetOnWidgetFontColor": QColor(150, 150, 240),
 
-    systemWidgetBorderColor = "black"
-    systemWidgetBackGroundColor = QColor(40, 40, 45)
-    systemWidgetOnWidgetBackgroundColor = QColor(35, 35, 35)
-    systemWidgetOnWidgetBorderColor = "black"
+        "systemHighlightColor": QColor(60, 60, 65),
+        "systemHighlightTextColor": QColor(250, 250, 255),
+        "systemBorderColor": QColor(40, 40, 45),
+        "systemBackgroundColor": QColor(50, 50, 53),
+        "systemIconSize": 40,
+
+        "widgetBorderColor": QColor(40, 40, 45),
+        "widgetBackgroundColor": QColor(40, 40, 45),
+
+        "widgetOnWidgetBorderColor": QColor(40, 40, 45),
+        "widgetOnWidgetBackgroundColor": QColor(35, 35, 35)
+    }
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setGeometry(100, 100, 1440, 900)
+        self.setGeometry(100, 100, 1920, 1100)
         self.setWindowTitle("BiggusPy(a great Caesar's friend) V0.1.3.1")
         self.setWindowIcon(QIcon('elements/imgs/BiggusIcon.ico'))
         # self.openConfigFile()
@@ -79,13 +80,15 @@ class BiggusPy(QMainWindow):
         self.canvas = Canvas(self)
         self.nodeBrowser = NodeBrowser(self, self.canvas)
         self.terminal = Terminal(self, self.canvas)
-
         mainSplit = QSplitter(Qt.Orientation.Vertical)
         mainSplit.addWidget(self.canvas)
         bottomSplit = QSplitter(Qt.Orientation.Horizontal)
+
         bottomSplit.addWidget(self.nodeBrowser)
         bottomSplit.addWidget(self.terminal)
+        bottomSplit.setSizes([200, 200])
         mainSplit.addWidget(bottomSplit)
+        mainSplit.setSizes([300,100])
         self.setCentralWidget(mainSplit)
 
     def initMenu(self):
@@ -166,15 +169,15 @@ class BiggusPy(QMainWindow):
                 "systemBackGroundColor": self.systemBackGroundColor,
                 "systemBorderColor": self.systemBorderColor,
                 "systemWidgetColor": self.systemWidgetColor,
-                "systemWidgetFont": self.systemWidgetFont,
-                "systemWidgetFontSize": self.systemWidgetFontSize,
+                "wdgetFont": self.wdgetFont,
+                "widgetFontSize": self.widgetFontSize,
                 "systemWidgetBackGroundColor": self.systemWidgetBackGroundColor,
                 "systemWidgetBorderColor": self.systemWidgetBorderColor,
                 "systemHighlightColor": self.systemHighlightColor,
                 "systemHighlightTextColor": self.systemHighlightTextColor,
-                "systemWidgetOnWidgetFontColor": self.systemWidgetOnWidgetFontColor,
-                "systemWidgetOnWidgetFont": self.systemWidgetOnWidgetFont,
-                "systemWidgetOnWidgetFontSize": self.systemWidgetOnWidgetFontSize,
+                "widgetOnWidgetFontColor": self.widgetOnWidgetFontColor,
+                "widgetOnWidgetFont": self.widgetOnWidgetFont,
+                "widgetOnWidgetFontSize": self.widgetOnWidgetFontSize,
                 "systemWidgetOnWidgetBackGroundColor": self.systemWidgetOnWidgetBackGroundColor}
 
         with open("config.json", "w") as f:
