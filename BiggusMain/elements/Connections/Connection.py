@@ -4,8 +4,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QGraphicsItem
 
+from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeDataV1_2 import AbstractNodeData
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeGraphicV1_2 import AbstractNodeGraphic
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
+from BiggusMain.elements.Plugs.PlugData import PlugData
 from BiggusMain.elements.Plugs.PlugGraphic import PlugGraphic
 from BiggusMain.elements.debugTool import debugTool
 
@@ -18,8 +20,8 @@ class Connection(QGraphicsItem, debugTool):
     inputPlug = None
     inIndex = None
 
-    def __init__(self, outputNode: 'AbstractNodeData', outputPlug: 'PlugData', outIndex,
-                 inputNode: 'AbstractNodeData', inputPlug: 'PlugData', inIndex):
+    def __init__(self, outputNode: AbstractNodeData, outputPlug: PlugData, outIndex,
+                 inputNode: AbstractNodeData, inputPlug: PlugData, inIndex):
         """
         ITA:
             Costruttore della classe Connection. Una connection E' un edge tra l'output di un nodo e l'input di un altro nodo.
@@ -138,7 +140,6 @@ class Connection(QGraphicsItem, debugTool):
             self.inputNode.outConnections.remove(self)
         if self in self.outputNode.outConnections:
             self.outputNode.outConnections.remove(self)
-
         resetValue = self.inputNode.inPlugs[self.inIndex].getResetValue()
         self.inputNode.inPlugs[self.inIndex].setValue(resetValue)
         self.inputNode.calculate()

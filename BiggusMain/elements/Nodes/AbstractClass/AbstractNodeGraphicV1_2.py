@@ -39,7 +39,7 @@ class ConvertToGrayscaleThread(QThread):
                     return
         pixmap = QPixmap.fromImage(image)
 
-        # Emitti il segnale con l'immagine convertita
+        # Emetti il segnale con l'immagine convertita
         self.converted.emit(pixmap)
 
     def stopThread(self):
@@ -486,7 +486,7 @@ class AbstractNodeGraphic(QGraphicsItem):
             is disabled for nodes that perform operations such as mathNode, ifNode, etc ...
         :return:
         """
-        self.nodeInterface.setInputValue(0, self.txtValue.text(), True)
+        self.nodeInterface.changeInputValue(0, self.txtValue.text(), True)
         self.txtValue.clearFocus()
 
     def initTxtValueProperties(self):

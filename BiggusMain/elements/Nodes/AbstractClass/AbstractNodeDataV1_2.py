@@ -12,6 +12,24 @@ class AbstractNodeData:
     isNodeCreated: bool = False
 
     def __init__(self, className: str = None, nodeInterface=None):
+        """
+        ITA:
+            Questa classe rappresenta un nodo generico. Un nodo è un oggetto che può essere collegato ad altri nodi.
+            Un nodo può avere dei plug di input e dei plug di output e il numero minimo è uno per ogni tipo.
+            La classe viene chiamata da abstractNodeInterface al momento della creazione del nodo e contiene i dati
+            del nodo come la classe del nodo "NumberNode" o "StringNode" e il nome che può essere x, y, z, ecc, il
+            titolo che viene usato per identificare il nodo nella canvas in modo univoco ed è definito dal nome
+            e dall'indice del nodo. L'indice viene incrementato ogni volta che viene creato un nodo con lo stesso titolo.
+        ENG:
+            This class represents a generic node. A node is an object that can be connected to other nodes.
+            A node can have input and output plugs and the minimum number is one for each type.
+            The class is called by abstractNodeInterface at the time of creating the node and contains the data
+            of the node such as the class of the node "NumberNode" or "StringNode" and the name that can be x, y, z, etc., the
+            title that is used to identify the node in the canvas in a unique way and is defined by the name
+            and the index of the node. The index is incremented each time a node with the same title is created.
+        :param className:
+        :param nodeInterface:
+        """
         self.name = className
         self.className = className
         self.nodeGraphic = None
@@ -23,6 +41,13 @@ class AbstractNodeData:
         self.isNodeCreated = True
 
     def __str__(self):
+        """
+        ITA:
+            Ritorna una stringa con i dati del nodo. E' utile per il debug.
+        ENG:
+            Returns a string with the data of the node. It is useful for debugging.
+        :return:
+        """
         returnPlugs = ""
 
         for plug in self.inPlugs:
@@ -37,9 +62,24 @@ class AbstractNodeData:
                f"\n\t{returnConnectionString}"
 
     def getTitle(self):
+        """
+        ITA:
+            Ritorna il titolo del nodo che è definito dal nome e dall'indice del nodo.
+        ENG:
+            Returns the title of the node which is defined by the name and the index of the node.
+        :return:
+        """
         return f"{self.name}_{self.index}"
 
     def deleteInPlug(self, index):
+        """
+        ITA:
+            Elimina un plug di input.
+        ENG:
+            Delete an input plug.
+        :param index:
+        :return:
+        """
         try:
             self.inPlugs.pop(index)
         except IndexError:
@@ -62,6 +102,7 @@ class AbstractNodeData:
         :return:
         """
         if isAResetValue:
+            print(f"Resetting {self.name} plug {index} to {value}")
             self.nodeInterface.startValue = value
         self.inPlugs[index].setValue(value)
         self.calculate()
@@ -101,18 +142,49 @@ class AbstractNodeData:
         return False not in valueReturn
 
     def outConnect(self, connection):
+        """
+        ITA:
+            Quando viene creata una connessione con l'outPlug del nodo, viene aggiunta la connessione
+            alla lista delle connessioni del nodo e viene chiamata la funzione updateValue() per
+            aggiornare il valore del plug di output.
+        ENG:
+            When a connection is created with the outPlug of the biggusNode, the connection is added
+            to the list of connections of the biggusNode and the updateValue() function is called to
+            update the value of the output plug.
+        :param connection:
+        :return:
+        """
         self.outConnections.append(connection)
         for _connection in self.outConnections:
             _connection.updateValue()
 
     def inConnect(self, connection):
+        """
+        ITA:
+            Questa è una piccola violazione alla regola delle connessioni possibili solo da out a in.
+            Se si cancella un nodo e questo è collegato in input ad un altro nodo, l'unico modo per risalire
+            al nodo collegato in input è attraverso la connessione. Quindi quando viene creata una connessione
+            con l'inPlug del nodo, siccome è permessa una sola connessione in input, viene eliminata la
+            connessione precedente e viene aggiunta la nuova connessione.
+        ENG:
+            This is a small violation of the rule of connections only from out to in.
+            If you delete a biggusNode and it is connected as input to another biggusNode, the only way to get back
+            to the biggusNode connected as input is through the connection. So when a connection is created
+            with the inPlug of the biggusNode, since only one input connection is allowed, the previous connection is
+            deleted and the new connection is added.
+        :param connection:
+        :return:
+        """
         inPlug = connection.inputPlug
         inPlug.inConnection = connection
         self.inConnections = connection
 
     def disconnect(self, node, nodePlugIndex):
         """
-        Disconnect the biggusNode from the plug
+        ITA:
+            node è il nodo da cui si vuole disconnettere il plug. Viene chiamata la funzione calculate() per
+            aggiornare il valore del plug di output e viene chiamata la funzione resetPlug() per resettare il
+            valore del plug di input dell'altro nodo.
         :param node: the biggusNode to disconnect
         :param nodePlugIndex: the index of the plug to disconnect
         :return:

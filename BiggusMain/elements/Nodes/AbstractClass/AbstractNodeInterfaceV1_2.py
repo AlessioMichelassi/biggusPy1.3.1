@@ -88,6 +88,20 @@ class AbstractNodeInterface:
     logo = r"Release/biggusFolder/imgs/logos/pythonLogo.png"
 
     def __init__(self, value=None, inNum=1, outNum=1, parent=None):
+        """
+        ITA:
+            Questa è la classe base per tutti i nodi. Tutti i nodi devono ereditare questa classe.
+            AbstractNodeInterface è una classe che fa da ponte fra la parte grafica e la parte dati. I metodi
+            che sono definiti in questa classe sono quelli che vengono chiamati dalle altri altre due classi.
+        ENG:
+            This is the base class for all nodes. All nodes must inherit this class.
+            AbstractNodeInterface is a class that acts as a bridge between the graphic part and the data part.
+            All methods that are defined in this class are the ones that are called by the other two classes.
+        :param value:
+        :param inNum:
+        :param outNum:
+        :param parent:
+        """
         self.nodeData = AbstractNodeData("AbstractNodeInterface", self)
         self.nodeGraphic = AbstractNodeGraphic(self)
         self.contextMenu = self.nodeGraphic.contextMenu
@@ -117,9 +131,7 @@ class AbstractNodeInterface:
     def index(self, index):
         self.nodeData.index = index
 
-    # ###############################################
-    #
-    #      THIS FUNCTION IS FOR GRAPHIC NODES
+    # ------- NODE GRAPHICS METHODS -------
 
     def getTitle(self):
         return self.nodeData.getTitle()
@@ -194,17 +206,21 @@ class AbstractNodeInterface:
         self.nodeGraphic.updatePlugsPos()
         self.nodeGraphic.updateLogoPosition()
 
-    # ###############################################
-    #
-    #      THIS FUNCTION IS FOR UPDATE THE VALUE
-    #               IN THE GRAPHIC NODE
+    # ------- UPDATE NODE DATA IN NODE GRAPHIC -------
 
     def updateInPlugValueFromGraphics(self, value):
         """
         ITA:
-            ...
+            Se si connette un nodo ad un altro nodo, questo metodo viene chiamato per aggiornare il valore
+            del nodo che viene connesso. Alcuni nodi sono incompatibili fra loro. Una stringa ad esempio non
+            sempre può essere convertita in un intero. Per non far crashare il programma, questo metodo
+            controlla il tipo di dato che viene passato e lo converte nel tipo di dato che il nodo accetta.
         ENG:
-            ...
+            If you connect a node to another node, this method is called to update the value of the node that
+            is connected.
+            Some nodes are incompatible with each other. A string for example is not always convertible to an integer.
+            To not crash the program, this method checks the type of data that is passed and converts it into
+            the type of data that the node accepts.
         :param value:
         :return:
         """
@@ -224,10 +240,7 @@ class AbstractNodeInterface:
             self.changeInputValue(0, value)
         self.nodeGraphic.updateTxtValuePosition()
 
-    # ###############################################
-    #
-    #      THIS FUNCTION IS FOR CONNECTIONS
-    #
+    # ------- CONNECTION METHODS -------
 
     @property
     def inConnections(self):
@@ -240,9 +253,7 @@ class AbstractNodeInterface:
     def disconnect(self, node, index):
         self.nodeData.disconnect(node, index)
 
-    # ###############################################
-    #
-    #      THIS FUNCTION IS FOR DATA NODES
+    # ------- THIS FUNCTION IS FOR DATA NODES
 
     def getOutputValue(self, plugIndex):
         return self.nodeData.outPlugs[plugIndex].getValue()
@@ -250,24 +261,9 @@ class AbstractNodeInterface:
     def getInputValue(self, plugIndex):
         return self.nodeData.inPlugs[plugIndex].getValue()
 
-    def setInputValue(self, plugIndex, value, isAResetValue=False):
-        if isAResetValue:
-            self.resetValue = value
-        try:
-            self.nodeData.inPlugs[plugIndex].setValue(value)
-            self.nodeData.calculate()
-            if self.outConnections:
-                for connection in self.outConnections:
-                    connection.updateValue()
-            self.nodeGraphic.setTextValueOnQLineEdit(self.getOutputValue(0))
-        except Exception as e:
-            """print(f"Debug: class AbstractNodeInterface, function setInputValue, error: {event}"
-                  f"\nplugIndex: {plugIndex}, biggusNode: {biggusNode}, isAResetValue: {isAResetValue} ")"""
-            a = e
-
     def calculateOutput(self, plugIndex):
         """
-        Override this function to calculate the output biggusNode
+        Override this function to calculate the output of the node
         :param plugIndex:
         :return:
         """
@@ -287,6 +283,16 @@ class AbstractNodeInterface:
         return None
 
     def getCodeFromInput(self, index):
+        """
+        ITA:
+            Questa funzione viene chiamata quando si vuole ottenere il codice del nodo. Quando si connettono
+            due nodi, il nodo in input concatena il suo codice a quello che gli viene passato.
+        ENG:
+            This function is called when you want to get the code of the biggusNode. When two nodes are connected,
+            the input biggusNode concatenates its code to the one that is passed to it.
+        :param index:
+        :return:
+        """
         try:
             if not self.inPlugs[index].inConnection:
                 return self.getTitle(), self.inPlugs[index].getCode()
@@ -295,10 +301,7 @@ class AbstractNodeInterface:
         except Exception as e:
             return None, None
 
-    # ###############################################
-    #
-    #    Plug functions
-    #
+    # ------- THIS FUNCTION IS FOR PLUGS -------
 
     def changeInputValue(self, plugIndex, value, isAResetValue=False):
         """
@@ -331,6 +334,13 @@ class AbstractNodeInterface:
         return self.nodeData.outPlugs
 
     def getFirstFreeInPlug(self):
+        """
+        ITA:
+            Ritorna il primo plug di input libero.
+        ENG:
+            Returns the first free input plug.
+        :return:
+        """
         for plug in self.inPlugs:
             if not plug.inConnection:
                 return plug
@@ -356,18 +366,50 @@ class AbstractNodeInterface:
         self.nodeGraphic.updatePlugsPos()
 
     def setPlugInTitle(self, plugIndex, name):
+        """
+        ITA:
+            Cambia il nome di un plug di input. E' utile quando un plug può avere in ingresso solo un tipo di dato,
+            come nel caso di if, while, for, ecc.
+        ENG:
+            Change the name of an input plug. It is useful when a plug can only have one type of data as input,
+            like in the case of if, while, for, etc.
+        :param plugIndex:
+        :param name:
+        :return:
+        """
         self.nodeData.inPlugs[plugIndex].setName(name)
 
     def getPlugInTitle(self, plugIndex):
         return self.nodeData.inPlugs[plugIndex].name
 
     def setPlugOutTitle(self, plugIndex, name):
+        """
+        ITA:
+            Cambia il nome di un plug di output. E' utile quando ci sono più out e si vuole distinguere il loro
+            significato.
+        ENG:
+            Change the name of an output plug. It is useful when there are more out and you want to distinguish their
+            meaning.
+        :param plugIndex:
+        :param name:
+        :return:
+        """
         self.nodeData.outPlugs[plugIndex].setName(name)
 
     def getPlugOutTitle(self, plugIndex):
         return self.nodeData.outPlugs[plugIndex].name
 
     def addInPlug(self, name=None):
+        """
+        ITA:
+            Ogni nodo viene creato con un numero di plug di default. Alcuni nodi durante la loro vita possono
+            richiedere un numero di plug maggiori. Questa funzione aggiunge un plug di input.
+        ENG:
+            Each biggusNode is created with a default number of plugs. Some biggusNodes during their life can
+            require a larger number of plugs. This function adds an input plug.
+        :param name:
+        :return:
+        """
         plug = PlugData("In", len(self.nodeData.inPlugs))
         self.nodeData.inPlugs.append(plug)
         gPlug = plug.createPlugGraphic(self.nodeGraphic)
@@ -377,6 +419,15 @@ class AbstractNodeInterface:
         self.nodeGraphic.updatePlugsPos()
 
     def addInPlugs(self, number, nameList=None):
+        """
+        ITA:
+            Funziona in modo simile a addInPlug, ma aggiunge più plug di input.
+        ENG:
+            Works in a similar way to addInPlug, but adds more input plugs.
+        :param number:
+        :param nameList:
+        :return:
+        """
         for x in range(number):
             plug = PlugData("In", x)
             self.nodeData.inPlugs.append(plug)
@@ -416,6 +467,15 @@ class AbstractNodeInterface:
             self.nodeData.outPlugs.pop(index)
 
     def removeAllUnnecessaryPlugs(self):
+        """
+        ITA:
+            Quando si crea ad esempio un nodo stringa, di default ha 1 plugIn. Se si trasforma il nodo in un replace,
+            ha bisogno di 3 inPlug. Per evitare errori, questo metodo elimina tutti i plug che non abbiano indice 0.
+        ENG:
+            When you create a string node for example, it has a default plugIn. If you turn the node into a replace,
+            it needs 3 inPlug. To avoid errors, this method deletes all plugs that do not have index 0.
+        :return:
+        """
         for _ in range(1, len(self.inPlugs)):
             self.deleteInPlug()
         self.updateAll()
@@ -427,15 +487,29 @@ class AbstractNodeInterface:
 
     def showContextMenu(self, position):
         """
-        Fa l'override del context menu del nodo
-        in modo da poterlo personalizzare
+        ITA:
+            Mostra il menu contestuale del nodo. Questo è il metodo a cui si fa l'override
+            per personalizzare il menu contestuale.
+        ENG:
+            Shows the context menu of the node. This is the method to which you do the override
+            to customize the context menu.
         :param position:
         :return:
         """
         pass
 
     def setMenuOperation(self, operation):
-        self.menuOperation = operation
+        """
+        ITA:
+            Quando si salva un nodo, viene salvato anche il valore del menu contestuale in modo che
+            alla riapertura del progetto si possa ripristinare lo stato del menu al valore corretto.
+        ENG:
+            When you save a node, the value of the context menu is also saved so that
+            when the project is reopened, the menu state can be restored to the correct value.
+        :param operation:
+        :return:
+        """
+        self.menuReturnValue = operation
         # in operation viene salvata la action che ha generato il menu
         # in questo modo si può sapere quale azione è stata scelta
         # event quindi eseguire l'azione corretta
@@ -443,7 +517,10 @@ class AbstractNodeInterface:
 
     def showToolWidget(self):
         """
-        Mostra il tool widget del nodo
+        ITA:
+            Ogni nodo può avere un widget per regolare i parametri. Questo metodo mostra il widget.
+        ENG:
+            Each node can have a widget to adjust the parameters. This method shows the widget.
         :return:
         """
         if self.hasAToolWidget:

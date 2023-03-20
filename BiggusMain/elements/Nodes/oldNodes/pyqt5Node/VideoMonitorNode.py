@@ -7,7 +7,7 @@ from PyQt5.QtMultimediaWidgets import *
 from PyQt5.QtWidgets import *
 
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
-from BiggusMain.elements.Nodes.openCvNode.VideoCVCameraNode import VideoCVCameraNode
+from Release.biggusFolder.Nodes.OpenCvNodes.VideoCVCameraNode import VideoCVCameraNode
 
 
 class CameraNode(QObject):

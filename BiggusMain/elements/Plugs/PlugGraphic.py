@@ -33,6 +33,19 @@ class PlugGraphic(QGraphicsItem):
     isTxtReversed = False
 
     def __init__(self, plugData, diameter=8, parent=None):
+        """
+        ITA:
+            Questa classe rappresenta la grafica di un plug. Ovvero un cerchio bianco con un altro cerchio nero
+            all'interno. Ha un testo che rappresenta il nome del plug e può essere cambiato cliccando con il tasto
+            in modalità editor, oppure in hardcode.
+        ENG:
+            This class represents the graphic of a plug. That is, a white circle with another black circle
+            inside. It has a text that represents the name of the plug and can be changed by clicking with the button
+            in editor mode, or in hardcode.
+        :param plugData:
+        :param diameter:
+        :param parent:
+        """
         super().__init__(parent)
         self.diameter = diameter
         self.plugData = plugData
@@ -45,6 +58,15 @@ class PlugGraphic(QGraphicsItem):
         self.createTitleText()
 
     def __str__(self):
+        """
+        ITA:
+            Questo metodo viene chiamato quando si fa un print di un oggetto di questa classe,
+            tenendo premuto CTRL + Click sull'oggetto, vengono stampate le informazioni del plug.
+        ENG:
+            This method is called when you do a print of an object of this class,
+            holding down CTRL + Click on the object, the plug information is printed.
+        :return:
+        """
         returnValue = f"{self.plugData.getTitle()}: {self.plugData.getValue()}\n"
         returnCode = f"{self.plugData.getCode()}\n"
         returnPlug = f"[{self.title}] = {self.plugData.getValue()} index = {self.plugData.index}\n"
