@@ -4,15 +4,14 @@ from BiggusMain.elements.Plugs.PlugGraphic import PlugGraphic
 
 
 class PlugData:
-    resetValue = 0
+
     inConnection = None
 
     def __init__(self, _type: str, index: int, value: int = 0):
         self.className = _type
         self._name = _type
         self.index = index
-        self.resetValue = value
-        self._value = self.resetValue
+        self._value = value
         self.plugGraphic = None
 
     def __str__(self):
@@ -59,6 +58,12 @@ class PlugData:
             # aggiorna solo il valore basato sull'out[0]
             if "Out" in self.className and self.index == 0:
                 self.plugGraphic.nodeGraphic.setTextValueOnQLineEdit(value)
+
+    def resetValue(self):
+        self._value = self.getNode().startValue
+
+    def getResetValue(self):
+        return self.getNode().startValue
 
     def getCode(self):
         """

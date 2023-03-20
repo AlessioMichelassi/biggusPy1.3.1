@@ -101,7 +101,7 @@ class Canvas(customFocusWidget):
         nodeClass = getattr(module, className)
         node = nodeClass(*args, **kwargs)
         node.modulePath = modulePath
-        value = kwargs.get("biggusNode", node.resetValue)
+        value = kwargs.get("biggusNode", node.startValue)
         if value:
             node.resetValue = value
         return node

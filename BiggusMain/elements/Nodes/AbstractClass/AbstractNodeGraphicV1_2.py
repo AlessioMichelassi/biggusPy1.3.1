@@ -139,6 +139,7 @@ class SuperQLineEdit(QLineEdit):
             self.updateStyle()
         return super().event(event)
 
+
 class SizeGripZ(QGraphicsItem):
     def __init__(self, graphicNode, parent=None):
         super().__init__(parent)
@@ -282,18 +283,34 @@ class AbstractNodeGraphic(QGraphicsItem):
         x += int(penWidth * 1.7)
         painter.drawLine(x, y, x, int(self.boundingRectangle.bottom() - (penWidth / 2)))
 
+    # ---------------------- TOOLS ----------------------
+
     def contextMenuEvent(self, event):
+        """
+        Show the context menu of the node. Actually user can override the context menu of the node,
+        by overriding the method showContextMenu of the nodeInterface.
+        :param event:
+        :return:
+        """
         self.nodeInterface.showContextMenu(event.screenPos())
 
     def mouseDoubleClickEvent(self, event):
-        self.nodeInterface.showToolWidget()
+        """
+        Show the toolWidget of the node if it has one.
+        :param event:
+        :return:
+        """
+        if self.nodeInterface.hasToolWidget:
+            self.nodeInterface.showToolWidget()
 
-    # ##########################################
-    #
-    #                Look & Feel
-    #
+    # ---------------------- LOGO ----------------------
 
     def setLogo(self, filePNG):
+        """
+        Set the logo of the node. Actually is a QLabel that is added to the scene as a proxyWidget
+        :param filePNG:
+        :return:
+        """
         self.logo = QLabel()
         self.logoPath = filePNG
         self.updateLogo()
@@ -302,6 +319,10 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.proxyLogo.setPos(self.width - 28, 2)
 
     def updateLogo(self):
+        """
+        Update the logo of the node.
+        :return:
+        """
         pixmap = QPixmap()
         if self.isLogoBandW:
             pixmap = self.toGrayScale()
@@ -313,6 +334,10 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.logo.setScaledContents(True)
 
     def updateLogoPosition(self):
+        """
+        Update the position of the logo inside the node.
+        :return:
+        """
         self.proxyLogo.setPos(self.width - 28, 2)
 
     def toGrayScale(self, grayStyle="Average"):
@@ -348,10 +373,28 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.updateLogo()
 
     def setLogoVisible(self, isVisible: bool):
+        """
+        Set logo visibility
+        :param isVisible:
+        :return:
+        """
         self.isLogoVisible = isVisible
         self.proxyLogo.setVisible(isVisible)
 
     def setColorTrain(self, colorTrain: list):
+        """
+        ITA:
+            Un nodo in biggus è composto da 8 colori, il fill, il bordo, il bordo selezionato, il bordo hover,
+            il testo del proxy, il fill del proxy, il bordo del proxy e il bordo selezionato del proxy.
+            per modificare tutti i colori si usa una lista chiamata colorTrain.
+        ENG:
+            A node in biggus is composed of 8 colors, the fill, the border, the selected border, the hover border,
+            the text of the proxy, the fill of the proxy, the border of the proxy and the selected border of the proxy.
+            to modify all colors you use a list called colorTrain.
+
+        :param colorTrain: colorTrain = [fill, border, selected border, hover border, text of the proxy, fill of the
+        proxy, border of the proxy, selected border of the proxy] :return:
+        """
         self.colorFill = colorTrain[0]
         self.borderColorDefault = colorTrain[1]
         self.borderColorSelect = colorTrain[2]
@@ -364,6 +407,19 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.update()
 
     def getColorTrain(self):
+        """
+        ITA:
+            Un nodo in biggus è composto da 8 colori, il fill, il bordo, il bordo selezionato, il bordo hover,
+            il testo del proxy, il fill del proxy, il bordo del proxy e il bordo selezionato del proxy.
+            per modificare tutti i colori si usa una lista chiamata colorTrain.
+        ENG:
+            A node in biggus is composed of 8 colors, the fill, the border, the selected border, the hover border,
+            the text of the proxy, the fill of the proxy, the border of the proxy and the selected border of the proxy.
+            to modify all colors you use a list called colorTrain.
+
+        :return colorTrain: colorTrain = [fill, border, selected border, hover border, text of the proxy, fill of the
+        proxy, border of the proxy, selected border of the proxy] :return:
+        """
         return [self.colorFill, self.borderColorDefault, self.borderColorSelect, self.borderColorHover,
                 self.proxyColorText, self.proxyColorFill, self.proxyColorBorder, self.proxyColorBorderSelect]
 
@@ -376,10 +432,7 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.updateTxtValuePosition()
         self.update()
 
-    # ##########################################
-    #
-    #                TITLE SECTION
-    #
+    # -------------------- TITLE SECTION
 
     def createTitle(self):
         self.txtTitle = SuperTxtTitle(self)
@@ -398,15 +451,16 @@ class AbstractNodeGraphic(QGraphicsItem):
         x = self.txtTitle.boundingRect().width() // 2 - self.width // 2
         self.txtTitle.setPos(-x, -30)
 
-    # ##########################################
-    #
-    #                VALUE SECTION
-    #
+    # -------------------- VALUE SECTION --------------------------------
 
     def createTxtValue(self):
         """
-        laTxtValue è la QLineEdit che viene visualizzata sul Nodo event ne visualizza il valore
-        dell'input 0 del nodo, oppure il valore di output 0 del nodo.
+        ITA:
+            laTxtValue è la QLineEdit che viene visualizzata sul Nodo per visualizzare il valore
+            di output 0 del nodo.
+        ENG:
+            the TxtValue is the QLineEdit that is displayed on the Node to display the value
+            of output 0 of the node.
         :return:
         """
         self.txtValue = SuperQLineEdit(self)
@@ -420,12 +474,19 @@ class AbstractNodeGraphic(QGraphicsItem):
 
     def setTxtValue(self):
         """
-        Questo metodo viene chiamato quando viene premuto il tasto invio sulla QLineEdit.
-        Generalmente in questo caso si vuole settare il valore della QLineEdit come input
-        del nodo.
+        ITA:
+            Questo metodo viene chiamato quando viene premuto il tasto invio sulla QLineEdit.
+            Generalmente in questo caso si vuole settare il valore della QLineEdit come input
+            del nodo. E' utile in Nodi che sono dei tipi come Float, Int, String, ecc... viene
+            disabilitato per i nodi che effettuano operazioni come mathNode, ifNode, ecc...
+        ENG:
+            This method is called when the enter key is pressed on the QLineEdit.
+            Usually in this case you want to set the value of the QLineEdit as input
+            of the node. It is useful in Nodes that are types such as Float, Int, String, etc ... it
+            is disabled for nodes that perform operations such as mathNode, ifNode, etc ...
         :return:
         """
-        self.nodeInterface.setInputValue(0, self.txtValue.text())
+        self.nodeInterface.setInputValue(0, self.txtValue.text(), True)
         self.txtValue.clearFocus()
 
     def initTxtValueProperties(self):
@@ -436,8 +497,10 @@ class AbstractNodeGraphic(QGraphicsItem):
 
     def setTextValueOnQLineEdit(self, value):
         """
-        Questo metodo serve per settare il valore della QLineEdit
-        dall'esterno.
+        ITA:
+            Questo metodo serve per settare il valore della QLineEdit.
+        ENG:
+            This method is used to set the value of the QLineEdit.
         :param value:
         :return:
         """
@@ -462,12 +525,7 @@ class AbstractNodeGraphic(QGraphicsItem):
         :return:
         """
         size = self.txtValue.size()
-        # la dimensione della QLineEdit non riesce a contenere il testo, quindi la si ingrandisce
-        # conta il numero di caratteri ad esclusione delle parentesi, delle virgole event degli apici
-        #
-        # the size of the QLineEdit cannot contain the text, so it is enlarged
-        # count the number of characters excluding parentheses, commas and apostrophes
-        charset_normalizer = "[]',"
+        charset_normalizer = "[]{}().;:',"
         charsCount = len(self.txtValue.text()) - sum(
             self.txtValue.text().count(char) for char in charset_normalizer
         )
@@ -485,10 +543,7 @@ class AbstractNodeGraphic(QGraphicsItem):
     def setTxtValueReadOnly(self, value):
         self.txtValue.setReadOnly(value)
 
-    # ##########################################
-    #
-    #                PLUGS SECTION
-    #
+    # -------------------- PLUGS SECTION --------------------------------
 
     def addPlug(self, _type, plug):
         if _type == "In":
@@ -548,10 +603,7 @@ class AbstractNodeGraphic(QGraphicsItem):
             if "out" in plug.plugData.className.lower():
                 plug.setPos(QPointF(self.width // 2, self.height + 8))
 
-    # ##########################################
-    #
-    #                PROXY WIDGET SECTION
-    #
+    # -------------------- PROXY WIDGET SECTION --------------------------------
 
     def createProxyWidget(self, widget):
         self.proxyWidget = QGraphicsProxyWidget(self, Qt.WindowFlags())

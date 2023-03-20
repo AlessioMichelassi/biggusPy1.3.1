@@ -16,7 +16,7 @@ class GraphicViewOverride(QGraphicsView):
     # Objects variables
     isConnectingPlug = False
     arrow: Arrow = None
-
+    isOnCollision = False
     # Mouse variables
     isMiddleMouseButtonPressed = False
     lastMiddleMousePosition = None
@@ -55,7 +55,7 @@ class GraphicViewOverride(QGraphicsView):
                     self.selectedItem.mouseDoubleClickEvent(event)
                 elif isinstance(self.selectedItem, QGraphicsProxyWidget):
                     try:
-                        self.selectedItem.widget().showToolBox(self.mapToScene(event.pos()) )
+                        self.selectedItem.widget().showToolBox(self.mapToScene(event.pos()))
                     except AttributeError as e:
                         print(e)
                 super().mouseDoubleClickEvent(event)
@@ -182,33 +182,36 @@ class GraphicViewOverride(QGraphicsView):
             if isinstance(self.selectedItem, AbstractNodeGraphic):
                 # se è premuto CTRL
                 if QApplication.keyboardModifiers() == Qt.KeyboardModifier.ControlModifier:
-                    self.checkCollisions(self.selectedItem)
+                    self.checkCollisions(self.selectedItem, event)
 
-    def checkCollisions(self, node):
+    def checkCollisions(self, node, event):
         for item in self.graphicScene.items():
             if isinstance(item, Connection):
                 if item.collidesWithItem(node):
+                    self.isOnCollision = True
                     # crea una connessione fra i tre elementi
                     inputNode = item.inputNode
-                    inputPlug = item.inputPlug
+                    inputPlug = item.inputPlug.plugGraphic
                     inputIndexPlug = item.inIndex
+                    self.checkIf_InPlug_IsConnected(inputPlug, event)
                     newNode = node.nodeData
+                    newNodeOutPlug = newNode.outPlugs[0].plugGraphic
+                    newNodeInPlug = newNode.inPlugs[0].plugGraphic
                     outputNode = item.outputNode
-                    outputPlug = item.outputPlug
+                    outputPlug = item.outputPlug.plugGraphic
                     outputIndexPlug = item.outIndex
-                    self.canvas.deleteConnection(item)
-                    self.graphicScene.removeItem(item)
-                    connection = Connection(outputNode, outputPlug, outputIndexPlug, newNode, newNode.inPlugs[0], 0)
-                    self.setConnection(connection)
-                    connection = Connection(newNode, newNode.outPlugs[0], 0, inputNode, inputPlug, inputIndexPlug)
-                    self.setConnection(connection)
+                    self.createArrowFromTwoPlug(outputPlug, newNodeInPlug, event)
+                    self.createArrowFromTwoPlug(newNodeOutPlug, inputPlug, event)
+                    allItemIntheScene = self.graphicScene.items()
+                    for item in allItemIntheScene:
+                        if isinstance(item, Arrow):
+                            self.graphicScene.removeItem(item)
 
     def setConnection(self, connection):
         connection.outputNode.outConnections.append(connection)
         connection.inputNode.inConnections = connection
         self.canvas.connections.append(connection)
         self.graphicScene.addItem(connection)
-
 
     # -------------------------- MOUSE EVENTS -------------------------- #
 
@@ -233,9 +236,9 @@ class GraphicViewOverride(QGraphicsView):
             print(self.selectedItem)
         elif isinstance(self.selectedItem, PlugGraphic):
             if "In" in self.selectedItem.name:
-                item = self.selectedItem
+                plugGraphic = self.selectedItem
                 # controlla se il plug di "In" non abbia connessioni
-                self.checkIfInNodeIsConnected(item, event)
+                self.checkIf_InPlug_IsConnected(plugGraphic, event)
             if not self.arrow:
                 self.createArrow(event)
 
@@ -321,6 +324,35 @@ class GraphicViewOverride(QGraphicsView):
         self.arrow = Arrow(self.selectedItem, self.mapToScene(event.pos()))
         self.graphicScene.addItem(self.arrow)
 
+    def createArrowFromTwoPlug(self, plugOut, plugIn, event):
+        """
+        ITA:
+            Crea la freccia che collega due nodi. La freccia è una specie di collegamento
+            temporaneo event serve solo per visualizzare l'azione del collegare. Quando viene
+            fatto il release del mouse viene creata la connessione vera event propria la freccia
+            viene cancellata event sostituita con una Connection.
+        ENG:
+            Creates the arrow that connects two nodes. The arrow is a kind of temporary connection
+            and is only used to visualize the action of connecting. When the mouse is released,
+            the real connection is created, the arrow is deleted and replaced with a Connection.
+
+        :param plugOut:
+        :param plugIn:
+        :param event:
+        :return:
+        """
+        self.isConnectingPlug = True
+        self.arrow = Arrow(plugIn, self.mapToScene(event.pos()))
+        self.graphicScene.addItem(self.arrow)
+        connection = self.arrow.establishConnection(plugOut)
+        self.graphicScene.removeItem(self.arrow)
+        self.arrow = None
+        self.isConnectingPlug = False
+        if connection:
+            connection.outputNode.outConnect(connection)
+            connection.inputNode.inConnect(connection)
+            self.canvas.connections.append(connection)
+
     def createArrowFromConnection(self, connection, event):
         """
         ITA:
@@ -339,7 +371,7 @@ class GraphicViewOverride(QGraphicsView):
         self.arrow = Arrow(connection.outputPlug.plugGraphic, self.mapToScene(event.pos()))
         self.graphicScene.addItem(self.arrow)
 
-    def checkIfInNodeIsConnected(self, item, event):
+    def checkIf_InPlug_IsConnected(self, item: PlugGraphic, event):
         """
         ITA:
             Controlla se il plug di "In" non abbia connessioni. Se ha una connessione la cancella.
@@ -349,7 +381,6 @@ class GraphicViewOverride(QGraphicsView):
         :param item:
         :return:
         """
-        print(type(item))
         if item.plugData.inConnection is not None:
             connection = item.plugData.inConnection
             outNode = connection.outputNode
@@ -357,11 +388,12 @@ class GraphicViewOverride(QGraphicsView):
                 if conn and conn == connection:
                     conn.disconnect()
                     self.graphicScene.removeItem(conn)
+                    self.canvas.connections.remove(conn)
 
-            if not self.arrow:
+            if not self.arrow and not self.isConnectingPlug:
                 self.createArrowFromConnection(connection, event)
 
-    def connectNode(self, item, event):
+    def connectNode(self, plug: 'plugGraphic', event):
         # sourcery skip: use-named-expression
         """
         ITA:
@@ -371,12 +403,12 @@ class GraphicViewOverride(QGraphicsView):
             Connects two plugs together.
             If the In plug already has a connection, it replaces it with the new one.
         :param event:
-        :param item: il plug Out
+        :param plug: il plug Out
         """
         # controlla se il plug di "In" non abbia connessioni
-        self.checkIfInNodeIsConnected(item, event)
+        self.checkIf_InPlug_IsConnected(plug, event)
         # quindi connette i plug se è possibile connetterli
-        connection = self.arrow.establishConnection(item)
+        connection = self.arrow.establishConnection(plug)
         if connection:
             connection.outputNode.outConnect(connection)
             connection.inputNode.inConnect(connection)

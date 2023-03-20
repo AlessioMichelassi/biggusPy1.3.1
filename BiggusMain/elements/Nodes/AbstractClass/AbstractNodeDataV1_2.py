@@ -62,7 +62,7 @@ class AbstractNodeData:
         :return:
         """
         if isAResetValue:
-            self.inPlugs[index].resetValue = value
+            self.nodeInterface.startValue = value
         self.inPlugs[index].setValue(value)
         self.calculate()
         if self.outConnections:

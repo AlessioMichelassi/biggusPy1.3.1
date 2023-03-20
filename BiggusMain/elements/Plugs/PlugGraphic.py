@@ -61,6 +61,9 @@ class PlugGraphic(QGraphicsItem):
     def getNode(self):
         return self.nodeGraphic.nodeInterface
 
+    def getClassName(self):
+        return self.plugData.className
+
     def createTitleText(self):
         font = QFont()
         font.setPointSize(10)

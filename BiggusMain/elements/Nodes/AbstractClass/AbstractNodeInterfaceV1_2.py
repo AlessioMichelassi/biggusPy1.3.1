@@ -76,7 +76,7 @@ class AbstractNodeInterface:
     # Quando il nodo viene salvato, viene salvato anche il valore del menu a tendina
     # in modo da ripristinare lo stato del nodo quando viene caricato
     menuReturnValue = None
-    resetValue = 0
+    startValue = 0
     isEditable = False
     canvas = None
     mainWidget = None
