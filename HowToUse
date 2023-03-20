@@ -1,0 +1,50 @@
+                            HOW TO USE BIGGUS_PY
+
+ITA:
+    Si può usare il programma in vari modi.
+ENG:
+    You can use the program in various ways.
+
+ITA:
+    Una volta scaricato il file zip da github, si può estrarre e usare il programma direttamente nel proprio editor
+    di testo preferito. Per esempio, se si usa PyCharm, si può aprire il progetto selezionando la cartella
+    del programma. Nel file requirements.txt sono elencate le dipendenze del programma. Per installarle,
+    si può usare il comando:
+                            pip install -r requirements.txt
+
+    1) Scaricare il file zip della repository
+    2) Estrarre il file zip
+    3) Aprire il file main.py con il proprio editor di testo preferito
+    4) Eseguire il programma python main.py
+
+ENG:
+    Once you downloaded the zip file from github, it can be extracted and used directly in your preferred
+    text editor. For example, if you use PyCharm, you can open the project by selecting the program folder.
+    The dependencies of the program are listed in the requirements.txt file. To install them, you can use the
+    command:
+                            pip install -r requirements.txt
+
+    1) Download the zip file of the repository
+    2) Extract the zip file
+    3) Open the main.py file with your preferred text editor
+    4) Run the program python main.py
+
+
+ITA:
+    C'è anche la possibilità di usare il programma compilato in un eseguibile. LA versione più recente è contenuta
+    nella cartella dist. Per eseguire il programma, basta fare doppio click sul file biggusPy.exe. Oppure, se si
+    usa linux ./biggusPy
+
+ENG:
+
+    There is also the possibility of using the program compiled in an executable. The latest version is contained
+    in the dist folder. To run the program, just double click on the biggusPy.exe file. Or, if you use linux
+    ./biggusPy
+
+ITA:
+    Il programma è stato testato su linux ubuntu e su windows 10. Non è stato testato su mac. Se si riscontrano
+    problemi, si può aprire un issue su github e sarò felice di aiutarvi.
+
+ENG:
+    The program has been tested on linux ubuntu and windows 10. It has not been tested on mac. If you encounter
+    problems, you can open an issue on github and I will be happy to help you.

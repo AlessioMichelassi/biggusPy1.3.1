@@ -21,7 +21,7 @@ class GraphicViewOverride(QGraphicsView):
     isMiddleMouseButtonPressed = False
     lastMiddleMousePosition = None
     selectedItem = None
-
+    lastSelectedItem = None
     # signal to update the position of the mouse in the status bar
     scenePosChanged = pyqtSignal(int, int)
 
@@ -157,7 +157,6 @@ class GraphicViewOverride(QGraphicsView):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            self.setDragMode(QGraphicsView.DragMode.NoDrag)
             self.leftMouseButtonPress(event)
         elif event.button() == Qt.MouseButton.MiddleButton:
             self.middleMouseButtonPress(event)
@@ -185,6 +184,8 @@ class GraphicViewOverride(QGraphicsView):
                     self.checkCollisions(self.selectedItem, event)
 
     def checkCollisions(self, node, event):
+        if node == self.lastSelectedItem:
+            return
         for item in self.graphicScene.items():
             if isinstance(item, Connection):
                 if item.collidesWithItem(node):
@@ -206,6 +207,7 @@ class GraphicViewOverride(QGraphicsView):
                     for item in allItemIntheScene:
                         if isinstance(item, Arrow):
                             self.graphicScene.removeItem(item)
+                    self.lastSelectedItem = self.selectedItem
 
     def setConnection(self, connection):
         connection.outputNode.outConnections.append(connection)
@@ -232,6 +234,10 @@ class GraphicViewOverride(QGraphicsView):
         :return:
         """
         self.selectedItem = self.getItemAtClick(event)
+        if self.selectedItem is None:
+            self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
+        else:
+            self.setDragMode(QGraphicsView.DragMode.NoDrag)
         if event.modifiers() and Qt.KeyboardModifier.ControlModifier:
             print(self.selectedItem)
         elif isinstance(self.selectedItem, PlugGraphic):
