@@ -87,8 +87,6 @@ class Canvas(customFocusWidget):
 
     # ------------------- MOUSE EVENTS -------------------
 
-
-
     # ------------------- DRAG AND DROP EVENTS -------------------
 
     # ------------------- NODES -------------------
@@ -317,7 +315,6 @@ class Canvas(customFocusWidget):
         self.nodes = []
         self.connections = []
         self.nodesTitleList = []
-
 
     def copyNode(self, nodes):
         nodesList = []
