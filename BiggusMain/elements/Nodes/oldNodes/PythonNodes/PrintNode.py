@@ -71,7 +71,7 @@ class printWidget(QWidget):
 
 class PrintNode(AbstractNodeInterface):
     printWidget: printWidget
-    resetValue = 0
+    startValue = 0
     width = 300
     height = 300
     colorTrain = [QColor(144, 81, 81), QColor(242, 68, 100), QColor(242, 108, 115), QColor(197, 242, 232),
@@ -108,7 +108,7 @@ class PrintNode(AbstractNodeInterface):
 
     def addPrintWidget(self):
         self.printWidget = printWidget(self, self.colorTrain[0])
-        self.printWidget.setText(self.resetValue)
+        self.printWidget.setText(self.startValue)
         self.nodeGraphic.createProxyWidget(self.printWidget)
         self.printWidget.setFixedWidth(self.width - 20)
         self.printWidget.setFixedHeight(self.height - 50)

@@ -533,18 +533,18 @@ class AbstractNodeInterface:
         for connection in self.nodeData.outConnections:
             connections.append(connection.serialize())
 
-        resetValue = self.nodeData.inPlugs[0].getValue()
-        if isinstance(resetValue, np.ndarray):
-            resetValue = resetValue.tolist()
-        elif resetValue is not JSONSerializable:
-            resetValue = str(resetValue)
+        startValue = self.nodeData.inPlugs[0].getValue()
+        if isinstance(startValue, np.ndarray):
+            startValue = startValue.tolist()
+        elif startValue is not JSONSerializable:
+            startValue = str(startValue)
         dicts = OrderedDict([
             ('className', self.className),
             ('modulePath', self.modulePath),
             ('name', self.getName()),
             ('title', self.nodeData.getTitle()),
             ('index', self.index),
-            ('resetValue', resetValue),
+            ('startValue', startValue),
             ('menuReturnValue', self.menuReturnValue),
             ('pos', (int(self.nodeGraphic.pos().x()), int(self.nodeGraphic.pos().y()))),
             ('inPlugsNumb', len(self.inPlugs)),

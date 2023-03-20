@@ -140,8 +140,8 @@ class Connection(QGraphicsItem, debugTool):
             self.inputNode.outConnections.remove(self)
         if self in self.outputNode.outConnections:
             self.outputNode.outConnections.remove(self)
-        resetValue = self.inputNode.inPlugs[self.inIndex].getResetValue()
-        self.inputNode.inPlugs[self.inIndex].setValue(resetValue)
+        startValue = self.inputNode.inPlugs[self.inIndex].getResetValue()
+        self.inputNode.inPlugs[self.inIndex].setValue(startValue)
         self.inputNode.calculate()
         if self.inputNode.outConnections:
             for connection in self.inputNode.outConnections:

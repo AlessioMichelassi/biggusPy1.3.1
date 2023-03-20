@@ -24,7 +24,7 @@ for x in fruits:
 
 
 class ForNode(AbstractNodeInterface):
-    resetValue = []
+
     startFunction = lambda x: x
     startValue = []
     width = 120

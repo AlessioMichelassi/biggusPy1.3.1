@@ -416,6 +416,10 @@ class GraphicViewOverride(QGraphicsView):
 
     # --------------------- NODES EVENTS ---------------------
 
+    def selectAllItems(self):
+        for item in self.graphicScene.items():
+            item.setSelected(True)
+
     def deleteSelectedItems(self):
         try:
             for item in self.graphicScene.selectedItems():

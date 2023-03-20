@@ -91,7 +91,7 @@ class RangeNodeUI(QWidget):
 
 
 class RangeNode(AbstractNodeInterface):
-    resetValue = 0
+
     startValue = True
     width = 120
     height = 180

@@ -134,7 +134,7 @@ class Canvas(customFocusWidget):
         node.modulePath = modulePath
         value = kwargs.get("biggusNode", node.startValue)
         if value:
-            node.resetValue = value
+            node.startValue = value
         return node
 
     @staticmethod
@@ -172,9 +172,9 @@ class Canvas(customFocusWidget):
         try:
             if nodeClass:
                 node = nodeClass(*args, **kwargs)
-                value = kwargs.get("biggusNode", node.resetValue)
+                value = kwargs.get("biggusNode", node.startValue)
                 if value:
-                    node.resetValue = value
+                    node.startValue = value
                 return node
         except Exception as e:
             print(f"Error in createNode: {className} {e}")
@@ -265,9 +265,9 @@ class Canvas(customFocusWidget):
             if nodeClass:
                 node = nodeClass(*args, **kwargs)
                 node.modulePath = modulePath
-                value = kwargs.get("biggusNode", node.resetValue)
+                value = kwargs.get("biggusNode", node.startValue)
                 if value:
-                    node.resetValue = value
+                    node.startValue = value
                 return node
         except Exception as e:
             print(f"Error in createNode: {className} {e}")
@@ -546,7 +546,7 @@ class Canvas(customFocusWidget):
         _name = deserialized["name"]
         _title = deserialized["title"]
         _index = deserialized["index"]
-        _value = deserialized["resetValue"]
+        _value = deserialized["startValue"]
         try:
             _menuOperation = deserialized["menuReturnValue"]
         except Exception as e:
@@ -567,6 +567,8 @@ class Canvas(customFocusWidget):
             node = self.createNode(_className, value=int(_value))
             node.setName(_name)
             node.changeInputValue(0, _value, True)
+            self.addNode(node)
+            node.setPos(pos)
         else:
             try:
                 node = self.createNodeFromDeserialize(_className, _modulePath, value=_value, inNum=_inPlugsNumb,

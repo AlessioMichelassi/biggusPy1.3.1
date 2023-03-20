@@ -241,7 +241,7 @@ class AbstractNodeGraphic(QGraphicsItem):
     def __str__(self):
         nodeIdentification = f"Node className: {self.nodeInterface.nodeData.className}" \
                              f" name: {self.nodeInterface.nodeData.name} index: {self.nodeInterface.nodeData.index}\n"
-        nodeValue = f"\t\tcurrent outValue: {self.outPlugs[0].plugData.getValue()} resetValue: {self.nodeInterface.resetValue}\n"
+        nodeValue = f"\t\tcurrent outValue: {self.outPlugs[0].plugData.getValue()} resetValue: {self.nodeInterface.startValue}\n"
         nodeCode = f"\t\tcode:\n{self.nodeInterface.getCode()}\n"
         nodeConnections = f"\t\tinConnections: {self.nodeInterface.inConnections}\n" \
                           f"\t\toutConnections: {self.nodeInterface.outConnections}\n"

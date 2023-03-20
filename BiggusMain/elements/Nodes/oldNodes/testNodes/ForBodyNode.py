@@ -89,8 +89,8 @@ class ForBodyWidget(QWidget):
 
 
 class ForBodyNode(AbstractNodeInterface):
-    resetValue = lambda x: x
-    functionString = resetValue
+    startValue = lambda x: x
+    functionString = startValue
     menuReturnValue = ""
     function = None
     functionWidget: ForBodyWidget

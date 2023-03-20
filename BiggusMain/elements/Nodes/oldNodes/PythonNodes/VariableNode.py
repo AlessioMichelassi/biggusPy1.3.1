@@ -9,7 +9,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 
 class VariableNode(AbstractNodeInterface):
-    resetValue = 0
+    startValue = 0
     width = 50
     height = 120
     menuReturnValue = "int"

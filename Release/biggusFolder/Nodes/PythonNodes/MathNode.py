@@ -9,7 +9,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 
 class MathNode(AbstractNodeInterface):
-    resetValue = 0
+    startValue = 0
     menuReturnValue = "+"
     width = 120
     height = 80

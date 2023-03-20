@@ -247,7 +247,6 @@ class BiggusMenu(QMenuBar):
                 file = f.read()
             self.biggusPy.canvas.deserialize(file)
             fileName = openDialog.selectedFiles()[0].split("/")[-1].split(".")[0]
-            print(fileName)
             # self.biggusPy.printOnStatusBar(f"File opened {self.fileName}")
             self.saveRecentFiles([openDialog.selectedFiles()[0]])
             self.updateRecentFileMenu()

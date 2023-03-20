@@ -89,8 +89,8 @@ class FunctionWidget(QWidget):
 
 
 class FunctionNode(AbstractNodeInterface):
-    resetValue = "def default_function(initialLocation):\n    return initialLocation += 1"
-    functionString = resetValue
+    startValue = "def default_function(initialLocation):\n    return initialLocation += 1"
+    functionString = startValue
     menuReturnValue = ""
     function = None
     functionWidget: FunctionWidget
@@ -185,8 +185,8 @@ class FunctionNode(AbstractNodeInterface):
     def clone(self):
         inNum = len(self.inPlugs)
         outNum = len(self.outPlugs)
-        resetValue = self.functionString
-        return FunctionNode(resetValue, inNum, outNum)
+        startValue = self.functionString
+        return FunctionNode(startValue, inNum, outNum)
 
     def returnFunctionCode(self):
         functionString = self.functionString

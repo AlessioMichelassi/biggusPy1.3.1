@@ -329,14 +329,14 @@ class scratchNodeV0_9(QMainWindow):
         class UntitledNode(AbstractNodeData):
 
             _className = "UntitledNode"
-            resetValue = 0
+            startValue = 0
             width = 50 <--- aggiornato il valore
             height = 50 <--- aggiornato il valore
             colorTrain = [] <--- aggiornato il valore
 
             def __init__(self, biggusNode, inNum=1, outNum=1): <--- aggiornato il valore inNum event outNum
                 super().__init__(inNum, outNum)
-                self.resetValue = biggusNode
+                self.startValue = biggusNode
                 self.changeValue(biggusNode, type(biggusNode), 0, True)
 
         :return:

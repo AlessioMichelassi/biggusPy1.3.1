@@ -9,7 +9,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 
 class BooleanNode(AbstractNodeInterface):
-    resetValue = True
+
     startValue = True
     menuReturnValue = "True"
     width = 70

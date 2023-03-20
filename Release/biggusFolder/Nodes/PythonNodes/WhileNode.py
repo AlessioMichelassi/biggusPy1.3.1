@@ -10,7 +10,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 
 class WhileNode(AbstractNodeInterface):
-    resetValue = []
+    startValue = []
     startFunction = "biggusNode = 0    def doThis():    biggusNode += 1    print(f'biggusNode from function {biggusNode}')"
     width = 120
     height = 80

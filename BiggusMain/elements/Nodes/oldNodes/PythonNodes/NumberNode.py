@@ -9,7 +9,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 
 class NumberNode(AbstractNodeInterface):
-    resetValue = 0
+
     startValue = True
     width = 50
     height = 120

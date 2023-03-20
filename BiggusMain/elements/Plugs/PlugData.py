@@ -83,7 +83,7 @@ class PlugData:
         return self.plugGraphic.nodeGraphic.nodeInterface
 
     def resetPlug(self):
-        self._value = self.resetValue
+        self._value = self.getResetValue()
 
     def createPlugGraphic(self, graphicNode):
         self.plugGraphic = PlugGraphic(self, parent=graphicNode)
