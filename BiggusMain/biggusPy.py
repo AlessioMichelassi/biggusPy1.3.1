@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import sys
 
 from PyQt5.QtCore import *
@@ -177,12 +178,25 @@ class BiggusPy(QMainWindow):
                 data = json.load(f)
             self.mainDir = data["mainDir"]
             if os.name == "nt":
-                print(f"original main dir: {self.mainDir}")
-                self.mainDir = os.path.abspath(__file__)
-                print("nt finded. main dir will: {}".format(self.mainDir))
+                self.mainDir = data["mainDir"]
+                if getattr(sys, "frozen", False):
+                    # Il programma è stato compilato in un eseguibile autonomo.
+                    # Il percorso dell'eseguibile è in sys.executable.
+                    print("software compilato in un eseguibile autonomo")
+                    self.mainDir = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "biggusFolder"))
+                    print(f"Original main dir: {data['mainDir']}")
+                    print(f"New main dir: {self.mainDir}")
+                    biggusFolderSrc = os.path.join(self.mainDir, "biggusFolder")
+                    biggusTempDest = os.path.join(self.mainDir, "biggusTemp", "_MEI29162")
+                    shutil.copytree(biggusFolderSrc, biggusTempDest)
+                else:
+                    # Il programma è stato eseguito da un file sorgente.
+                    print("software eseguito da un file sorgente")
+                    self.mainDir = os.path.abspath(os.path.join(os.path.dirname(__file__), "biggusFolder"))
                 module_path = self.mainDir
                 os.environ["PYTHONPATH"] = os.pathsep.join([os.environ.get("PYTHONPATH", ""), module_path])
                 sys.path.insert(0, module_path)
+
             self.configurationFilePath = data["configurationFilePath"]
             self.saveFileDirectory = data["saveFileDirectory"]
             self.iconPaths = data["iconPaths"]
