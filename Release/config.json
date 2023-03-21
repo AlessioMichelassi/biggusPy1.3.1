@@ -1,20 +1,20 @@
 {
     "mainDir": "C:\\Users\\aless\\OneDrive\\Desktop\\ArchivioPy\\biggusPy1.3.1\\Release\\biggusFolder",
-    "configurationFilePath": "Release/config.json",
-    "saveFileDirectory": "Release/SaveDir",
+    "configurationFilePath": "config.json",
+    "saveFileDirectory": "SaveDir",
     "iconPaths": {
-        "biggusIcon": "Release/biggusFolder/imgs/icon/biggusIcon",
-        "pythonIcon": "Release/biggusFolder/imgs/icon/pythonIcon",
-        "openCv": "Release/biggusFolder/imgs/icon/openCvIcon",
-        "pyQt5": "Release/biggusFolder/imgs/icon/pyQt5Icon"
+        "biggusIcon": "biggusFolder/imgs/icon/biggusIcon",
+        "pythonIcon": "biggusFolder/imgs/icon/pythonIcon",
+        "openCv": "biggusFolder/imgs/icon/openCvIcon",
+        "pyQt5": "biggusFolder/imgs/icon/pyQt5Icon"
     },
     "logoPaths": {
-        "logos": "Release/biggusFolder/imgs/logos"
+        "logos": "biggusFolder/imgs/logos"
     },
     "nodesFolderPath": {
-        "python": "Release/biggusFolder/Nodes/PythonNodes",
-        "openCv": "Release/biggusFolder/Nodes/OpenCvNodes",
-        "pyQt5": "Release/biggusFolder/Nodes/PyQt5Nodes"
+        "python": "biggusFolder/Nodes/PythonNodes",
+        "openCv": "biggusFolder/Nodes/OpenCvNodes",
+        "pyQt5": "biggusFolder/Nodes/PyQt5Nodes"
     },
     "fontAndColor": {
         "font": "MS Shell Dlg 2,8,-1,5,50,0,0,0,0,0",

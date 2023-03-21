@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import sys
+from os.path import exists
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -27,13 +28,13 @@ class BiggusPy(QMainWindow):
     recentFiles = []
 
     # ----------------- sys Variables -----------------
-    mainDir = "Release/biggusFolder"
-    configurationFilePath = "Release/config.json"
-    saveFileDirectory = "Release/SaveDir"
+    mainDir = "biggusFolder"
+    configurationFilePath = "config.json"
+    saveFileDirectory = "SaveDir"
 
-    nodesFolderPath = {"python": "Release/biggusFolder/Nodes/PythonNodes",
-                       "openCv": "Release/biggusFolder/Nodes/OpenCvNodes",
-                       "pyQt5": "Release/biggusFolder/Nodes/PyQt5Nodes"}
+    nodesFolderPath = {"python": "biggusFolder/Nodes/PythonNodes",
+                       "openCv": "biggusFolder/Nodes/OpenCvNodes",
+                       "pyQt5": "biggusFolder/Nodes/PyQt5Nodes"}
     iconPaths = {
         "biggusIcon": "Release/biggusFolder/imgs/icon/biggusIcon",
         "pythonIcon": "Release/biggusFolder/imgs/icon/pythonIcon",
@@ -173,9 +174,36 @@ class BiggusPy(QMainWindow):
         self.saveFileDirectory = _directory
 
     def openConfigFile(self):
+        print("Opening configuration file...")
+        if exists("config.json"):
+            print(f"Configuration file found at {os.getcwd()}\\config.json")
+            with open("config.json", "r") as f:
+                data = json.load(f)
+        else:
+            print("Configuration file not found, a new configuration file will be created.")
+            openFileDialog = QFileDialog()
+            openFileDialog.setFileMode(QFileDialog.Directory)
+            openFileDialog.setOption(QFileDialog.ShowDirsOnly)
+            if openFileDialog.exec_():
+                filename = openFileDialog.selectedFiles()[0]
+                with open(filename, "r") as f:
+                    data = json.load(f)
+
+
+    def openConfigFileOld(self):
+        print("Apertura file di configurazione...")
         try:
             with open("config.json", "r") as f:
                 data = json.load(f)
+        except Exception as e:
+            print("File di configurazione non trovato, verrà creato un nuovo file di configurazione.")
+            openDialog = QFileDialog()
+            openDialog.setFileMode(QFileDialog.Directory)
+            openDialog.setOption(QFileDialog.ShowDirsOnly)
+            if openDialog.exec_():
+                configFile = openDialog.selectedFiles()[0]
+                with open(configFile,"r"):
+                    data = json.load(f)
             self.mainDir = data["mainDir"]
             if os.name == "nt":
                 self.mainDir = data["mainDir"]
@@ -186,9 +214,15 @@ class BiggusPy(QMainWindow):
                     self.mainDir = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "biggusFolder"))
                     print(f"Original main dir: {data['mainDir']}")
                     print(f"New main dir: {self.mainDir}")
-                    biggusFolderSrc = os.path.join(self.mainDir, "biggusFolder")
-                    biggusTempDest = os.path.join(self.mainDir, "biggusTemp", "_MEI29162")
-                    shutil.copytree(biggusFolderSrc, biggusTempDest)
+
+                    biggusFolderSrc = os.path.join(self.mainDir)
+                    print(f"biggusFolderSrc: {biggusFolderSrc} copy to:")
+                    biggusTempDest = os.path.join(sys._MEIPASS, "biggusFolder")
+                    print(f"biggusTempDest: {biggusTempDest}")
+                    if shutil.copytree(biggusFolderSrc, biggusTempDest):
+                        print("biggusFolder copied")
+                    else:
+                        print("biggusFolder not copied")
                 else:
                     # Il programma è stato eseguito da un file sorgente.
                     print("software eseguito da un file sorgente")
@@ -216,7 +250,7 @@ class BiggusPy(QMainWindow):
                 else:
                     # se è un font
                     QFont(value)
-        except FileNotFoundError:
+
             self.saveConfigFile()
 
     def saveConfigFile(self):
