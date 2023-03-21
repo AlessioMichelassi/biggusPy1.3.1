@@ -1,3 +1,4 @@
+import os
 import sys
 
 from PyQt5.QtCore import *
@@ -34,6 +35,9 @@ def setPalette(app):
 
 
 def main():
+    # Imposta la variabile d'ambiente
+    os.environ['PYTHONPATH'] = os.path.abspath(os.path.join(os.path.dirname(__file__), 'biggusFolder'))
+
     app = QApplication(sys.argv)
     setPalette(app)
     window = BiggusPy()

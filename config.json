@@ -1,0 +1,33 @@
+{
+    "mainDir": "Release/biggusFolder",
+    "configurationFilePath": "Release/config.json",
+    "saveFileDirectory": "Release/SaveDir",
+    "iconPaths": {
+        "biggusIcon": "Release/biggusFolder/imgs/icon/biggusIcon",
+        "pythonIcon": "Release/biggusFolder/imgs/icon/pythonIcon",
+        "openCv": "Release/biggusFolder/imgs/icon/openCvIcon",
+        "pyQt5": "Release/biggusFolder/imgs/icon/pyQt5Icon"
+    },
+    "logoPaths": {
+        "logos": "Release/biggusFolder/imgs/logos"
+    },
+    "nodesFolderPath": {
+        "python": "Release/biggusFolder/Nodes/PythonNodes",
+        "openCv": "Release/biggusFolder/Nodes/OpenCvNodes",
+        "pyQt5": "Release/biggusFolder/Nodes/PyQt5Nodes"
+    },
+    "fontAndColor": {
+        "font": "MS Shell Dlg 2,8,-1,5,50,0,0,0,0,0",
+        "systemFontColor": "(250, 250, 250, 255)",
+        "widgetFontColor": "(250, 250, 250, 255)",
+        "widgetOnWidgetFontColor": "(150, 150, 240, 255)",
+        "systemHighlightColor": "(60, 60, 65, 255)",
+        "systemHighlightTextColor": "(250, 250, 255, 255)",
+        "systemBorderColor": "(40, 40, 45, 255)",
+        "systemBackgroundColor": "(50, 50, 53, 255)",
+        "widgetBorderColor": "(40, 40, 45, 255)",
+        "widgetBackgroundColor": "(39, 39, 40, 255)",
+        "widgetOnWidgetBorderColor": "(40, 40, 45, 255)",
+        "widgetOnWidgetBackgroundColor": "(43, 43, 45, 255)"
+    }
+}

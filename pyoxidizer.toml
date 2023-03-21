@@ -1,0 +1,22 @@
+[project]
+name = "biggusPy"
+version = "1.0.0"
+description = "Node Editor"
+authors = ["Alessio Michelassi <alessio.michelassi@gmail.com>"]
+
+[build]
+output-type = "executable"
+executable-name = "biggusPy"
+rust-version = "1.54.0"
+target = "x86_64-pc-windows-msvc"
+
+[[build.embed]]
+directory = "Release"
+
+[build.profile.dev]
+debug = true
+codegen-units = 1
+
+[build.profile.release]
+debug = false
+codegen-units = 1

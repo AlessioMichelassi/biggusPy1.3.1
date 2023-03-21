@@ -1,0 +1,69 @@
+{
+    "name": "Untitled",
+    "sceneWidth": 64000,
+    "sceneHeight": 64000,
+    "Nodes": [
+        {
+            "className": "NumberNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "NumberNode",
+            "title": "NumberNode_0",
+            "index": 0,
+            "startValue": "2",
+            "menuReturnValue": "int",
+            "pos": [
+                -194,
+                96
+            ],
+            "inPlugsNumb": 1,
+            "outPlugsNumb": 1,
+            "connections": [
+                {
+                    "inputNodeName": "DivisionInt_2",
+                    "inputPlug": 1,
+                    "outputNodeName": "NumberNode_0",
+                    "outputPlug": 0
+                }
+            ]
+        },
+        {
+            "className": "NumberNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "NumberNode",
+            "title": "NumberNode_1",
+            "index": 1,
+            "startValue": "48",
+            "menuReturnValue": "random int",
+            "pos": [
+                -94,
+                -67
+            ],
+            "inPlugsNumb": 1,
+            "outPlugsNumb": 1,
+            "connections": [
+                {
+                    "inputNodeName": "DivisionInt_2",
+                    "inputPlug": 0,
+                    "outputNodeName": "NumberNode_1",
+                    "outputPlug": 0
+                }
+            ]
+        },
+        {
+            "className": "MathNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "DivisionInt",
+            "title": "DivisionInt_2",
+            "index": 2,
+            "startValue": "48",
+            "menuReturnValue": "divisionInt",
+            "pos": [
+                211,
+                24
+            ],
+            "inPlugsNumb": 2,
+            "outPlugsNumb": 1,
+            "connections": []
+        }
+    ]
+}

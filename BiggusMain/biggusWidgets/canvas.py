@@ -15,6 +15,13 @@ from BiggusMain.elements.Connections.Connection import Connection
 from BiggusMain.graphicEngine.GraphicSceneOverride import GraphicSceneOverride
 from BiggusMain.graphicEngine.graphicViewOverride import GraphicViewOverride
 
+import sys
+
+print("*" * 20)
+print(f"from canvas: {sys.path}")
+print("*" * 20)
+print("\n" * 2)
+
 
 class Canvas(customFocusWidget):
     mainLayout: QVBoxLayout
@@ -226,8 +233,40 @@ class Canvas(customFocusWidget):
             print(f"Error in createNode: {className} {e}")
             return None
 
-    @staticmethod
-    def createNodeFromAbsolutePath(path, className: str, *args, **kwargs):
+    def findModuleWinNT(self, path, className):
+        nodes_folder = os.path.abspath(path)
+        nodes_folder.replace("C:", "")
+        relative_path = os.path.relpath(nodes_folder, os.getcwd())
+        relative_path = relative_path.replace("/", "\\")
+        char = "\\"
+        modulePath = f"{relative_path.replace(char, '.').replace('C:.', '')}"
+        moduleName = f"{modulePath}.{className}"
+        try:
+            module = importlib.import_module(moduleName)
+            print(f"Module {module} found")
+            return module, modulePath
+        except Exception as e:
+            print(f"WARNING FROM createNodeFromAbsolutePath:")
+            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
+                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
+            return None, None
+
+    def findModuleLinuxAndMac(self, path, className):
+        nodes_folder = os.path.abspath(path)
+        relative_path = os.path.relpath(nodes_folder, os.getcwd())
+        modulePath = f"{relative_path.replace('/', '.')}"
+        moduleName = f"{modulePath}.{className}"
+        module = None
+        try:
+            module = importlib.import_module(moduleName)
+            return module, modulePath
+        except Exception as e:
+            print(f"WARNING FROM createNodeFromAbsolutePath:")
+            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
+                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
+            return None, None
+
+    def createNodeFromAbsolutePath(self, path, className: str, *args, **kwargs):
         # sourcery skip: use-named-expression
         """
         ITA:
@@ -247,34 +286,20 @@ class Canvas(customFocusWidget):
         :return:
         """
         nodes_folder = os.path.abspath(path)
-        relative_path = os.path.relpath(nodes_folder, os.getcwd())
         # this is for compatibility with windows
         # linux directory: biggusFolder/imgs/icon/biggusIcon
         # windows directory: biggusFolder\imgs\icon\biggusIcon
         # mac directory: biggusFolder/imgs/icon/biggusIcon
-        if os.name == "nt":
-            print("windows nt")
-            relative_path = relative_path.replace("/", "\\")
-            char = "\\"
-            modulePath = f"{relative_path.replace(char, '.')}"
-        else:
-            print("linux or mac")
-            modulePath = f"{relative_path.replace('/', '.')}"
-        moduleName = f"{modulePath}.{className}"
         module = None
+        modulePath = None
+        if os.name == "nt":
+            module, modulePath = self.findModuleWinNT(path, className)
+        elif os.name == "posix":
+            module, modulePath = self.findModuleLinuxAndMac(path, className)
+        if module is None:
+            print("module is None")
+            return None
         nodeClass = None
-        try:
-            module = importlib.import_module(moduleName)
-        except Exception as e:
-            print(f"WARNING FROM createNodeFromAbsolutePath:")
-            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
-                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
-            module_spec = importlib.util.find_spec(moduleName)
-            if module_spec is None:
-                print(f"Module {moduleName} not found")
-            else:
-                module = importlib.util.module_from_spec(module_spec)
-                module_spec.loader.exec_module(module)
         try:
             if module:
                 nodeClass = getattr(module, className)

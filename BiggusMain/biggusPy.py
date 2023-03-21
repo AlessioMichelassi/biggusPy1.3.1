@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -175,6 +176,13 @@ class BiggusPy(QMainWindow):
             with open("config.json", "r") as f:
                 data = json.load(f)
             self.mainDir = data["mainDir"]
+            if os.name == "nt":
+                print(f"original main dir: {self.mainDir}")
+                self.mainDir = os.path.abspath(__file__)
+                print("nt finded. main dir will: {}".format(self.mainDir))
+                module_path = self.mainDir
+                os.environ["PYTHONPATH"] = os.pathsep.join([os.environ.get("PYTHONPATH", ""), module_path])
+                sys.path.insert(0, module_path)
             self.configurationFilePath = data["configurationFilePath"]
             self.saveFileDirectory = data["saveFileDirectory"]
             self.iconPaths = data["iconPaths"]
