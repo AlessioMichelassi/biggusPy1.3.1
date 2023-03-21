@@ -10,7 +10,7 @@ from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import Ab
 
 class MathNode(AbstractNodeInterface):
     startValue = 0
-    menuReturnValue = "+"
+    menuReturnValue = "sum"
     width = 120
     height = 80
     colorTrain = [QColor(148, 209, 178), QColor(92, 10, 50), QColor(250, 47, 200), QColor(117, 66, 246),
@@ -29,13 +29,13 @@ class MathNode(AbstractNodeInterface):
             if val2 == 0:
                 val2 = 1
             operations = {
-                "+": val1 + val2,
-                "-": val1 - val2,
-                "/": val1 / val2,
-                "//": val1 // val2,
-                "%": val1 % val2,
-                "*": val1 * val2,
-                "**": val1 ** val2,
+                "sum": val1 + val2,
+                "subtraction": val1 - val2,
+                "division": val1 / val2,
+                "divisionInt": val1 // val2,
+                "module": val1 % val2,
+                "multiplication": val1 * val2,
+                "exponentiation": val1 ** val2,
             }
             value = operations[self.menuReturnValue]
             self.outPlugs[plugIndex].setValue(value)
@@ -55,13 +55,13 @@ class MathNode(AbstractNodeInterface):
     def showContextMenu(self, position):
         contextMenu = QMenu()
         contextMenu.addSection("operation")
-        actionPlus = contextMenu.addAction("+")
-        actionMinus = contextMenu.addAction("-")
-        actionDiv = contextMenu.addAction("/")
-        actionDivInt = contextMenu.addAction("//")
-        actionModule = contextMenu.addAction("%")
-        actionMult = contextMenu.addAction("*")
-        actionExp = contextMenu.addAction("**")
+        actionPlus = contextMenu.addAction("sum")
+        actionMinus = contextMenu.addAction("subtraction")
+        actionDiv = contextMenu.addAction("division")
+        actionDivInt = contextMenu.addAction("divisionInt")
+        actionModule = contextMenu.addAction("module")
+        actionMult = contextMenu.addAction("multiplication")
+        actionExp = contextMenu.addAction("exponentiation")
         action = contextMenu.exec(position)
         self.menuReturnValue = action.text()
         if action == actionPlus:

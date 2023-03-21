@@ -258,7 +258,7 @@ class BiggusMenu(QMenuBar):
         # sourcery skip: use-named-expression
         filename = action.text()  # ottiene il nome del file dall'action
         with open(filename, "r") as f:
-            file = f.read()
+            file = json.load(f)
         self.biggusPy.canvas.deserialize(file)
         self.fileName = filename
         # self.biggusPy.printOnStatusBar(f"File opened {self.fileName}")
@@ -350,7 +350,11 @@ class BiggusMenu(QMenuBar):
 
     def settings(self):
         self.preferencesWidget = PreferenceWidget(self.biggusPy)
+        # la mette al centro dello schermo
+
         self.preferencesWidget.show()
+        self.preferencesWidget.move(
+            QApplication.desktop().screen().rect().center() - self.preferencesWidget.rect().center())
 
     def openScratchONode(self):
         scratchNode = scratchNodeV0_9(self.biggusPy.canvas)
@@ -455,8 +459,8 @@ class BiggusMenu(QMenuBar):
         # #2D2D30 è  in rgb 45 45 48
         self.setStyleSheet(f"""
         QMenu {{
-                font-family: "{self.biggusPy.configColor["systemFont"].family()}";
-                font-size: {self.biggusPy.configColor["systemFont"].pointSize()}px;
+                font-family: "{self.biggusPy.configFontAndColors["systemFont"].family()}";
+                font-size: {self.biggusPy.configFontAndColors["systemFont"].pointSize()}px;
                 background-color: #2D2D30;
                 border: 1px solid #2D2D30;
                 color: #FFFFFF;

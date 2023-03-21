@@ -1,1 +1,69 @@
-{"name": "Untitled", "sceneWidth": 64000, "sceneHeight": 64000, "Nodes": ["{\n    \"className\": \"NumberNode\",\n    \"modulePath\": \"BiggusMain.elements.Nodes.PythonNodes\",\n    \"name\": \"NumberNode\",\n    \"title\": \"NumberNode_0\",\n    \"index\": 0,\n    \"startValue\": \"80\",\n    \"menuReturnValue\": null,\n    \"pos\": [\n        -39,\n        -11\n    ],\n    \"inPlugsNumb\": 1,\n    \"outPlugsNumb\": 1,\n    \"connections\": [\n        \"{\\n    \\\"inputNodeName\\\": \\\"SumNode_0\\\",\\n    \\\"inputPlug\\\": 0,\\n    \\\"outputNodeName\\\": \\\"NumberNode_0\\\",\\n    \\\"outputPlug\\\": 0\\n}\"\n    ]\n}", "{\n    \"className\": \"NumberNode\",\n    \"modulePath\": \"BiggusMain.elements.Nodes.PythonNodes\",\n    \"name\": \"NumberNode\",\n    \"title\": \"NumberNode_1\",\n    \"index\": 1,\n    \"startValue\": \"80\",\n    \"menuReturnValue\": null,\n    \"pos\": [\n        -43,\n        139\n    ],\n    \"inPlugsNumb\": 1,\n    \"outPlugsNumb\": 1,\n    \"connections\": [\n        \"{\\n    \\\"inputNodeName\\\": \\\"SumNode_0\\\",\\n    \\\"inputPlug\\\": 1,\\n    \\\"outputNodeName\\\": \\\"NumberNode_1\\\",\\n    \\\"outputPlug\\\": 0\\n}\"\n    ]\n}", "{\n    \"className\": \"MathNode\",\n    \"modulePath\": \"BiggusMain.elements.Nodes.PythonNodes\",\n    \"name\": \"SumNode\",\n    \"title\": \"SumNode_0\",\n    \"index\": 0,\n    \"startValue\": \"80\",\n    \"menuReturnValue\": \"+\",\n    \"pos\": [\n        125,\n        81\n    ],\n    \"inPlugsNumb\": 2,\n    \"outPlugsNumb\": 1,\n    \"connections\": []\n}"]}
+{
+    "name": "Untitled",
+    "sceneWidth": 64000,
+    "sceneHeight": 64000,
+    "Nodes": [
+        {
+            "className": "NumberNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "NumberNode",
+            "title": "NumberNode_0",
+            "index": 0,
+            "startValue": "80",
+            "menuReturnValue": "int",
+            "pos": [
+                -119,
+                -46
+            ],
+            "inPlugsNumb": 1,
+            "outPlugsNumb": 1,
+            "connections": [
+                {
+                    "inputNodeName": "Subtraction_0",
+                    "inputPlug": 0,
+                    "outputNodeName": "NumberNode_0",
+                    "outputPlug": 0
+                }
+            ]
+        },
+        {
+            "className": "MathNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "Subtraction",
+            "title": "Subtraction_0",
+            "index": 0,
+            "startValue": "80",
+            "menuReturnValue": "-",
+            "pos": [
+                212,
+                75
+            ],
+            "inPlugsNumb": 2,
+            "outPlugsNumb": 1,
+            "connections": []
+        },
+        {
+            "className": "NumberNode",
+            "modulePath": "Release.biggusFolder.Nodes.PythonNodes",
+            "name": "NumberNode",
+            "title": "NumberNode_1",
+            "index": 1,
+            "startValue": "80",
+            "menuReturnValue": "int",
+            "pos": [
+                -64,
+                140
+            ],
+            "inPlugsNumb": 1,
+            "outPlugsNumb": 1,
+            "connections": [
+                {
+                    "inputNodeName": "Subtraction_0",
+                    "inputPlug": 1,
+                    "outputNodeName": "NumberNode_1",
+                    "outputPlug": 0
+                }
+            ]
+        }
+    ]
+}

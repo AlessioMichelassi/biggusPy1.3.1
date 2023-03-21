@@ -42,14 +42,14 @@ class BiggusPy(QMainWindow):
 
     # ----------------- sys Variables -----------------
 
-    configColor = {
-        "systemFont": QFont("Lohit Gujarati", 16),
+    configFontAndColors = {
+        "systemFont": QFont("MS Shell Dlg 2", 16),
         "systemFontColor": QColor(250, 250, 250),
 
-        "widgetFont": QFont("Lohit Gujarati", 14),
+        "widgetFont": QFont("MS Shell Dlg 2", 14),
         "widgetFontColor": QColor(250, 250, 250),
 
-        "widgetOnWidgetFont": QFont("Lohit Gujarati", 8),
+        "widgetOnWidgetFont": QFont("MS Shell Dlg 2", 8),
         "widgetOnWidgetFontColor": QColor(150, 150, 240),
 
         "systemHighlightColor": QColor(60, 60, 65),
@@ -59,18 +59,22 @@ class BiggusPy(QMainWindow):
         "systemIconSize": 40,
 
         "widgetBorderColor": QColor(40, 40, 45),
-        "widgetBackgroundColor": QColor(40, 40, 45),
+        "widgetBackgroundColor": QColor(39, 39, 40),
 
         "widgetOnWidgetBorderColor": QColor(40, 40, 45),
-        "widgetOnWidgetBackgroundColor": QColor(35, 35, 35)
+        "widgetOnWidgetBackgroundColor": QColor(43, 43, 45)
     }
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setGeometry(100, 100, 1920, 1100)
+        self.setGeometry(100, 100, 1620, 1300)
         self.setWindowTitle("BiggusPy(a great Caesar's friend) V0.1.3.1")
-        self.setWindowIcon(QIcon('elements/imgs/BiggusIcon.ico'))
-        # self.openConfigFile()
+        # se è windows
+        if os.name == "nt":
+            self.setWindowIcon(QIcon('BiggusMain/elements/imgs/BiggusIcon.ico'))
+        else:
+            self.setWindowIcon(QIcon('BiggusMain/elements/imgs/BiggusIcon.ico'))
+        self.openConfigFile()
         self.initMainUI()
         self.initMenu()
 
@@ -87,7 +91,7 @@ class BiggusPy(QMainWindow):
         bottomSplit.addWidget(self.terminal)
         bottomSplit.setSizes([200, 200])
         mainSplit.addWidget(bottomSplit)
-        mainSplit.setSizes([300,100])
+        mainSplit.setSizes([300, 100])
         self.setCentralWidget(mainSplit)
 
     def initMenu(self):
@@ -114,7 +118,7 @@ class BiggusPy(QMainWindow):
 
     # ------------------ config files ------------------
 
-    def setMainDirectory(self, _directory):
+    def setMainDirectoryMacLinux(self, _directory):
         self.mainDir = _directory
         self.nodesFolderPath = {}
         for folder in os.listdir(f"{self.mainDir}/Nodes"):
@@ -137,6 +141,29 @@ class BiggusPy(QMainWindow):
                 value = f"{self.mainDir}/imgs/logo/{folder}"
                 self.logoPaths[key] = value
 
+    def setMainDirectoryWinNT(self, _directory):
+        self.mainDir = _directory
+        self.nodesFolderPath = {}
+        for folder in os.listdir(f"{self.mainDir}\\Nodes"):
+            if not os.path.isfile(f"{self.mainDir}\\Nodes\\{folder}"):
+                # example: "python"
+                key = folder
+                # example: "Release/biggusFolder/Nodes/PythonNodes"
+                value = f"{self.mainDir}\\Nodes\\{folder}"
+                self.nodesFolderPath[key] = value
+        self.iconPaths = {}
+        for folder in os.listdir(f"{self.mainDir}\\imgs\\icon"):
+            if not os.path.isfile(f"{self.mainDir}\\imgs\\icon\\{folder}"):
+                key = folder
+                value = f"{self.mainDir}\\imgs\\icon\\{folder}"
+                self.iconPaths[key] = value
+        self.logoPaths = {}
+        for folder in os.listdir(f"{self.mainDir}\\imgs\\logo"):
+            if not os.path.isfile(f"{self.mainDir}\\imgs\\logo\\{folder}"):
+                key = folder
+                value = f"{self.mainDir}\\imgs\\logo\\{folder}"
+                self.logoPaths[key] = value
+
     def setBiggusConfigFile(self, _directory):
         self.configurationFilePath = f"{_directory}/config.json"
 
@@ -147,40 +174,73 @@ class BiggusPy(QMainWindow):
         try:
             with open("config.json", "r") as f:
                 data = json.load(f)
+            self.mainDir = data["mainDir"]
+            self.configurationFilePath = data["configurationFilePath"]
+            self.saveFileDirectory = data["saveFileDirectory"]
             self.iconPaths = data["iconPaths"]
             self.logoPaths = data["logoPaths"]
             self.nodesFolderPath = data["nodesFolderPath"]
+            configFontAndColors = data["fontAndColor"]
+            for key, value in configFontAndColors.items():
+                # se è un font è tipo "font": "MS Shell Dlg 2,8,-1,5,50,0,0,0,0,0",
+                # se è un colore è tipo: "systemFontColor": "(250, 250, 250, 255)",
+                if "Color" in key:
+                    # se è un colore
+                    value = value.replace("(", "")
+                    value = value.replace(")", "")
+                    value = value.split(",")
+                    value = [int(i) for i in value]
+                    value = QColor(*value)
+                else:
+                    # se è un font
+                    QFont(value)
         except FileNotFoundError:
             self.saveConfigFile()
 
     def saveConfigFile(self):
         """
-        :return:
+        ITA:
+            Salva il file di configurazione.
+        ENG:
+            Save the configuration file.
         """
-        data = {"mainDir": self.mainDir,
-                "iconPaths": self.iconPaths,
-                "logoPaths": self.logoPaths,
-                "nodesFolderPath": self.nodesFolderPath,
-                "configurationFilePath": self.configurationFilePath,
-                "saveFileDirectory": self.saveFileDirectory,
-                "systemFont": self.systemFont,
-                "systemFontColor": self.systemFontColor,
-                "systemBackGroundColor": self.systemBackGroundColor,
-                "systemBorderColor": self.systemBorderColor,
-                "systemWidgetColor": self.systemWidgetColor,
-                "wdgetFont": self.wdgetFont,
-                "widgetFontSize": self.widgetFontSize,
-                "systemWidgetBackGroundColor": self.systemWidgetBackGroundColor,
-                "systemWidgetBorderColor": self.systemWidgetBorderColor,
-                "systemHighlightColor": self.systemHighlightColor,
-                "systemHighlightTextColor": self.systemHighlightTextColor,
-                "widgetOnWidgetFontColor": self.widgetOnWidgetFontColor,
-                "widgetOnWidgetFont": self.widgetOnWidgetFont,
-                "widgetOnWidgetFontSize": self.widgetOnWidgetFontSize,
-                "systemWidgetOnWidgetBackGroundColor": self.systemWidgetOnWidgetBackGroundColor}
-
+        fontAndColor = self.serializeFontAndColors()
+        data = {
+            "mainDir": self.mainDir,
+            "configurationFilePath": self.configurationFilePath,
+            "saveFileDirectory": self.saveFileDirectory,
+            "iconPaths": self.iconPaths,
+            "logoPaths": self.logoPaths,
+            "nodesFolderPath": self.nodesFolderPath,
+            "fontAndColor": fontAndColor
+        }
+        # salva il file di configurazione come pretty print
+        data = json.dumps(data, indent=4)
         with open("config.json", "w") as f:
-            json.dump(data, f)
+            f.write(data)
+
+    def serializeFontAndColors(self):
+        newDict = {}
+        for key, value in self.configFontAndColors.items():
+            if isinstance(value, QColor):
+                # salva il valore rgba
+                newDict[key] = f"({value.red()}, {value.green()}, {value.blue()}, {value.alpha()})"
+            elif isinstance(value, QFont):
+                # salva il valore della font
+                newDict["font"] = value.toString()
+        return newDict
+
+    @staticmethod
+    def deserializeFontAndColors(dictionary):
+        newDict = {}
+        for key, value in dictionary.items():
+            if isinstance(value, str):
+                if value.startswith("("):
+                    # carica il valore rgba
+                    newDict[key] = QColor(value)
+                elif value.startswith("QFont"):
+                    newDict[key].fromString(value)
+        return newDict
 
     def getMainDirectory(self):
         return self.mainDir

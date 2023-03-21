@@ -166,7 +166,19 @@ class AbstractNodeInterface:
         self.nodeGraphic.updateTitlePosition()
 
     def setGraphicTitleText(self, title):
-        self.nodeGraphic.updateTitle(title)
+        """
+        ITA:
+            Questo metodo viene chiamato quando il titolo del nodo viene modificato
+            dall'utente. Il titolo viene modificato sia nella parte dati che nella parte grafica.
+        ENG:
+            This method is called when the title of the node is modified by the user.
+            The title is modified both in the data part and in the graphic part.
+        :param title:
+        :return:
+        """
+        self.nodeData.name = title
+        self.canvas.updateTitle(self)
+        self.updateTitle()
 
     def updateTxtTitleFromGraphics(self, title):
         self.nodeData.name = title
@@ -513,7 +525,16 @@ class AbstractNodeInterface:
         # in operation viene salvata la action che ha generato il menu
         # in questo modo si può sapere quale azione è stata scelta
         # event quindi eseguire l'azione corretta
-        self.nodeGraphic.contextMenu.setDefaultAction(operation)
+        action = None
+        for a in self.nodeGraphic.contextMenu.actions():
+            if a.text() == operation:
+                action = a
+                break
+        # impostazione dell'azione predefinita del menu contestuale
+        if action is not None:
+            self.nodeGraphic.contextMenu.setDefaultAction(action)
+        else:
+            print(f"{operation} - Azione non trovata")
 
     def showToolWidget(self):
         """
@@ -551,4 +572,4 @@ class AbstractNodeInterface:
             ('outPlugsNumb', len(self.outPlugs)),
             ('connections', connections)
         ])
-        return json.dumps(dicts, indent=4)
+        return dicts

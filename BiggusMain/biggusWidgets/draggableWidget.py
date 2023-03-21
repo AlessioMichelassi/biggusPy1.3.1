@@ -23,7 +23,7 @@ class DraggableWidget(QWidget):
         self.lblIcon = QLabel()
         self.lblIcon.setPixmap(QPixmap("elements/imgs/BiggusIcon.ico"))
         self.lblIcon.setScaledContents(True)
-        self.lblIcon.setFixedSize(54, 40)
+        self.lblIcon.setFixedSize(50, 40)
         self.mainLayout = QVBoxLayout()
         self.mainLayout.addWidget(self.lblIcon, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.mainLayout.addWidget(self.lblTxt, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
@@ -31,7 +31,7 @@ class DraggableWidget(QWidget):
         self.setStyleSheet("font-family: Lohit Gujarati; "
                            "font-size: 8pt; "
                            "background-color: transparent; "
-                           "color: black;")
+                           "color: lightgray; ")
 
     def setIcon(self, path):
         self.lblIcon.setPixmap(QPixmap(path))

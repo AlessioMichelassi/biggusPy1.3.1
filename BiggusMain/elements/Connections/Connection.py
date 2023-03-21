@@ -168,4 +168,4 @@ class Connection(QGraphicsItem, debugTool):
             'outputNodeName': self.outputNode.getTitle(),
             'outputPlug': self.outputPlug.index,
         }
-        return json.dumps(dicts, indent=4)
+        return dicts

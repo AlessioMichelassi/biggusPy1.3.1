@@ -83,10 +83,10 @@ class customFocusWidget(QWidget):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: rgba({self.biggusPy.configColor["widgetBackgroundColor"].red()}, {self.biggusPy.configColor["widgetBackgroundColor"].green()}, {self.biggusPy.configColor["widgetBackgroundColor"].blue()}, {self.biggusPy.configColor["widgetBackgroundColor"].alpha()});
-                color: rgba({self.biggusPy.configColor["widgetFontColor"].red()}, {self.biggusPy.configColor["widgetFontColor"].green()}, {self.biggusPy.configColor["widgetFontColor"].blue()}, {self.biggusPy.configColor["widgetFontColor"].alpha()});
-                font-family: {self.biggusPy.configColor["widgetFont"].family()};
-                font-size: {self.biggusPy.configColor["widgetFont"].pointSize()}px;
+                background-color: rgba({self.biggusPy.configFontAndColors["widgetBackgroundColor"].red()}, {self.biggusPy.configFontAndColors["widgetBackgroundColor"].green()}, {self.biggusPy.configFontAndColors["widgetBackgroundColor"].blue()}, {self.biggusPy.configFontAndColors["widgetBackgroundColor"].alpha()});
+                color: rgba({self.biggusPy.configFontAndColors["widgetFontColor"].red()}, {self.biggusPy.configFontAndColors["widgetFontColor"].green()}, {self.biggusPy.configFontAndColors["widgetFontColor"].blue()}, {self.biggusPy.configFontAndColors["widgetFontColor"].alpha()});
+                font-family: {self.biggusPy.configFontAndColors["widgetFont"].family()};
+                font-size: {self.biggusPy.configFontAndColors["widgetFont"].pointSize()}px;
             }}""")
 
     def getWidgetStyleFromBiggus(self):

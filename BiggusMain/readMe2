@@ -1,0 +1,67 @@
+ITA:
+    Se state leggendo il contenuto di questa cartella, probabilmente vi state chiedendo com è strutturato il progetto.
+    cercherò quindi di essere esaustivo e chiaro nel minor numero di parole possibili.
+
+    BigguPy è un editor dove è possibile mettere in relazione un oggetto con un altro. Potete creare voi l'oggetto o
+    utilizzare quelli già presenti. Gli oggetti si chiamano Nodi e ogni nodo svolge una sua funzione. Il nodo più
+    semplice da capire è NumberNode, che fatto non fa altro che restituire il suo valore o nel caso in cui sia collegato
+    ad un altro nodo, restituire il valore di cast. E' come scrivere int(5.0) o float(3). Se prendiamo ad esempio string
+    ha alcuno opzione, questo perchè si possono fare operazioni con le stringhe che non sono comtemplate con i numeri.
+    Per esempio, concatenare due stringhe. Per fare questo, basta trasformare dal menu contestuale in nodo in un
+    join o in un replace per ottenere una stringa con un valore sostituito.
+
+ENG:
+
+    If you are reading the content of this folder, you are probably wondering how the project is structured.
+    I will try to be exhaustive and clear in the fewest possible words.
+
+    BigguPy is an editor where you can relate an object to another. You can create the object yourself or
+    use the ones already present. The objects are called Nodes and each node performs its own function. The simplest
+    node to understand is NumberNode, which does nothing more than return its value or in the case where it is connected
+    to another node, return the cast value. It's like writing int (5.0) or float (3). If we take string as an example
+    has some option, this because you can do operations with strings that are not contemplated with numbers.
+    For example, concatenate two strings. To do this, just transform from the context menu into a node in a
+    join or in a replace to get a string with a replaced value.
+
+ITA:
+    Un nodo è costituito da tre classi:
+    - AbstractNodeData (contiene i dati del nodo)
+    - AbstractNodeInterface (contiene i metodi per gestire il nodo)
+    - AbstractNodeGraphic (contiene i metodi per gestire la grafica del nodo)
+
+    Ogni nodo ha poi almeno un input e almeno un output. Questi sono rappresentati da un oggetto di tipo plugData e
+    dal suo corrispettivo grafico plugGraphic. Il primo si occupa ti tenere traccia dei dati e del nodo collegato
+    mentre il secondo si occupa di disegnare il plug. Quando attribuisco un valore a un nodo, quello ch faccio è
+    assegnare un valore al suo plug[0]. nel caso più semplice, un nodo con 1 in e un out, viene assegnato un valore di
+    default che può essere modificato dall'utente utilizzando l'interfaccia grafica o assegnato tramite codice.
+
+ENG:
+
+    A node consists of three classes:
+    - AbstractNodeData (contains the node data)
+    - AbstractNodeInterface (contains the methods to manage the node)
+    - AbstractNodeGraphic (contains the methods to manage the node graphic)
+
+    Each node then has at least one input and at least one output. These are represented by a plugData object and
+    its corresponding graphic plugGraphic. The first one takes care of keeping track of the data and the connected node
+    while the second takes care of drawing the plug. When I assign a value to a node, what I do is
+    assign a value to its plug [0]. in the simplest case, a node with 1 in and 1 out, a default value is assigned that can be
+    modified by the user using the graphical interface or assigned via code.
+
+ITA:
+
+    Quando un nodo vien viene creato, in nuovo nodo eredita da abstractNodeInterface che in automatico crea le altre
+    due classi. E' possibile aggiungere una o più funzioni per calcolare l'output o gli output, l'importante è che
+    sia creato un metodo def calculateOutput(self, plugIndex): che restituisca il valore in out del nodo. Per farlo si usa:
+    self.outPlugs[plugIndex].setValue(.... richiamo alla funzione che calcola l'out.....)
+
+ENG:
+
+    When a node is created, a new node inherits from abstractNodeInterface which automatically creates the other
+    two classes. It is possible to add one or more functions to calculate the output or outputs, the important thing is that
+    a def calculateOutput (self, plugIndex): method is created that returns the value in out of the node. To do this, use:
+    self.outPlugs [plugIndex]. setValue (... call to the function that calculates the out ...)
+
+ITA:
+
+    

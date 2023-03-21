@@ -300,7 +300,7 @@ class AbstractNodeGraphic(QGraphicsItem):
         :param event:
         :return:
         """
-        if self.nodeInterface.hasToolWidget:
+        if self.nodeInterface.hasAToolWidget:
             self.nodeInterface.showToolWidget()
 
     # ---------------------- LOGO ----------------------

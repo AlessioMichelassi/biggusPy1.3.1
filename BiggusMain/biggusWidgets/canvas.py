@@ -1,4 +1,5 @@
 import importlib
+from importlib import *
 import json
 import os
 import sys
@@ -247,14 +248,33 @@ class Canvas(customFocusWidget):
         """
         nodes_folder = os.path.abspath(path)
         relative_path = os.path.relpath(nodes_folder, os.getcwd())
-        modulePath = f"{relative_path.replace('/', '.')}"
+        # this is for compatibility with windows
+        # linux directory: biggusFolder/imgs/icon/biggusIcon
+        # windows directory: biggusFolder\imgs\icon\biggusIcon
+        # mac directory: biggusFolder/imgs/icon/biggusIcon
+        if os.name == "nt":
+            print("windows nt")
+            relative_path = relative_path.replace("/", "\\")
+            char = "\\"
+            modulePath = f"{relative_path.replace(char, '.')}"
+        else:
+            print("linux or mac")
+            modulePath = f"{relative_path.replace('/', '.')}"
         moduleName = f"{modulePath}.{className}"
         module = None
         nodeClass = None
         try:
             module = importlib.import_module(moduleName)
         except Exception as e:
-            print(f"module not found: name: {className} path: {nodes_folder} {e}")
+            print(f"WARNING FROM createNodeFromAbsolutePath:")
+            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
+                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
+            module_spec = importlib.util.find_spec(moduleName)
+            if module_spec is None:
+                print(f"Module {moduleName} not found")
+            else:
+                module = importlib.util.module_from_spec(module_spec)
+                module_spec.loader.exec_module(module)
         try:
             if module:
                 nodeClass = getattr(module, className)
@@ -321,7 +341,7 @@ class Canvas(customFocusWidget):
 
     def updateTitle(self, node):
         """
-        This method update the title of the biggusNode if it is already present in the canvas
+        This method update the title of the biggusNode if it is present in the canvas
         :param node: biggusNode to update
         :return:
         """
@@ -518,44 +538,49 @@ class Canvas(customFocusWidget):
             ('sceneWidth', self.canvasWidth),
             ('sceneHeight', self.canvasHeight),
             ('Nodes', listOfNodeSerialized)])
-        print(dicts)
-        return json.dumps(dicts)
+        return json.dumps(dicts, indent=4)
 
     def deserialize(self, serializedString):
         try:
-            deserialized = json.loads(serializedString)
-            self.fileName = deserialized['name']
-            self.canvasWidth = deserialized['sceneWidth']
-            self.canvasHeight = deserialized['sceneHeight']
-            nodes = deserialized['Nodes']
-
+            self.fileName = serializedString['name']
+            self.canvasWidth = serializedString['sceneWidth']
+            self.canvasHeight = serializedString['sceneHeight']
+            nodes = serializedString['Nodes']
             for node in nodes:
-                if node is not None:
+                try:
                     self.addSerializedNode(node)
+                except Exception as e:
+                    print("WARNING THERE WAS AN ERROR UNPACKING NODES")
+                    print(f"node was {node}")
+                    print(e)
             for node in nodes:
-                if node is not None:
+                try:
                     self.deserializeConnections(node)
+                except Exception as e:
+                    print("WARNING THERE WAS AN ERROR UNPACKING CONNECTIONS")
+                    print(f"node was {node}")
+                    print(e)
         except Exception as e:
-            print(f"Error during deserialization: {e}")
+            print("WARNING THERE WAS AN ERROR IN DESERIALIZATION")
+            print("is it a biggus file?")
+            print(e)
 
-    def addSerializedNode(self, serializedJsonDictionary, _position=None):
-        deserialized = json.loads(serializedJsonDictionary)
-
-        _className = deserialized["className"]
-        _modulePath = deserialized["modulePath"]
-        _name = deserialized["name"]
-        _title = deserialized["title"]
-        _index = deserialized["index"]
-        _value = deserialized["startValue"]
+    def addSerializedNode(self, dictionary, _position=None):
+        _className = dictionary["className"]
+        _modulePath = dictionary["modulePath"]
+        _name = dictionary["name"]
+        _title = dictionary["title"]
+        _index = dictionary["index"]
+        _value = dictionary["startValue"]
         try:
-            _menuOperation = deserialized["menuReturnValue"]
+            _menuOperation = dictionary["menuReturnValue"]
         except Exception as e:
             # this is for compatibility with old version
             a = e
             _menuOperation = None
-        _pos = deserialized["pos"]
-        _inPlugsNumb = deserialized["inPlugsNumb"]
-        _outPlugsNumb = deserialized["outPlugsNumb"]
+        _pos = dictionary["pos"]
+        _inPlugsNumb = dictionary["inPlugsNumb"]
+        _outPlugsNumb = dictionary["outPlugsNumb"]
         # se viene specificata la posizione, aumenta la pos corrente
         # del valore specificato
         # è utile quando si fa il paste di un nodo
@@ -563,35 +588,22 @@ class Canvas(customFocusWidget):
             pos = QPointF(float(_pos[0] + _position.x()), float(_pos[1] + _position.y()))
         else:
             pos = QPointF(float(_pos[0]), float(_pos[1]))
-        if "Number" in _className:
-            node = self.createNode(_className, value=int(_value))
-            node.setName(_name)
-            node.changeInputValue(0, _value, True)
-            self.addNode(node)
-            node.setPos(pos)
-        else:
-            try:
-                node = self.createNodeFromDeserialize(_className, _modulePath, value=_value, inNum=_inPlugsNumb,
-                                                      outNum=_outPlugsNumb)
-                node.setName(_name)
-                node.setMenuOperation(_menuOperation)
-                self.addNode(node)
-                node.setPos(pos)
-            except Exception as e:
-                print(
-                    f"error: {e} in {self.__class__.__name__} {sys._getframe().f_code.co_name} "
-                    f"line: {sys._getframe().f_lineno}")
 
-    def deserializeConnections(self, serializedJsonDictionary):
-        deserialized = json.loads(serializedJsonDictionary)
-        connections = deserialized["connections"]
+        node = self.createNodeFromDeserialize(_className, _modulePath, value=_value, inNum=_inPlugsNumb,
+                                              outNum=_outPlugsNumb)
+        node.setName(_name)
+        node.setMenuOperation(_menuOperation)
+        self.addNode(node)
+        node.setPos(pos)
+
+    def deserializeConnections(self, dictionary):
+        connections = dictionary["connections"]
         for connection in connections:
-            deserializedLine = json.loads(connection)
 
-            inputNodeName = deserializedLine["inputNodeName"]
-            inIndex = int(deserializedLine["inputPlug"])
-            outputNodeName = deserializedLine["outputNodeName"]
-            outIndex = int(deserializedLine["outputPlug"])
+            inputNodeName = connection["inputNodeName"]
+            inIndex = int(connection["inputPlug"])
+            outputNodeName = connection["outputNodeName"]
+            outIndex = int(connection["outputPlug"])
 
             inputNode = self.getNodeByTitle(inputNodeName)
             outputNode = self.getNodeByTitle(outputNodeName)
