@@ -72,7 +72,7 @@ class PyQt5NodeMenu(QMenu):
         :return:
         """
         print(nodeName)
-        self.biggusPy.canvas.addNodeFromMenu(self.nodeFolderPath, nodeName)
+        self.biggusPy.canvas.addNodeFromMenu(self.biggusPy.nodesFolderPath["pyQt5"], nodeName)
 
     def makeDoNode(self, nodeName):
         """

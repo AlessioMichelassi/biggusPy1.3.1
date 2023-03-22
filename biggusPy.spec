@@ -6,10 +6,10 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=[],
+    pathex=['Release\\biggusFolder'],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=[("elements", "BiggusMain/elements"), ("Menu", "BiggusMain/Menu"), ("graphicEngine", "BiggusMain/graphicEngine"), ("elements/Nodes/oldNodes", "BiggusMain/elements/Nodes/oldNodes"), ("elements/Nodes/oldNodes/openCvNode", "BiggusMain/elements/Nodes/oldNodes/openCvNode"), ("elements/Nodes/oldNodes/pyqt5Node", "BiggusMain/elements/Nodes/oldNodes/pyqt5Node"), ("elements/Nodes/oldNodes/PythonNodes", "BiggusMain/elements/Nodes/oldNodes/PythonNodes"), ("elements/Nodes/oldNodes/testNodes", "BiggusMain/elements/Nodes/oldNodes/testNodes"), ("elements/Plugs", "BiggusMain/elements/Plugs"), ("elements/Nodes/AbstractClass", "BiggusMain/elements/Nodes/AbstractClass"), ("elements/object", "BiggusMain/elements/object"), ("elements/tools", "BiggusMain/elements/tools"), ("BiggusMain/Menu", "BiggusMain/Menu"), ("BiggusMain/graphicEngine", "BiggusMain/graphicEngine"), ("BiggusMain/BiggusMain", "BiggusMain")],
+    hiddenimports=['cv2', 'numpy', 'PyQt5', 'PyQt5.QtCore', 'PyQt5.QtGui', 'PyQt5.QtWidgets', 'PyQt5.QMultimedia', 'PyQt5.QtMultimediaWidgets],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

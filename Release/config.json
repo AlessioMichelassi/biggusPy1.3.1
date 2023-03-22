@@ -1,5 +1,5 @@
 {
-    "mainDir": "C:\\Users\\aless\\OneDrive\\Desktop\\ArchivioPy\\biggusPy1.3.1\\Release\\biggusFolder",
+    "mainDir": "biggusFolder",
     "configurationFilePath": "config.json",
     "saveFileDirectory": "SaveDir",
     "iconPaths": {
@@ -17,7 +17,9 @@
         "pyQt5": "biggusFolder/Nodes/PyQt5Nodes"
     },
     "fontAndColor": {
-        "font": "MS Shell Dlg 2,8,-1,5,50,0,0,0,0,0",
+        "systemFont": "Noto Serif,16,-1,5,50,0,0,0,0,0",
+        "widgetFont": "Noto Serif,14,-1,5,50,0,0,0,0,0",
+        "widgetOnWidgetFont": "Noto Serif,10,-1,5,50,0,0,0,0,0",
         "systemFontColor": "(250, 250, 250, 255)",
         "widgetFontColor": "(250, 250, 250, 255)",
         "widgetOnWidgetFontColor": "(150, 150, 240, 255)",

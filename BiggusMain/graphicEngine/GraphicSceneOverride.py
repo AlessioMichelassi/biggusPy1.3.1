@@ -1,3 +1,4 @@
+import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -78,18 +79,18 @@ class GraphicSceneOverride(QGraphicsScene):
             mimeText = (event.mimeData().text()).split(";;")
             nodeName = mimeText[1]
             nodeAbsolutePath = mimeText[0]
-            node = self.canvas.createNodeFromAbsolutePath(nodeAbsolutePath, nodeName)
+            node = self.canvas.createNode(nodeName, absPath=nodeAbsolutePath)
             if node:
                 print(event.scenePos().toPoint())
-                position = self.views()[0].mapToScene(event.screenPos())
+                position = event.scenePos().toPoint()
                 self.canvas.addNode(node)
-                # la posizione è scorretta di 50 pixel in x e 30 in y
-                pos = QPoint(int(position.x())-70, int(position.y() -50))
+                if getattr(sys, 'frozen', False):
+                    pos = QPoint(int(position.x()), int(position.y()))
+                else:
+                    position = self.views()[0].mapToScene(event.screenPos())
+                    # la posizione è scorretta di 50 pixel in x e 30 in y
+                    pos = QPoint(int(position.x()) - 70, int(position.y() - 50))
                 node.setPos(pos)  # posiziona il nodo nella scena
 
     def dragMoveEvent(self, e):
         e.acceptProposedAction()
-
-
-
-

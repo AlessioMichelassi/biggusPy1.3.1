@@ -490,7 +490,10 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.txtValue.clearFocus()
 
     def initTxtValueProperties(self):
-        self.txtValue.setFont(QFont("Arial", 9))
+        systemFont = self.nodeInterface.getFont("systemFont")
+        widgetFont = self.nodeInterface.getFont("widgetFont")
+        wOwFont = self.nodeInterface.getFont("widgetOnWidgetFont")
+        self.txtValue.setFont(wOwFont)
         self.txtValue.setFixedWidth(int(self.width * 1.4))
         self.txtValue.setFixedHeight(20)
         self.txtValue.setAlignment(Qt.AlignmentFlag.AlignCenter)

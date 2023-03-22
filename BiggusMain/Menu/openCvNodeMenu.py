@@ -11,7 +11,7 @@ class OpenCvNodeMenu(QMenu):
     ENG:
         Menu that allows you to create a python biggusNode
     """
-    nodeFolderPath: str = r"Release/biggusFolder/Nodes/openCvNode"
+
     creatorString: str = "Created by BiggusPy"
     availableNodeList: list = []
 
@@ -73,7 +73,7 @@ class OpenCvNodeMenu(QMenu):
         :return:
         """
         print(nodeName)
-        self.biggusPy.canvas.addNodeFromMenu(self.nodeFolderPath, nodeName)
+        self.biggusPy.canvas.addNodeFromMenu(self.biggusPy.nodesFolderPath["openCv"], nodeName)
 
     def makeDoNode(self, nodeName):
         """

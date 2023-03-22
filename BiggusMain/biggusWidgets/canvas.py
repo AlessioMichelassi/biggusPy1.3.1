@@ -1,9 +1,12 @@
 import importlib
+import shutil
 from importlib import *
 import json
 import os
 import sys
 from collections import OrderedDict
+from os.path import exists
+from shutil import copytree
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -16,11 +19,6 @@ from BiggusMain.graphicEngine.GraphicSceneOverride import GraphicSceneOverride
 from BiggusMain.graphicEngine.graphicViewOverride import GraphicViewOverride
 
 import sys
-
-print("*" * 20)
-print(f"from canvas: {sys.path}")
-print("*" * 20)
-print("\n" * 2)
 
 
 class Canvas(customFocusWidget):
@@ -111,15 +109,25 @@ class Canvas(customFocusWidget):
         else:
             super().keyPressEvent(event)
 
-    # ------------------- MOUSE EVENTS -------------------
-
-    # ------------------- DRAG AND DROP EVENTS -------------------
-
     # ------------------- NODES -------------------
-    @staticmethod
-    def createNode(className: str, *args, **kwargs):
+
+    def searchNodePath(self, className):
         """
-        OBSOLETE - USE createNodeFromAbsolutePath
+        ITA:
+        Cerca il path del nodo a partire dal nome della classe. Ritorna il path del nodo.
+        ENG:
+        Search the path of the node from the name of the class. Returns the path of the node.
+        :param className:
+        :return:
+        """
+        for key, value in self.biggusPy.nodesFolderPath.items():
+            files = os.listdir(value)
+            for file in files:
+                if className in file:
+                    return value
+
+    def createNode(self, className: str, *args, **kwargs):
+        """
         ITA:
         Crea un nodo a partire dal nome della classe ad Es: "NumberNode". Il metodo importa il modulo event crea
         un oggetto della classe passata come parametro, quindi ritorna l'interfaccia del nodo. In args event kwargs
@@ -133,190 +141,19 @@ class Canvas(customFocusWidget):
         :param kwargs: :return:
 
         """
-        # sourcery skip: use-named-expression
-
-        modulePath = "Release.biggusFolder.Nodes.PythonNodes"
+        absPath = kwargs.get("absPath", None)
+        if absPath:
+            del kwargs["absPath"]
+        path = self.searchNodePath(className)
+        modulePath = path.replace("/", ".")
         module = importlib.import_module(f"{modulePath}.{className}")
         nodeClass = getattr(module, className)
-        node = nodeClass(*args, **kwargs)
+        node = nodeClass(*args, **kwargs, canvas=self)
         node.modulePath = modulePath
-        value = kwargs.get("biggusNode", node.startValue)
+        value = kwargs.get("value", node.startValue)
         if value:
             node.startValue = value
         return node
-
-    @staticmethod
-    def createNodeOther(path, className: str, *args, **kwargs):
-        # sourcery skip: use-named-expression
-        """
-        ITA:
-            Crea un nodo a partire dal nome della classe ad Es: "NumberNode".
-            Il metodo importa il modulo event crea un oggetto della classe passata come parametro,
-            quindi ritorna l'interfaccia del nodo. In args event kwargs vanno passati i parametri
-            come Value, Name, InputNumber, OutputNumber ecc...
-        ENG:
-            Create a biggusNode from the name of the class, for example "NumberNode".
-            The method imports the module and creates an object of the class passed as a parameter,
-            then it returns the biggusNode interface. In args and kwargs you have to pass the parameters
-            as Value, Name, InputNumber, OutputNumber etc ...
-        :param path:
-        :param className: class name of the biggusNode
-        :param args:  biggusNode, name, inputNumber, outputNumber etc...
-        :param kwargs:  biggusNode, name, inputNumber, outputNumber etc...
-        :return:
-        """
-        module = None
-        nodeClass = None
-        try:
-            module = importlib.import_module(f"{path}.{className}")
-        except Exception as e:
-            print(f"module not found: {className} not found {e}")
-        try:
-            if module:
-                nodeClass = getattr(module, className)
-        except Exception as e:
-            print(f"Error in nodeClass: {className} {e}")
-            return None
-        try:
-            if nodeClass:
-                node = nodeClass(*args, **kwargs)
-                value = kwargs.get("biggusNode", node.startValue)
-                if value:
-                    node.startValue = value
-                return node
-        except Exception as e:
-            print(f"Error in createNode: {className} {e}")
-            return None
-
-    @staticmethod
-    def createNodeFromDeserialize(className, modulePath, *args, **kwargs):
-        """
-        ITA:
-            Quando si carica un progetto, per deserializzare un nodo si chiama questo metodo.
-            Il metodo importa il modulo event crea un oggetto della classe passata come parametro,
-            quindi ritorna l'interfaccia del nodo. In args event kwargs vanno passati i parametri
-            come Value, Name, InputNumber, OutputNumber ecc...
-        ENG:
-            When a project is loaded, to deserialize a node this method is called.
-            The method imports the module and creates an object of the class passed as a parameter,
-            then it returns the biggusNode interface. In args and kwargs you have to pass the parameters
-            as Value, Name, InputNumber, OutputNumber etc ...
-        :param className:
-        :param modulePath:
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        module = None
-        nodeClass = None
-        try:
-            module = importlib.import_module(f"{modulePath}.{className}")
-        except Exception as e:
-            try:
-                # this is for compatibility with older versions
-                module = importlib.import_module(f"BiggusMain.{modulePath}.{className}")
-            except Exception as e:
-                print(f"module not found: {className} -- {e}")
-                return None
-        try:
-            if module:
-                nodeClass = getattr(module, className)
-        except Exception as e:
-            print(f"Error in nodeClass: {className} -- {e}")
-            return None
-        try:
-            if nodeClass:
-                node = nodeClass(*args, **kwargs)
-                node.modulePath = modulePath
-                return node
-        except Exception as e:
-            print(f"Error in createNode: {className} {e}")
-            return None
-
-    def findModuleWinNT(self, path, className):
-        nodes_folder = os.path.abspath(path)
-        nodes_folder.replace("C:", "")
-        relative_path = os.path.relpath(nodes_folder, os.getcwd())
-        relative_path = relative_path.replace("/", "\\")
-        char = "\\"
-        modulePath = f"{relative_path.replace(char, '.').replace('C:.', '')}"
-        moduleName = f"{modulePath}.{className}"
-        try:
-            module = importlib.import_module(moduleName)
-            print(f"Module {module} found")
-            return module, modulePath
-        except Exception as e:
-            print(f"WARNING FROM createNodeFromAbsolutePath:")
-            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
-                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
-            return None, None
-
-    def findModuleLinuxAndMac(self, path, className):
-        nodes_folder = os.path.abspath(path)
-        relative_path = os.path.relpath(nodes_folder, os.getcwd())
-        modulePath = f"{relative_path.replace('/', '.')}"
-        moduleName = f"{modulePath}.{className}"
-        module = None
-        try:
-            module = importlib.import_module(moduleName)
-            return module, modulePath
-        except Exception as e:
-            print(f"WARNING FROM createNodeFromAbsolutePath:")
-            print(f"module not found:\nclassName:\n\t{className}\npath:\n\t{nodes_folder}\n"
-                  f"module path\n\t{modulePath}\nmodule name:\n\t{moduleName}\n{e}")
-            return None, None
-
-    def createNodeFromAbsolutePath(self, path, className: str, *args, **kwargs):
-        # sourcery skip: use-named-expression
-        """
-        ITA:
-            Crea un nodo a partire dal nome della classe ad Es: "NumberNode".
-            Il metodo importa il modulo event crea un oggetto della classe passata come parametro,
-            quindi ritorna l'interfaccia del nodo. In args event kwargs vanno passati i parametri
-            come Value, Name, InputNumber, OutputNumber ecc...
-        ENG:
-            Create a biggusNode from the name of the class, for example "NumberNode".
-            The method imports the module and creates an object of the class passed as a parameter,
-            then it returns the biggusNode interface. In args and kwargs you have to pass the parameters
-            as Value, Name, InputNumber, OutputNumber etc ...
-        :param path:
-        :param className: class name of the biggusNode
-        :param args:  biggusNode, name, inputNumber, outputNumber etc...
-        :param kwargs:  biggusNode, name, inputNumber, outputNumber etc...
-        :return:
-        """
-        nodes_folder = os.path.abspath(path)
-        # this is for compatibility with windows
-        # linux directory: biggusFolder/imgs/icon/biggusIcon
-        # windows directory: biggusFolder\imgs\icon\biggusIcon
-        # mac directory: biggusFolder/imgs/icon/biggusIcon
-        module = None
-        modulePath = None
-        if os.name == "nt":
-            module, modulePath = self.findModuleWinNT(path, className)
-        elif os.name == "posix":
-            module, modulePath = self.findModuleLinuxAndMac(path, className)
-        if module is None:
-            print("module is None")
-            return None
-        nodeClass = None
-        try:
-            if module:
-                nodeClass = getattr(module, className)
-        except Exception as e:
-            print(f"Error in nodeClass: {className} {e}")
-            return None
-        try:
-            if nodeClass:
-                node = nodeClass(*args, **kwargs)
-                node.modulePath = modulePath
-                value = kwargs.get("biggusNode", node.startValue)
-                if value:
-                    node.startValue = value
-                return node
-        except Exception as e:
-            print(f"Error in createNode: {className} {e}")
-            return None
 
     def addNodeFromMenu(self, path, className):
         """
@@ -330,7 +167,7 @@ class Canvas(customFocusWidget):
         :param className:
         :return:
         """
-        node = self.createNodeFromAbsolutePath(path, className)
+        node = self.createNode(className)
         position = self.graphicScene.currentMousePos
         if not position:
             position = self.graphicScene.sceneRect().center()
@@ -614,8 +451,7 @@ class Canvas(customFocusWidget):
         else:
             pos = QPointF(float(_pos[0]), float(_pos[1]))
 
-        node = self.createNodeFromDeserialize(_className, _modulePath, value=_value, inNum=_inPlugsNumb,
-                                              outNum=_outPlugsNumb)
+        node = self.createNode(_className, value=_value, inNum=_inPlugsNumb,outNum=_outPlugsNumb)
         node.setName(_name)
         node.setMenuOperation(_menuOperation)
         self.addNode(node)

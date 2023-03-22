@@ -4,8 +4,15 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtMultimedia import *
+from PyQt5.QtMultimediaWidgets import *
 
-from BiggusMain.biggusPy import BiggusPy
+import cv2
+import psutil
+import time
+import numpy as np
+
+from BiggusMain.compatibilityChecker import ntVsPosixVsFreeze
 
 
 def setPalette(app):
@@ -40,8 +47,7 @@ def main():
 
     app = QApplication(sys.argv)
     setPalette(app)
-    window = BiggusPy()
-    window.show()
+    window = ntVsPosixVsFreeze()
     sys.exit(app.exec())
 
 
