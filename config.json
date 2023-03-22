@@ -1,7 +1,8 @@
 {
     "mainDir": "C:\\Users\\aless\\OneDrive\\Desktop\\ArchivioPy\\biggusPy1.3.1\\Release\\biggusFolder",
     "configurationFilePath": "config.json",
-    "saveFileDirectory": "Release/SaveDir",
+    "saveFileDirectory": "C:\\Users\\aless\\OneDrive\\Desktop\\ArchivioPy\\biggusPy1.3.1\\BiggusMain\\Release\\SaveDir",
+    "defaultNode": "biggusFolder/biggusCode/",
     "iconPaths": {
         "biggusIcon": "Release/biggusFolder/imgs/icon/biggusIcon",
         "pythonIcon": "Release/biggusFolder/imgs/icon/pythonIcon",
@@ -18,8 +19,8 @@
     },
     "fontAndColor": {
         "systemFont": "Segoe UI,16,-1,5,50,0,0,0,0,0",
-        "widgetFont": "Segoe UI,18,-1,5,50,0,0,0,0,0",
-        "widgetOnWidgetFont": "Segoe UI,10,-1,5,50,0,0,0,0,0",
+        "widgetFont": "Segoe UI,14,-1,5,50,0,0,0,0,0",
+        "widgetOnWidgetFont": "Segoe UI,7,-1,5,50,0,0,0,0,0",
         "systemFontColor": "(250, 250, 250, 255)",
         "widgetFontColor": "(250, 250, 250, 255)",
         "widgetOnWidgetFontColor": "(150, 150, 240, 255)",

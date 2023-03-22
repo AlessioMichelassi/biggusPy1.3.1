@@ -2,6 +2,7 @@
     "mainDir": "biggusFolder",
     "configurationFilePath": "config.json",
     "saveFileDirectory": "SaveDir",
+    "defaultNode": "biggusFolder/biggusCode/",
     "iconPaths": {
         "biggusIcon": "biggusFolder/imgs/icon/biggusIcon",
         "pythonIcon": "biggusFolder/imgs/icon/pythonIcon",

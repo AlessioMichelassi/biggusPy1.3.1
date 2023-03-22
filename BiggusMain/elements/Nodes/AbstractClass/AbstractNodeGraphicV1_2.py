@@ -70,7 +70,7 @@ class SuperTxtTitle(QGraphicsTextItem):
 
 
 class SuperQLineEdit(QLineEdit):
-    font = QFont("Arial", 7)
+
     isWidgetSelected = False
 
     def __init__(self, graphicNode, parent=None):
@@ -432,6 +432,20 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.updateTxtValuePosition()
         self.update()
 
+    def setFont(self):
+        systemFont = self.nodeInterface.getFont("systemFont")
+        widgetFont = self.nodeInterface.getFont("widgetFont")
+        wOwFont = self.nodeInterface.getFont("widgetOnWidgetFont")
+        self.txtValue.setFont(wOwFont)
+        self.txtTitle.setFont(wOwFont)
+        for plug in self.inPlugs:
+            plug.txtTitle.setFont(wOwFont)
+            plug.updateTitle()
+        for plug in self.outPlugs:
+            plug.txtTitle.setFont(wOwFont)
+            plug.updateTitle()
+        self.nodeInterface.updateAll()
+
     # -------------------- TITLE SECTION
 
     def createTitle(self):
@@ -448,8 +462,10 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.updateTitlePosition()
 
     def updateTitlePosition(self):
+        # il testo si posiziona sopra il nodo e iene conto della grandezza del font
+        y = (-self.txtTitle.boundingRect().height() // 1.2)
         x = self.txtTitle.boundingRect().width() // 2 - self.width // 2
-        self.txtTitle.setPos(-x, -30)
+        self.txtTitle.setPos(-x, y)
 
     # -------------------- VALUE SECTION --------------------------------
 
@@ -490,10 +506,6 @@ class AbstractNodeGraphic(QGraphicsItem):
         self.txtValue.clearFocus()
 
     def initTxtValueProperties(self):
-        systemFont = self.nodeInterface.getFont("systemFont")
-        widgetFont = self.nodeInterface.getFont("widgetFont")
-        wOwFont = self.nodeInterface.getFont("widgetOnWidgetFont")
-        self.txtValue.setFont(wOwFont)
         self.txtValue.setFixedWidth(int(self.width * 1.4))
         self.txtValue.setFixedHeight(20)
         self.txtValue.setAlignment(Qt.AlignmentFlag.AlignCenter)

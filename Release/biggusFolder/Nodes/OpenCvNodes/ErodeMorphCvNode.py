@@ -1,12 +1,10 @@
-import cv2
 import numpy as np
-from PyQt5.QtCore import QDir, pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QMenu, QFileDialog, QWidget, QFrame, QGroupBox, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QMenu, QWidget, QFrame, QGroupBox, QHBoxLayout, QVBoxLayout
 import cv2 as cv
-import sys
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
-from BiggusMain.elements.tools.sliderBox import sliderBox
+from Release.biggusFolder.tools.sliderBox import sliderBox
 
 
 # toDo: https://docs.opencv.org/4.x/d3/dbe/tutorial_opening_closing_hats.html

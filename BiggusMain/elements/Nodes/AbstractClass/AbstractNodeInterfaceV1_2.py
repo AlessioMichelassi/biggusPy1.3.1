@@ -87,7 +87,7 @@ class AbstractNodeInterface:
     modulePath = "elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2"
     logo = r"Release/biggusFolder/imgs/logos/pythonLogo.png"
 
-    def __init__(self, value=None, inNum=1, outNum=1, canvas=None, parent=None):
+    def __init__(self, value=None, inNum=1, outNum=1, parent=None):
         """
         ITA:
             Questa è la classe base per tutti i nodi. Tutti i nodi devono ereditare questa classe.
@@ -102,10 +102,11 @@ class AbstractNodeInterface:
         :param outNum:
         :param parent:
         """
-        self.canvas = canvas
         self.nodeData = AbstractNodeData("AbstractNodeInterface", self)
-
-
+        self.nodeGraphic = AbstractNodeGraphic(self)
+        self.contextMenu = self.nodeGraphic.contextMenu
+        self.createPlug(inNum, outNum)
+        self.createGraphicClass()
 
     @property
     def className(self):
@@ -131,7 +132,11 @@ class AbstractNodeInterface:
         self.nodeData.index = index
 
     def getFont(self, fontType):
-        return self.canvas.biggusPy.configFontAndColors[fontType]
+        if self.canvas:
+            return self.canvas.biggusPy.configFontAndColors[fontType]
+
+    def setFont(self):
+        self.nodeGraphic.setFont()
 
     # ------- NODE GRAPHICS METHODS -------
 
@@ -154,11 +159,7 @@ class AbstractNodeInterface:
     def getHeight(self):
         return self.nodeGraphic.height
 
-    def createGraphicClass(self, canvas):
-        self.canvas = canvas
-        self.nodeGraphic = AbstractNodeGraphic(self)
-        self.contextMenu = self.nodeGraphic.contextMenu
-        self.createPlug(inNum, outNum)
+    def createGraphicClass(self):
         self.nodeGraphic.createTitle()
         self.nodeGraphic.createTxtValue()
         pngFile = self.logo

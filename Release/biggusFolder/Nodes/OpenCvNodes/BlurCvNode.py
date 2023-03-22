@@ -1,12 +1,9 @@
 import cv2
-import numpy as np
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import cv2 as cv
-import sys
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
-from BiggusMain.elements.tools.blurTool import blurTool
+from Release.biggusFolder.tools.blurTool import blurTool
 
 
 class cmbBoxWidget(QWidget):

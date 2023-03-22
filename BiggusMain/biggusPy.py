@@ -31,7 +31,7 @@ class BiggusPy(QMainWindow):
     mainDir = "biggusFolder"
     configurationFilePath = "config.json"
     saveFileDirectory = "SaveDir"
-
+    defaultNode = "defaultNode"
     nodesFolderPath = {}
     iconPaths = {}
     logoPaths = {}
@@ -121,7 +121,7 @@ class BiggusPy(QMainWindow):
                 newDict[key] = f"({value.red()}, {value.green()}, {value.blue()}, {value.alpha()})"
             elif isinstance(value, QFont):
                 # salva il valore della font
-                newDict["font"] = value.toString()
+                newDict[key] = value.toString()
         return newDict
 
     @staticmethod
@@ -142,11 +142,16 @@ class BiggusPy(QMainWindow):
     # ------------------ return path ------------------
 
     def returnNodePath(self, key):
-        path = self.nodesFolderPath[key]
-        nodes_folder = os.path.abspath(path)
-        relative_path = os.path.relpath(nodes_folder, os.getcwd())
-        modulePath = f"{relative_path.replace('/', '.')}"
-        return f"{relative_path}/"
+        try:
+            path = self.nodesFolderPath[key]
+            nodes_folder = os.path.abspath(path)
+            relative_path = os.path.relpath(nodes_folder, os.getcwd())
+            modulePath = f"{relative_path.replace('/', '.')}"
+            return f"{relative_path}/"
+        except KeyError:
+            print(f"WARNING: {key} not found in nodesFolderPath, check the config file")
+            print("content of nodesFolderPath:")
+            print(f"{self.nodesFolderPath}")
 
     def returnIconPath(self, key):
         return self.iconPaths[key]

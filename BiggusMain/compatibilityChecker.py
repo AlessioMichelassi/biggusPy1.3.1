@@ -197,9 +197,13 @@ class ntVsPosixVsFreeze:
             self.biggusPy.saveFileDirectory = os.path.abspath(os.path.join(os.path.dirname(sys.executable), saveDir))
             # le icone si trovano in imgs/icons
             for key, value in iconPath.items():
-                self.biggusPy.iconPaths[key] = os.path.abspath(os.path.join(os.path.dirname(sys.executable), value))
+                self.biggusPy.iconPaths[key] = value
             # il logo si trova in imgs/logos
-            self.biggusPy.logoPath = os.path.abspath(os.path.join(os.path.dirname(sys.executable), logoPath))
+            for key, value in logoPath.items():
+                self.biggusPy.logoPaths[key] = value
+            # i nodi si trovano in nodes
+            for key, value in nodeAndFolderPath.items():
+                self.biggusPy.nodesFolderPath[key] = value
         else:
             self.biggusPy.mainDir = os.path.abspath(os.path.join(os.path.dirname(__file__), mainDir))
             self.biggusPy.saveFileDirectory = os.path.abspath(os.path.join(os.path.dirname(__file__), saveDir))
@@ -212,7 +216,7 @@ class ntVsPosixVsFreeze:
             # i nodi si trovano in nodes
             for key, value in nodeAndFolderPath.items():
                 self.biggusPy.nodesFolderPath[key] = value
-
+        self.biggusPy.defaultNode = data["defaultNode"]
         # carica il font di sistema e i colori
         self.loadFontAndColor(data)
 

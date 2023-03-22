@@ -148,8 +148,10 @@ class Canvas(customFocusWidget):
         modulePath = path.replace("/", ".")
         module = importlib.import_module(f"{modulePath}.{className}")
         nodeClass = getattr(module, className)
-        node = nodeClass(*args, **kwargs, canvas=self)
+        node = nodeClass(*args, **kwargs)
         node.modulePath = modulePath
+        node.canvas = self
+        node.setFont()
         value = kwargs.get("value", node.startValue)
         if value:
             node.startValue = value

@@ -32,10 +32,11 @@ class scratchNodeV0_9(QMainWindow):
     node: AbstractNodeInterface = None
     valueChangedFromGraphicEditor = pyqtSignal(str, str, name="valueChangedFromGraphicEditor")
     fileName = None
-    filePath = r"Release/biggusFolder/biggusCode/defaultNode.py"
+    filePath = ""
 
-    def __init__(self, parent=None):
+    def __init__(self, biggusPy, parent=None):
         super().__init__(parent, Qt.WindowFlags(Qt.WindowType.Window))
+        self.biggusPy = biggusPy
         self.initUI()
         self.initGeometry()
         self.initStatusBar()
@@ -59,7 +60,7 @@ class scratchNodeV0_9(QMainWindow):
         self.setMenuBar(self.menu)
 
     def initGeometry(self):
-        self.setWindowTitle("ScratchO!")
+        self.setWindowTitle("ScratchONode!")
         self.setContentsMargins(10, 10, 10, 10)
 
     def initStatusBar(self):
@@ -140,11 +141,9 @@ class scratchNodeV0_9(QMainWindow):
             Load in ArguePy_CodeEditor the code of the empty biggusNode and in the graphic editor the empty biggusNode
         :return:
         """
-
         # cerca il file nella cartella da cui è stato lanciato lo script
         if not os.path.exists(filepath):
-            print("file not found")
-            return
+            print(f"File {filepath} not found")
         else:
             with open(filepath, "r") as f:
                 code = f.read()
@@ -173,6 +172,7 @@ class scratchNodeV0_9(QMainWindow):
         if loadDialog.exec():
             fileName = loadDialog.selectedFiles()[0]
             with open(fileName, "r") as f:
+                self.graphicEditor.graphicScene.clear()
                 self.createNodeFromExternalCode(f)
 
     def saveFile(self):

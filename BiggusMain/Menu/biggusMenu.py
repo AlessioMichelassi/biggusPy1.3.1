@@ -1,5 +1,6 @@
 import configparser
 import json
+import os
 import pprint
 import sys
 
@@ -357,8 +358,10 @@ class BiggusMenu(QMenuBar):
             QApplication.desktop().screen().rect().center() - self.preferencesWidget.rect().center())
 
     def openScratchONode(self):
-        scratchNode = scratchNodeV0_9(self.biggusPy.canvas)
-        scratchNode.filePath = "Release/biggusFolder/biggusCode/defaultNode.py"
+        scratchNode = scratchNodeV0_9(self.biggusPy)
+        filepath = self.biggusPy.mainDir
+        path = os.path.join(filepath, "biggusCode", "defaultNode.py")
+        scratchNode.filePath = path
         scratchNode.loadUntitledNode(scratchNode.filePath)
         scratchNode.show()
 

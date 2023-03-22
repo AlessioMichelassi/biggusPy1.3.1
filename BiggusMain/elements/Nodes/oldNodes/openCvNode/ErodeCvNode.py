@@ -3,10 +3,8 @@ import numpy as np
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import cv2 as cv
-import sys
 from BiggusMain.elements.Nodes.AbstractClass.AbstractNodeInterfaceV1_2 import AbstractNodeInterface
-from BiggusMain.elements.tools.sliderBox import sliderBox
+from Release.biggusFolder.tools.sliderBox import sliderBox
 
 
 class toolz(QWidget):
