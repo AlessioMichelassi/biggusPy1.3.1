@@ -77,12 +77,14 @@ class pixelSmith(QWidget):
         self.node.isEditable = True
         self.graphicScene.addItem(self.node.nodeGraphic)
         self.node.setPos(self.position)
-        self.node.setColorTrain(self.colorToolWidget.colorTrainGenerator.colorTrain)
         width = self.node.nodeGraphic.boundingRect().width()
         height = self.node.nodeGraphic.boundingRect().height()
         inputNumber = self.node.inPlugs.__len__()
         outputNumber = self.node.outPlugs.__len__()
         self.propertyEditor.setValue(int(width), int(height), inputNumber, outputNumber)
+        if node.getColorTrain() is not None:
+            print("color train", node.getColorTrain())
+            self.colorToolWidget.colorTrainGenerator.colorTrain = node.getColorTrain()
 
     def changeNode(self, node: 'AbstractNodeInterface'):
         self.graphicScene.clear()

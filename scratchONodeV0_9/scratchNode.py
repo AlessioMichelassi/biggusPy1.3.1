@@ -49,11 +49,7 @@ class scratchNodeV0_9(QMainWindow):
         self.saveSettings()
         event.accept()
 
-    # ################################################
-    #
     #       INIT MAIN WINDOWS
-    #
-    #
 
     def initUI(self):
         self.menu = MenuBar(self)
@@ -75,8 +71,8 @@ class scratchNodeV0_9(QMainWindow):
         self.graphicEditor = pixelSmith(self)
         frame = QFrame()
         frame.setFrameStyle(QFrame.Shape.StyledPanel)
-        frame.setStyleSheet("background-color: rgb(50, 50, 50);" 
-                            "border: 1px solid rgb(20, 20, 20);" 
+        frame.setStyleSheet("background-color: rgb(50, 50, 50);"
+                            "border: 1px solid rgb(20, 20, 20);"
                             "border-radius: 5px;")
 
         frame.setContentsMargins(10, 10, 5, 10)
@@ -93,8 +89,8 @@ class scratchNodeV0_9(QMainWindow):
         self.codeEditor = ArguePy(self)
         frame = QFrame()
         frame.setFrameStyle(QFrame.Shape.StyledPanel)
-        frame.setStyleSheet("background-color: rgb(50, 50, 50);" 
-                            "border: 1px solid rgb(20, 20, 20);" 
+        frame.setStyleSheet("background-color: rgb(50, 50, 50);"
+                            "border: 1px solid rgb(20, 20, 20);"
                             "border-radius: 5px;")
         frame.setContentsMargins(20, 10, 5, 10)
         frame.setLayout(QVBoxLayout())
@@ -110,11 +106,7 @@ class scratchNodeV0_9(QMainWindow):
         self.graphicEditor.nodeLogoChangeForEditor.connect(self.onNodeLogoChangeForEditor)
         self.graphicEditor.nodeColorChangeForEditor.connect(self.onNodeColorChangeForEditor)
 
-    # ################################################
-    #
     #       LOAD/SAVE SETTINGS
-    #
-    #
 
     def loadSettings(self):
         pass
@@ -122,11 +114,7 @@ class scratchNodeV0_9(QMainWindow):
     def saveSettings(self):
         pass
 
-    # ################################################
-    #
     #       NEW/LOAD/SAVE NODE
-    #
-    #
 
     def newNode(self):
         self.graphicEditor.graphicScene.clear()
@@ -199,11 +187,7 @@ class scratchNodeV0_9(QMainWindow):
             with open(self.fileName, "w") as f:
                 f.write(self.codeEditor.codeEditor.toPlainText())
 
-    # ################################################
-    #
     #       NODES
-    #
-    #
 
     @staticmethod
     def createNode(className: str, mod, *args, **kwargs):
@@ -275,7 +259,6 @@ class scratchNodeV0_9(QMainWindow):
             print("WARNING CANNOT UPDATE NODE FROM TEXT")
             print(e)
             return
-
 
     # ################################################
     #
